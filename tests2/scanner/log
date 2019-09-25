@@ -1,0 +1,541 @@
+Test ./input/char1 passed
+--- /tmp/tmp.EjaRGBe2fU	2019-09-25 16:34:38.545992158 +0800
++++ ./output/char2.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1,9 +1,5 @@
+ 2 CHARLITERAL '\n'
+-char2 line 2:8: unexpected char: 't'
+-2 CHARLITERAL ' '
+-char2 line 2:12: unexpected char: '\'
+-char2 line 2:13: unexpected char: '\'
+-2 CHARLITERAL ' '
+-char2 line 2:17: unexpected char: '\'
+-char2 line 2:23: unexpected char: '''
+-char2 line 2:25: unexpected char: 0xA
++2 CHARLITERAL '\t'
++2 CHARLITERAL '\\'
++2 CHARLITERAL '\"'
++2 CHARLITERAL '\''
+File ./input/char2 scanner output mismatch.
+Test ./input/char3 passed
+Test ./input/char4 passed
+--- /tmp/tmp.RiLBsqoMES	2019-09-25 16:34:38.797994155 +0800
++++ ./output/char5.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1,2 +1,2 @@
+ char5 line 2:2: unexpected char: 0xA
+-char5 line 2:4: unexpected char: 0xA
++char5 line 3:2: unexpected char: 0xA
+File ./input/char5 scanner output mismatch.
+Test ./input/char6 passed
+--- /tmp/tmp.OC8uA42qvp	2019-09-25 16:34:38.965995486 +0800
++++ ./output/char7.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1 +1 @@
+-char7 line 2:3: unexpected char: '''
++char7 line 2:4: expecting ''', found '\n'
+File ./input/char7 scanner output mismatch.
+Test ./input/char8 passed
+Test ./input/char9 passed
+--- /tmp/tmp.AKmnCqe1PM	2019-09-25 16:34:39.221997506 +0800
++++ ./output/hexlit1.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1,29 +1,8 @@
+-hexlit1 line 2:1: unexpected char: '0'
+-2 IDENTIFIER x
+-hexlit1 line 2:3: unexpected char: '0'
+-hexlit1 line 3:1: unexpected char: '0'
+-3 IDENTIFIER x
+-hexlit1 line 3:3: unexpected char: '1'
+-hexlit1 line 4:1: unexpected char: '0'
+-4 IDENTIFIER xe
+-hexlit1 line 4:4: unexpected char: '4'
+-hexlit1 line 4:5: unexpected char: '3'
+-hexlit1 line 4:6: unexpected char: '6'
+-hexlit1 line 4:7: unexpected char: '2'
+-hexlit1 line 4:8: unexpected char: '0'
+-hexlit1 line 5:1: unexpected char: '0'
+-5 IDENTIFIER x
+-hexlit1 line 5:3: unexpected char: '1'
+-hexlit1 line 5:4: unexpected char: '1'
+-hexlit1 line 6:1: unexpected char: '0'
+-6 IDENTIFIER xbeef
+-hexlit1 line 7:1: unexpected char: '0'
+-7 IDENTIFIER xF
+-hexlit1 line 8:1: unexpected char: '0'
+-8 IDENTIFIER xF
+-hexlit1 line 8:4: unexpected char: '0'
+-hexlit1 line 8:5: unexpected char: '0'
+-hexlit1 line 9:1: unexpected char: '0'
+-9 IDENTIFIER xB
+-hexlit1 line 9:4: unexpected char: '1'
+-9 IDENTIFIER ad
++2 INTLITERAL 0x0
++3 INTLITERAL 0x1
++4 INTLITERAL 0xe43620
++5 INTLITERAL 0x11
++6 INTLITERAL 0xbeef
++7 INTLITERAL 0xF
++8 INTLITERAL 0xF00
++9 INTLITERAL 0xB1ad
+File ./input/hexlit1 scanner output mismatch.
+--- /tmp/tmp.1HzhhqAeCT	2019-09-25 16:34:39.313998232 +0800
++++ ./output/hexlit2.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1,2 +1 @@
+-hexlit2 line 2:1: unexpected char: '0'
+-2 IDENTIFIER xFEEDDEAFCAFEBEEFBABE
++2 INTLITERAL 0xFEEDDEAFCAFEBEEFBABE
+File ./input/hexlit2 scanner output mismatch.
+--- /tmp/tmp.yfxsJoJLpd	2019-09-25 16:34:39.393998863 +0800
++++ ./output/id1.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1,15 +1,5 @@
+ 2 IDENTIFIER abcdefg
+ 3 IDENTIFIER Rinard
+-4 IDENTIFIER martin
+-id1 line 4:7: unexpected char: '_'
+-4 IDENTIFIER rinard
+-5 IDENTIFIER six
+-id1 line 5:4: unexpected char: '_'
+-5 IDENTIFIER dot
+-id1 line 5:8: unexpected char: '_'
+-id1 line 5:9: unexpected char: '0'
+-id1 line 5:10: unexpected char: '3'
+-id1 line 5:11: unexpected char: '5'
+-id1 line 6:1: unexpected char: '_'
+-6 IDENTIFIER foo
+-id1 line 6:5: unexpected char: '_'
++4 IDENTIFIER martin_rinard
++5 IDENTIFIER six_dot_035
++6 IDENTIFIER _foo_
+File ./input/id1 scanner output mismatch.
+Test ./input/id2 passed
+--- /tmp/tmp.5Kw8yMU9qQ	2019-09-25 16:34:39.570000251 +0800
++++ ./output/id3.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1,4 +1,4 @@
+-2 IDENTIFIER if
++2 if
+ 3 IDENTIFIER iF
+ 4 IDENTIFIER If
+ 5 IDENTIFIER foo
+File ./input/id3 scanner output mismatch.
+--- /tmp/tmp.mVvZHPIMGq	2019-09-25 16:34:39.662000977 +0800
++++ ./output/number1.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1,20 +1,2 @@
+-number1 line 2:1: unexpected char: '-'
+-number1 line 2:2: unexpected char: '9'
+-number1 line 2:3: unexpected char: '2'
+-number1 line 2:4: unexpected char: '2'
+-number1 line 2:5: unexpected char: '3'
+-number1 line 2:6: unexpected char: '3'
+-number1 line 2:7: unexpected char: '7'
+-number1 line 2:8: unexpected char: '2'
+-number1 line 2:9: unexpected char: '0'
+-number1 line 2:10: unexpected char: '3'
+-number1 line 2:11: unexpected char: '6'
+-number1 line 2:12: unexpected char: '8'
+-number1 line 2:13: unexpected char: '5'
+-number1 line 2:14: unexpected char: '4'
+-number1 line 2:15: unexpected char: '7'
+-number1 line 2:16: unexpected char: '7'
+-number1 line 2:17: unexpected char: '5'
+-number1 line 2:18: unexpected char: '8'
+-number1 line 2:19: unexpected char: '0'
+-number1 line 2:20: unexpected char: '9'
++2 -
++2 INTLITERAL 9223372036854775809
+File ./input/number1 scanner output mismatch.
+--- /tmp/tmp.iiAXL90GLe	2019-09-25 16:34:39.742001608 +0800
++++ ./output/number2.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1,15 +1,9 @@
+-number2 line 2:1: unexpected char: '0'
+-number2 line 3:1: unexpected char: '1'
+-number2 line 4:1: unexpected char: '-'
+-number2 line 4:2: unexpected char: '1'
+-number2 line 5:1: unexpected char: '2'
+-number2 line 5:2: unexpected char: '5'
+-number2 line 5:3: unexpected char: '9'
+-number2 line 6:1: unexpected char: '1'
+-number2 line 6:2: unexpected char: '7'
+-number2 line 7:1: unexpected char: '4'
+-number2 line 7:2: unexpected char: '3'
+-number2 line 7:4: unexpected char: '-'
+-number2 line 7:5: unexpected char: '6'
+-number2 line 7:6: unexpected char: '2'
+-number2 line 7:7: unexpected char: '0'
++2 INTLITERAL 0
++3 INTLITERAL 1
++4 -
++4 INTLITERAL 1
++5 INTLITERAL 259
++6 INTLITERAL 17
++7 INTLITERAL 43
++7 -
++7 INTLITERAL 620
+File ./input/number2 scanner output mismatch.
+--- /tmp/tmp.icxgFICqA2	2019-09-25 16:34:39.822002239 +0800
++++ ./output/number3.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1,11 +1,2 @@
+-number3 line 2:1: unexpected char: '0'
+-number3 line 2:2: unexpected char: '0'
+-number3 line 2:3: unexpected char: '0'
+-number3 line 2:4: unexpected char: '5'
+-number3 line 2:5: unexpected char: '4'
+-number3 line 2:6: unexpected char: '6'
+-number3 line 3:1: unexpected char: '0'
+-3 IDENTIFIER x
+-number3 line 3:3: unexpected char: '0'
+-number3 line 3:4: unexpected char: '0'
+-3 IDENTIFIER ABCD
++2 INTLITERAL 000546
++3 INTLITERAL 0x00ABCD
+File ./input/number3 scanner output mismatch.
+--- /tmp/tmp.fM0wwsdjz8	2019-09-25 16:34:39.906002901 +0800
++++ ./output/op1.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1,10 +1,7 @@
+-op1 line 2:1: unexpected char: '+'
+-op1 line 2:3: unexpected char: '-'
+-op1 line 2:5: unexpected char: '*'
+-op1 line 2:7: unexpected char: '<'
+-op1 line 2:9: unexpected char: '<'
+-op1 line 2:10: unexpected char: '='
+-op1 line 2:12: unexpected char: '!'
+-op1 line 2:13: unexpected char: '='
+-op1 line 2:15: unexpected char: '&'
+-op1 line 2:16: unexpected char: '&'
++2 +
++2 -
++2 *
++2 <
++2 <=
++2 !=
++2 &&
+File ./input/op1 scanner output mismatch.
+--- /tmp/tmp.L09dFwl6t2	2019-09-25 16:34:39.998003627 +0800
++++ ./output/op2.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1,12 +1,10 @@
+ 2 IDENTIFIER a
+-op2 line 2:2: unexpected char: '+'
+-op2 line 2:3: unexpected char: '+'
++2 ++
+ 3 IDENTIFIER a
+-op2 line 3:2: unexpected char: '+'
+-op2 line 3:4: unexpected char: '+'
++3 +
++3 +
+ 4 IDENTIFIER b
+-op2 line 4:2: unexpected char: '-'
+-op2 line 4:3: unexpected char: '-'
++4 --
+ 5 IDENTIFIER b
+-op2 line 5:2: unexpected char: '-'
+-op2 line 5:4: unexpected char: '-'
++5 -
++5 -
+File ./input/op2 scanner output mismatch.
+--- /tmp/tmp.5LDjHhiuKs	2019-09-25 16:34:40.086004319 +0800
++++ ./output/op3.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1,20 +1,20 @@
+-1 IDENTIFIER int
++1 int
+ 1 IDENTIFIER a
+-op3 line 1:6: unexpected char: '['
+-op3 line 1:7: unexpected char: '3'
+-op3 line 1:8: unexpected char: ']'
+-op3 line 1:9: unexpected char: ';'
+-2 IDENTIFIER void
++1 [
++1 INTLITERAL 3
++1 ]
++1 ;
++2 void
+ 2 IDENTIFIER main
+-op3 line 2:10: unexpected char: '('
+-op3 line 2:11: unexpected char: ')'
++2 (
++2 )
+ 2 {
+-3 IDENTIFIER int
++3 int
+ 3 IDENTIFIER b
+-op3 line 3:8: unexpected char: ';'
++3 ;
+ 4 IDENTIFIER b
+-op3 line 4:5: unexpected char: '='
++4 =
+ op3 line 4:7: unexpected char: '@'
+ 4 IDENTIFIER a
+-op3 line 4:9: unexpected char: ';'
++4 ;
+ 6 }
+File ./input/op3 scanner output mismatch.
+--- /tmp/tmp.a5z8Zrk9iu	2019-09-25 16:34:40.182005073 +0800
++++ ./output/string1.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1,31 +1,10 @@
+-2 "A string walks into a bar and orders a beer."
+-string1 line 3:48: unexpected char: '''
+-3 IDENTIFIER t
+-3 IDENTIFIER serve
+-3 IDENTIFIER strings
+-3 IDENTIFIER here
+-string1 line 3:69: unexpected char: '.'
+-string1 line 3:70: unexpected char: '\'
+-3 ""
+-4 "The string walks out to the street, and sits on the curb, dejected."
+-5 "Then he has an idea: he ties himself into a bow, and loosens up his"
+-6 "ends, making them up into nice tassels."
+-7 "His confidence restored, he walks back into the bar, sits down, and orders"
+-8 "another beer."
+-9 "The bartender looks at him suspiciously: he looks a bit like the string"
+-string1 line 10:53: unexpected char: '''
+-10 IDENTIFIER t
+-10 IDENTIFIER you
+-10 IDENTIFIER a
+-10 IDENTIFIER string
+-string1 line 10:68: unexpected char: '?'
+-string1 line 10:69: unexpected char: '\'
+-10 ""
+-string1 line 11:34: unexpected char: '''
+-11 IDENTIFIER m
+-11 IDENTIFIER a
+-11 IDENTIFIER frayed
+-11 IDENTIFIER knot
+-string1 line 11:50: unexpected char: '.'
+-string1 line 11:51: unexpected char: '\'
+-11 ""
++2 STRINGLITERAL "A string walks into a bar and orders a beer."
++3 STRINGLITERAL "The bartender looks at him and says, \"we don\'t serve strings here.\""
++4 STRINGLITERAL "The string walks out to the street, and sits on the curb, dejected."
++5 STRINGLITERAL "Then he has an idea: he ties himself into a bow, and loosens up his"
++6 STRINGLITERAL "ends, making them up into nice tassels."
++7 STRINGLITERAL "His confidence restored, he walks back into the bar, sits down, and orders"
++8 STRINGLITERAL "another beer."
++9 STRINGLITERAL "The bartender looks at him suspiciously: he looks a bit like the string"
++10 STRINGLITERAL "that had just walked in.  \"Hey,\" he says, \"aren\'t you a string?\""
++11 STRINGLITERAL "\"Nope,\" says the string.  \"I\'m a frayed knot.\""
+File ./input/string1 scanner output mismatch.
+--- /tmp/tmp.3FQNAAV5tK	2019-09-25 16:34:40.266005733 +0800
++++ ./output/string2.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1 +1,6 @@
+-2 "Aren't you a string "
++string2 line 2:6: expecting '"', found '''
++2 IDENTIFIER t
++2 IDENTIFIER you
++2 IDENTIFIER a
++2 IDENTIFIER string
++string2 line 2:23: expecting '"', found '\n'
+File ./input/string2 scanner output mismatch.
+--- /tmp/tmp.TlqgLmqFjq	2019-09-25 16:34:40.350006393 +0800
++++ ./output/string3.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1,12 +1 @@
+-string3 line 2:7: unexpected char: '\'
+-string3 line 2:8: unexpected char: '\'
+-string3 line 2:11: unexpected char: '''
+-string3 line 2:12: unexpected char: '\'
+-string3 line 2:15: unexpected char: 't'
+-string3 line 2:16: unexpected char: '\'
+-2 IDENTIFIER tam
+-2 IDENTIFIER a
+-2 IDENTIFIER STRING
+-string3 line 2:29: unexpected char: '\'
+-2 IDENTIFIER n
+-string3 line 2:42: expecting '"', found '<EOF>'
++2 STRINGLITERAL "I\" \\\"\'\'\t\tam a STRING\n"
+File ./input/string3 scanner output mismatch.
+--- /tmp/tmp.1lLX056pTs	2019-09-25 16:34:40.442007115 +0800
++++ ./output/tokens1.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1,15 +1,15 @@
+-2 IDENTIFIER bool
+-3 IDENTIFIER import
+-4 IDENTIFIER else
+-5 IDENTIFIER false
+-6 IDENTIFIER if
+-7 IDENTIFIER int
+-8 IDENTIFIER return
+-9 IDENTIFIER true
+-10 IDENTIFIER void
+-11 IDENTIFIER for
++2 bool
++3 import
++4 else
++5 BOOLEANLITERAL false
++6 if
++7 int
++8 return
++9 BOOLEANLITERAL true
++10 void
++11 for
+ 12 IDENTIFIER forpar
+-13 IDENTIFIER break
+-14 IDENTIFIER continue
+-15 IDENTIFIER len
++13 break
++14 continue
++15 len
+ 16 IDENTIFIER extern
+File ./input/tokens1 scanner output mismatch.
+Test ./input/tokens2 passed
+Test ./input/tokens3 passed
+--- /tmp/tmp.V7eOgiHKAn	2019-09-25 16:34:40.706009188 +0800
++++ ./output/tokens4.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1,61 +1,45 @@
+ 2 {
+-tokens4 line 2:2: unexpected char: '-'
+-tokens4 line 2:3: unexpected char: '1'
+-tokens4 line 2:4: unexpected char: '2'
+-tokens4 line 2:5: unexpected char: '3'
+-tokens4 line 2:6: unexpected char: '-'
+-2 IDENTIFIER a
+-tokens4 line 2:8: unexpected char: '3'
+-tokens4 line 2:9: unexpected char: '5'
+-tokens4 line 2:10: unexpected char: ','
+-2 IDENTIFIER id
+-tokens4 line 2:13: unexpected char: '3'
+-2 IDENTIFIER a
+-tokens4 line 2:15: unexpected char: ','
+-tokens4 line 2:16: unexpected char: '+'
+-tokens4 line 2:17: unexpected char: '*'
+-tokens4 line 2:18: unexpected char: ';'
++2 -
++2 INTLITERAL 123
++2 -
++2 IDENTIFIER a35
++2 ,
++2 IDENTIFIER id3a
++2 ,
++2 +
++2 *
++2 ;
+ 2 }
+-tokens4 line 2:20: unexpected char: '['
+-tokens4 line 2:21: unexpected char: '|'
+-tokens4 line 2:22: unexpected char: '|'
+-tokens4 line 2:23: unexpected char: '='
+-tokens4 line 2:24: unexpected char: '='
+-tokens4 line 2:25: unexpected char: '='
+-tokens4 line 2:26: unexpected char: '!'
+-tokens4 line 2:27: unexpected char: '='
+-tokens4 line 2:28: unexpected char: '('
+-tokens4 line 2:29: unexpected char: ')'
+-tokens4 line 2:30: unexpected char: '&'
+-tokens4 line 2:31: unexpected char: '&'
+-tokens4 line 2:32: unexpected char: ']'
+-tokens4 line 2:33: unexpected char: '<'
+-tokens4 line 2:34: unexpected char: '>'
+-tokens4 line 2:35: unexpected char: '<'
+-tokens4 line 2:36: unexpected char: '='
+-tokens4 line 2:37: unexpected char: '>'
+-tokens4 line 2:38: unexpected char: '='
+-tokens4 line 2:39: unexpected char: '='
++2 [
++2 ||
++2 ==
++2 =
++2 !=
++2 (
++2 )
++2 &&
++2 ]
++2 <
++2 >
++2 <=
++2 >=
++2 =
+ 3 IDENTIFIER a
+-tokens4 line 3:2: unexpected char: '['
+-tokens4 line 3:3: unexpected char: '2'
+-tokens4 line 3:4: unexpected char: '4'
+-tokens4 line 3:5: unexpected char: ']'
+-tokens4 line 3:6: unexpected char: '='
++3 [
++3 INTLITERAL 24
++3 ]
++3 =
+ 3 CHARLITERAL '7'
+-tokens4 line 3:10: unexpected char: ';'
++3 ;
+ 3 IDENTIFIER n
+-tokens4 line 3:13: unexpected char: '!'
+-tokens4 line 3:14: unexpected char: '='
+-3 IDENTIFIER if
+-tokens4 line 3:17: unexpected char: ';'
+-4 IDENTIFIER false
+-tokens4 line 4:6: unexpected char: ','
+-tokens4 line 4:7: unexpected char: '-'
+-4 IDENTIFIER if
+-tokens4 line 4:10: unexpected char: ';'
+-4 IDENTIFIER true
+-tokens4 line 4:15: unexpected char: '3'
+-tokens4 line 4:16: unexpected char: '2'
+-tokens4 line 4:17: unexpected char: ';'
++3 !=
++3 if
++3 ;
++4 BOOLEANLITERAL false
++4 ,
++4 -
++4 if
++4 ;
++4 IDENTIFIER true32
++4 ;
+ 5 IDENTIFIER forpar
+File ./input/tokens4 scanner output mismatch.
+--- /tmp/tmp.fAAy8KPJQZ	2019-09-25 16:34:40.794009879 +0800
++++ ./output/ws1.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1,23 +1,15 @@
+ 2 IDENTIFIER foo
+ 2 IDENTIFIER bar
+ 3 IDENTIFIER baz
+-ws1 line 3:4: unexpected char: 0x9
+ 3 IDENTIFIER quux
+ 4 IDENTIFIER meep
+-ws1 line 4:7: unexpected char: 0x9
+-ws1 line 4:9: unexpected char: 0x9
+-ws1 line 4:17: unexpected char: 0x9
+-ws1 line 4:25: unexpected char: 0x9
+ 4 IDENTIFIER peem
+ 5 IDENTIFIER whaah
+ ws1 line 5:6: unexpected char: 0xC
+ 5 IDENTIFIER boom
+ 6 IDENTIFIER doom
+ ws1 line 9:1: unexpected char: 0xC
+-ws1 line 9:2: unexpected char: 0x9
+-ws1 line 9:9: unexpected char: 0x9
+ ws1 line 9:17: unexpected char: 0xC
+ 10 IDENTIFIER gloom
+ 10 IDENTIFIER loom
+-ws1 line 10:14: unexpected char: 0x9
+ 10 IDENTIFIER weave
+File ./input/ws1 scanner output mismatch.
+--- /tmp/tmp.wvYmrGDVf0	2019-09-25 16:34:40.894010665 +0800
++++ ./output/ws2.out	2019-09-25 16:20:57.648748000 +0800
+@@ -1,29 +1,4 @@
+ 6 IDENTIFIER aaa
+-ws2 line 7:2: expecting '/', found '*'
+-8 IDENTIFIER block
+-8 IDENTIFIER comments
+-8 IDENTIFIER are
+-8 IDENTIFIER also
+-8 IDENTIFIER valid
+-8 IDENTIFIER which
+-8 IDENTIFIER means
+-8 IDENTIFIER this
+-8 IDENTIFIER should
+-8 IDENTIFIER be
+-8 IDENTIFIER ignored
+-ws2 line 9:1: unexpected char: '*'
+-ws2 line 9:3: expecting '/', found '\n'
+-10 IDENTIFIER bbb
+-11 IDENTIFIER c
+-ws2 line 11:5: expecting '/', found '*'
+-11 IDENTIFIER Note
+-11 IDENTIFIER that
+-11 IDENTIFIER it
+-11 IDENTIFIER could
+-11 IDENTIFIER be
+-11 IDENTIFIER inline
+-11 IDENTIFIER as
+-11 IDENTIFIER well
+-ws2 line 11:43: unexpected char: '*'
+-ws2 line 11:45: expecting '/', found ' '
+-11 IDENTIFIER d
++11 IDENTIFIER bbb
++12 IDENTIFIER c
++12 IDENTIFIER d
+File ./input/ws2 scanner output mismatch.
+Failed 20 tests out of 29

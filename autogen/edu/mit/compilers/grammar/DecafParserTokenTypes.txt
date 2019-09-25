@@ -1,0 +1,11 @@
+// $ANTLR 2.7.7 (2006-11-01): parser.g -> DecafParserTokenTypes.txt$
+DecafParser    // output token vocab name
+TK_class="class"=4
+LCURLY("{")=5
+RCURLY("}")=6
+ID("an identifier")=7
+WS_=8
+SL_COMMENT=9
+CHAR=10
+STRING=11
+ESC=12
