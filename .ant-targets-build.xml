@@ -1,0 +1,14 @@
+clean
+compile
+init
+integrationtests
+jar
+parser
+scanner
+tar
+test_codegen
+test_dataflow
+test_opt
+test_parser
+test_scanner
+test_semantics

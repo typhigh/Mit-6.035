@@ -17,7 +17,20 @@ options
 
 tokens 
 {
-  "class";
+  "bool";
+  "break";
+  "import";
+  "continue";
+  "else";
+  "false"; 
+  "for";
+  "while";
+  "if";
+  "int"; 
+  "return";
+  "len";
+  "true";
+  "void";
 }
 
 // Selectively turns on debug tracing mode.
@@ -47,20 +60,57 @@ LCURLY options { paraphrase = "{"; } : "{";
 RCURLY options { paraphrase = "}"; } : "}";
 
 ID options { paraphrase = "an identifier"; } : 
-  ('a'..'z' | 'A'..'Z')+;
+  ALPHA (ALPHANUM)*;
 
 // Note that here, the {} syntax allows you to literally command the lexer
 // to skip mark this token as skipped, or to advance to the next line
 // by directly adding Java commands.
-WS_ : (' ' | '\n' {newline();}) {_ttype = Token.SKIP; };
+WS_ : (' ' | '\n' {newline();} | '\t') {_ttype = Token.SKIP; };
 SL_COMMENT : "//" (~'\n')* '\n' {_ttype = Token.SKIP; newline (); };
+ML_COMMENT:
+  "/*"
+  (
+  '\n' {newline();} 
+  | (~('*' | '\n')))*
+  "*/"
+  {_ttype = Token.SKIP;};
 
-CHAR : '\'' 
-	(ESC|~('\'' | '\t' | '\n' | '\\' | '"')) 
-	'\'';
-STRING : '"' (ESC|~'"')* '"';
-INT : HEX;
-HEX : (("0x") | ("0X")) (HEX_LETTER)+;  
+MINUS :	"-";
+PLUS : 	"+";
+MUL : 	"*";
+DIV : 	"/";
+MOD : 	"%";	
+GE :	">=";
+GT : 	">";
+LE :	"<=";
+LT : 	"<";
+EQ :	"==";
+NE : 	"!=";
+AND : 	"&&";
+OR :	"||";
+NOT : 	"!";
+
+ASSIGN :	"=";
+ASSIGN_PLUS : 	"+=";
+ASSIGN_MINUS : 	"-=";
+ASSIGN_MUL : 	"*=";
+ASSIGN_DIV : 	"/=";
+ASSIGN_MOD : 	"%=";
+INC:		"++";
+DEC:		"--";
+
+LPAREN:       "(";
+RPAREN:       ")";
+LBRACK:       "[";
+RBRACK:       "]";
+SEMI:         ";";
+COMMA:        ",";
+COLON:        ":";
+QUESTION:     "?";
+
+CHAR : '\'' CHAR_LETTER '\'';
+STRING : '"' (CHAR_LETTER)* '"';
+INT : DIGITS | HEX;
 
 protected
 ESC :  '\\' ('n'|'"'|'t'|'\\'|'\''|'r');
@@ -68,3 +118,13 @@ protected
 DIGIT_LETTER : ('0'..'9');
 protected
 HEX_LETTER : DIGIT_LETTER | ('A'..'F') | ('a'..'f');
+protected
+ALPHANUM : ALPHA | DIGIT_LETTER;
+protected
+ALPHA : ('a'..'z')|('A'..'Z')|'_';
+protected
+DIGITS : (DIGIT_LETTER)+;
+protected
+HEX : ("0x") (HEX_LETTER)+;  
+protected 
+CHAR_LETTER : (ESC|~('\'' | '\t' | '\n' | '\\' | '"'));

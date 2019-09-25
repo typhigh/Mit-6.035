@@ -38,7 +38,15 @@ class Main {
                case DecafScannerTokenTypes.INT:
             	type = " INTLITERAL";
             	break;
+               case DecafScannerTokenTypes.STRING:
+            	type = " STRINGLITERAL";
+            	break;
+               case DecafScannerTokenTypes.TK_true:
+               case DecafScannerTokenTypes.TK_false:
+            	type = " BOOLEANLITERAL";
+            	break;
                default:
+            	// System.out.println(token.getType());
             	type = "";
             	break;
               }
