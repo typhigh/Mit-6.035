@@ -75,29 +75,29 @@ ML_COMMENT:
   "*/"
   {_ttype = Token.SKIP;};
 
-MINUS :	"-";
-PLUS : 	"+";
-MUL : 	"*";
-DIV : 	"/";
-MOD : 	"%";	
-GE :	">=";
-GT : 	">";
-LE :	"<=";
-LT : 	"<";
-EQ :	"==";
-NE : 	"!=";
-AND : 	"&&";
-OR :	"||";
-NOT : 	"!";
+OP_MINUS 	:	"-";
+OP_PLUS 	: 	"+";
+OP_MUL 		: 	"*";
+OP_DIV 		: 	"/";
+OP_MOD 		: 	"%";	
+OP_GE 		:	">=";
+OP_GT 		: 	">";
+OP_LE 		:	"<=";
+OP_LT 		: 	"<";
+OP_EQ 		:	"==";
+OP_NE 		: 	"!=";
+OP_AND 		: 	"&&";
+OP_OR 		:	"||";
+OP_NOT 		: 	"!";
 
-ASSIGN :	"=";
-ASSIGN_PLUS : 	"+=";
-ASSIGN_MINUS : 	"-=";
-ASSIGN_MUL : 	"*=";
-ASSIGN_DIV : 	"/=";
-ASSIGN_MOD : 	"%=";
-INC:		"++";
-DEC:		"--";
+OP_ASSIGN 		:	"=";
+OP_ASSIGN_PLUS 	: 	"+=";
+OP_ASSIGN_MINUS	: 	"-=";
+OP_ASSIGN_MUL 	: 	"*=";
+OP_ASSIGN_DIV 	: 	"/=";
+OP_ASSIGN_MOD 	: 	"%=";
+OP_INC			:	"++";
+OP_DEC			:	"--";
 
 LPAREN:       "(";
 RPAREN:       ")";

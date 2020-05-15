@@ -54,6 +54,7 @@ tokens
   @Override
   public void reportError (RecognitionException ex) {
     // Print the error via some kind of error reporting mechanism.
+    System.out.println(ex.getMessage());
     error = true;
   }
   @Override
@@ -138,7 +139,7 @@ statement
 	: location assign_expr SEMI!
 	| method_call SEMI!
 	| TK_if LPAREN! expr RPAREN! block (TK_else block)?
-	| TK_for LPAREN! ID ASSIGN expr SEMI! expr SEMI! location (compound_assign_op expr | increment) RPAREN! block
+	| TK_for LPAREN! ID OP_ASSIGN expr SEMI! expr SEMI! location (compound_assign_op expr | increment) RPAREN! block
 	| TK_while LPAREN! expr RPAREN! block
 	| TK_return (expr)? SEMI!
 	| TK_break SEMI!
@@ -151,18 +152,18 @@ assign_expr
 	;
 
 assign_op
-	: ASSIGN
+	: OP_ASSIGN
 	| compound_assign_op
 	;
 
 compound_assign_op
-	: ASSIGN_PLUS
-	| ASSIGN_MINUS
+	: OP_ASSIGN_PLUS
+	| OP_ASSIGN_MINUS
 	;
 
 increment
-	: INC
-	| DEC
+	: OP_INC
+	| OP_DEC
 	;
 
 method_call
@@ -181,8 +182,8 @@ expr
 	| method_call expr2
 	| literal expr2
 	| TK_len LPAREN! ID RPAREN! expr2
-	| MINUS	expr expr2
-	| NOT expr expr2
+	| OP_MINUS	expr expr2
+	| OP_NOT expr expr2
 	| LPAREN! expr RPAREN! expr2
 	;
 
@@ -213,28 +214,28 @@ bin_op
 	;
 
 arith_op
-	: PLUS
-	| MINUS
-	| MUL
-	| DIV
-	| MOD
+	: OP_PLUS
+	| OP_MINUS
+	| OP_MUL
+	| OP_DIV
+	| OP_MOD
 	;
 
 rel_op
-	: LT
-	| GT
-	| LE
-	| GE
+	: OP_LT
+	| OP_GT
+	| OP_LE
+	| OP_GE
 	;
 
 eq_op	
-	: EQ
-	| NE
+	: OP_EQ
+	| OP_NE
 	;
 
 cond_op 
-	: AND
-	| OR
+	: OP_AND
+	| OP_OR
 	;
 
 literal	
