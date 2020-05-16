@@ -1,10 +1,13 @@
 package edu.mit.compilers;
 
 import java.io.*;
+import java.util.logging.*;
 import antlr.Token;
 import edu.mit.compilers.grammar.*;
 import edu.mit.compilers.tools.CLI;
 import edu.mit.compilers.tools.CLI.Action;
+import edu.mit.compilers.cst.*;
+
 
 class Main {
 	public static void main(String[] args) {
@@ -79,7 +82,12 @@ class Main {
 				if (parser.getError()) {
 					System.exit(1);
 				}
-			
+				
+				
+				CST tree = parser.getCST();
+				String info = tree.showTree();
+				System.out.print(info);
+				System.out.print("Done");
 			}
 		} catch (Exception e) {
 			// print the error:

@@ -1,5 +1,8 @@
 header {
 package edu.mit.compilers.grammar;
+
+import edu.mit.compilers.cst.*;
+
 }
 
 options
@@ -71,22 +74,42 @@ tokens
   /** Whether to display debug information. */
   private boolean trace = false;
 
+  private CST cstTree = CST.getInstance();
+  private CSTNode root = cstTree.getRoot();
+  private CSTNode currentNode = root;
+  
   public void setTrace(boolean shouldTrace) {
     trace = shouldTrace;
   }
+  
+  public CST getCST() {
+  	return cstTree;
+  }
+  
   @Override
   public void traceIn(String rname) throws TokenStreamException {
+    currentNode.addChild(rname);
+    currentNode = currentNode.getLastChild();
     if (trace) {
       super.traceIn(rname);
     }
   }
   @Override
   public void traceOut(String rname) throws TokenStreamException {
+    currentNode = currentNode.getParent();
     if (trace) {
       super.traceOut(rname);
     }
   }
+  
+  @Override
+  public void match(int t) throws MismatchedTokenException, TokenStreamException {
+    currentNode.addChild(LT(1));
+    super.match(t);
+  }
 }
+
+
 
 program
 	: (import_decl)* (field_decl)* (method_decl)* EOF;

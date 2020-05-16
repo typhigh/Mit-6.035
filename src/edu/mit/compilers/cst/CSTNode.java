@@ -9,21 +9,41 @@ import edu.mit.compilers.grammar.DecafParserTokenTypes;
 public class CSTNode {
 	
 	private CSTNode parent;
-	private ArrayList<CSTNode> childrens;
+	private ArrayList<CSTNode> children;
 	private String name;
 	private Token token;
 	private int line;
 	private int column;
 	
-	public CSTNode(Token token, String name) {
-		this.token = token;
-		this.name = name;
-		this.line = token.getLine();
-		this.column = token.getColumn();
-		this.childrens = null;
+	// For Debug
+	private static int currentID = 0;
+	private int debugID;
+	
+	public CSTNode() {
+		this.children = new ArrayList<CSTNode>();
 		this.parent = null;
+		
+		// not thread safe
+		this.debugID = currentID++;
 	}
 	
+	public CSTNode(String name) {
+		this();
+		this.name = name;
+	}
+	
+	public CSTNode(Token token, String name) {
+		this(name);
+		this.token = token;
+		this.line = token.getLine();
+		this.column = token.getColumn();
+	}
+	
+	public CSTNode(Token token) {
+		this(token, token.getText());
+	}
+	
+
 	public String getName() {
 		return name;
 	}
@@ -32,8 +52,15 @@ public class CSTNode {
 		this.name = name;
 	}
 
-	public ArrayList<CSTNode> getChildrens() {
-		return childrens;
+	public ArrayList<CSTNode> getChildren() {
+		return children;
+	}
+	
+	/*
+	 * Get the children copy
+	 */
+	public ArrayList<CSTNode> getChildrenCopy() {
+		return new ArrayList<CSTNode>(children);
 	}
 
 	public void setParent(CSTNode parent) {
@@ -54,6 +81,10 @@ public class CSTNode {
 
 	public int getColumn() {
 		return column;
+	}
+	
+	public int getDebugID() {
+		return debugID;
 	}
 	
 	/*
@@ -89,17 +120,41 @@ public class CSTNode {
 	 * Add child node
 	 */
 	public void addChild(CSTNode child) {
-		childrens.add(child);
+		children.add(child);
+		child.setParent(this);
+		System.out.println("Add a child From " + debugID + " " + child.debugID);
 	}
 	
+	public void addChild(String name) {
+		addChild(new CSTNode(name));
+	}
+	
+	public void addChild(Token token) {
+		addChild(new CSTNode(token));
+	}
+
 	/*
 	 * Clear the node
 	 */
 	public void clear() {
-		this.childrens = null;
-		this.name = null;
-		this.token = null;
-		this.parent = null;
+		name = null;
+		token = null;
+		parent = null;
+		children.clear();
+	}
+	
+	/*
+	 * Return last child node
+	 */
+	public CSTNode getLastChild() {
+		if (children == null || children.isEmpty()) {
+			return null;
+		} 
+		return children.get(children.size()-1);
+	}
+	
+	public String toString() {
+		return "id: " + debugID + " content: " + name;
 	}
 
 }
