@@ -2,6 +2,9 @@ package edu.mit.compilers.cst;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import antlr.Token;
+import edu.mit.compilers.utils.TokenUtils;
 /*
  * Concrete tree
  */
@@ -38,6 +41,13 @@ public class CST {
 		showTreeWithPrefix(root.getChildren().get(0), "", ret);
 		return ret.toString();
 	}
+
+	/*
+	 * Prune the tree
+	 */
+	public void PrunTree() {
+		prune(root);
+	}
 	
 	/*
 	 * Implement the show func
@@ -55,6 +65,25 @@ public class CST {
 			CSTNode child = (CSTNode) iter.next();
 			showTreeWithPrefix(child, prefix + "  ", result);
 		}
+	}
+	
+	private void prune(CSTNode now) {
+		ArrayList<CSTNode> prunedChildren = new ArrayList<CSTNode>();
+		Iterator<CSTNode> iter = now.getChildren().iterator();
+		
+		while (iter.hasNext()) {
+			CSTNode node = iter.next();
+			Token token = node.getToken();
+			
+			// Maybe useless
+			if (!node.hasChild() && TokenUtils.isUseless(token)) {  
+				continue;
+			}
+			prune(node);
+			prunedChildren.add(node);
+		}
+		
+		now.setChildren(prunedChildren);
 	}
 	
 }

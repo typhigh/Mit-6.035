@@ -87,6 +87,11 @@ class Main {
 				CST tree = parser.getCST();
 				String info = tree.showTree();
 				System.out.print(info);
+				
+				// After pruned
+				tree.PrunTree();
+				info = tree.showTree();
+				System.out.print(info);
 				System.out.print("Done");
 			}
 		} catch (Exception e) {

@@ -1,7 +1,9 @@
 package edu.mit.compilers.cst;
 import java.util.ArrayList;
+import java.util.Iterator;
+
 import antlr.Token;
-import edu.mit.compilers.grammar.DecafParserTokenTypes;
+import edu.mit.compilers.utils.TokenUtils;
 /* 
  * Concrete Tree Node
  * The first tree of the parser
@@ -52,6 +54,10 @@ public class CSTNode {
 		this.name = name;
 	}
 
+	public void setChildren(ArrayList<CSTNode> children) {
+		this.children = children;
+	}
+	
 	public ArrayList<CSTNode> getChildren() {
 		return children;
 	}
@@ -88,32 +94,17 @@ public class CSTNode {
 	}
 	
 	/*
+	 * Return if the node has no child
+	 */
+	public boolean hasChild() {
+		return children != null && children.size() > 0;
+	}
+	
+	/*
 	 * Return if the node is operator
 	 */
 	public boolean isOperator() {
-		int type = token.getType();
-	    return type == DecafParserTokenTypes.OP_AND || 
-	    		type == DecafParserTokenTypes.OP_ASSIGN ||
-	    		type == DecafParserTokenTypes.OP_ASSIGN_DIV ||
-	    		type == DecafParserTokenTypes.OP_ASSIGN_MINUS ||
-	    		type == DecafParserTokenTypes.OP_ASSIGN_MOD ||
-	    		type == DecafParserTokenTypes.OP_ASSIGN_MUL ||
-	    		type == DecafParserTokenTypes.OP_ASSIGN_PLUS ||
-	    		type == DecafParserTokenTypes.OP_DEC ||
-	    		type == DecafParserTokenTypes.OP_DIV ||
-	    		type == DecafParserTokenTypes.OP_EQ ||
-	    		type == DecafParserTokenTypes.OP_GE ||
-	    		type == DecafParserTokenTypes.OP_GT ||
-	    		type == DecafParserTokenTypes.OP_INC ||
-	    		type == DecafParserTokenTypes.OP_LE ||
-	    		type == DecafParserTokenTypes.OP_LT ||
-	    		type == DecafParserTokenTypes.OP_MINUS ||
-	    		type == DecafParserTokenTypes.OP_MOD ||
-	    		type == DecafParserTokenTypes.OP_MUL ||
-	    		type == DecafParserTokenTypes.OP_NE ||
-	    		type == DecafParserTokenTypes.OP_NOT ||
-	    		type == DecafParserTokenTypes.OP_OR ||
-	    		type == DecafParserTokenTypes.OP_PLUS;
+		return TokenUtils.isOperator(token);
 	}
 	
 	/*
@@ -147,14 +138,14 @@ public class CSTNode {
 	 * Return last child node
 	 */
 	public CSTNode getLastChild() {
-		if (children == null || children.isEmpty()) {
+		if (!hasChild()) {
 			return null;
 		} 
 		return children.get(children.size()-1);
 	}
 	
 	public String toString() {
-		return "id: " + debugID + " content: " + name;
+		return "id: " + debugID + " content: " + name + " " + (token != null ? ("typeID: " + token.getType()) : "" );
 	}
-
+	
 }
