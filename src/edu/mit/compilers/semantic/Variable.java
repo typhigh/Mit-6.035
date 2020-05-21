@@ -27,5 +27,11 @@ public class Variable {
 		return name;
 	}
 	
+	public String toString() {
+		assert(name != null);
+		return "Tag: Variable" +  
+				" Type: " + type.toString() + 
+				" Name: " + name; 
+	}
 	
 }

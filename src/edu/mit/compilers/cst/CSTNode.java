@@ -144,6 +144,18 @@ public class CSTNode {
 		return children.get(children.size()-1);
 	}
 	
+	/*
+	 * Return the child at the position
+	 */
+	public CSTNode getChild(int index) {
+		assert(children.size() > index);
+		return children.get(index);
+	}
+	
+	public int getChildrenSize() {
+		return children.size();
+	}
+	
 	public String toString() {
 		return "id: " + debugID + " content: " + name + " " + (token != null ? ("typeID: " + token.getType()) : "" );
 	}

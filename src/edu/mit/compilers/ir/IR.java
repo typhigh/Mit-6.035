@@ -36,6 +36,12 @@ public abstract class IR {
 	public void setColumn(int column) {
 		this.column = column;
 	}
+
+	public String showTree() {
+		StringBuilder result = new StringBuilder("");
+		showTreeImpl("", result);
+		return result.toString();
+	}
 	
-	
+	protected abstract void showTreeImpl(String prefix, StringBuilder result);
 }

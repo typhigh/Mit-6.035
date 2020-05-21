@@ -17,7 +17,6 @@ public abstract class TypeDesc {
 		return len;
 	}
 	
-	
 	public boolean isArrayType() {	
 		return !isBasicType();
 	}

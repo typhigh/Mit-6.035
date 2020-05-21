@@ -1,5 +1,29 @@
 package edu.mit.compilers.ir.decl;
 
-public class IRFieldDecl {
+import antlr.Token;
+import edu.mit.compilers.ir.IRVisitor;
+import edu.mit.compilers.semantic.TypeDesc;
+
+public class IRFieldDecl extends IRMemberDecl {
+	TypeDesc type;
+	public IRFieldDecl(TypeDesc type, Token token) {
+		super("IRFieldDecl", token);
+		this.type = type;
+	}
+
+	@Override
+	public <T> T accept(IRVisitor<T> visitor) {
+		return visitor.visit(this);
+	}
+
+
+	@Override
+	public void showTreeImpl(String prefix, StringBuilder result) {
+		String info = prefix + 
+				" Tag: " + getTag() + 
+				" Type: " + type.toString() + 
+				" Name: " + getName() + '\n';
+		result.append(info);
+	}
 
 }

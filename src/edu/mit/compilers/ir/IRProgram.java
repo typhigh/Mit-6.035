@@ -29,12 +29,13 @@ public class IRProgram extends IR {
 		importDecls.add(decl);
 	}
 	
-	public void addIRFieldDecl(IRFieldDecl decl) {
-		fieldDecls.add(decl);
+	public void addMethodDecl(IRMethodDecl decl) {
+		methodDecls.add(decl);
 	}
 	
-	public void addMethodDecls(IRMethodDecl decl) {
-		methodDecls.add(decl);
+	public void addIRFieldDecls(ArrayList<IRFieldDecl> parseIRFieldDecls) {
+		// TODO Auto-generated method stub
+		fieldDecls.addAll(parseIRFieldDecls);
 	}
 	
 	public ArrayList<IRFieldDecl> getFieldDecls() {
@@ -47,5 +48,29 @@ public class IRProgram extends IR {
 
 	public ArrayList<IRImportDecl> getImportDecls() {
 		return importDecls;
+	}
+
+	@Override
+	protected void showTreeImpl(String prefix, StringBuilder result) {
+		
+		String info = prefix + " Tag: " + this.getTag() + '\n';
+		result.append(info);
+//		System.out.println("done1");
+		
+		for (int i = 0; i < importDecls.size(); ++i) {
+			importDecls.get(i).showTreeImpl(prefix + " ", result);
+		}
+		
+//		System.out.println("done2");
+		for (int i = 0; i < fieldDecls.size(); ++i) {
+			fieldDecls.get(i).showTreeImpl(prefix + " ", result);
+		}
+		
+//		System.out.print("done3");
+		for (int i = 0; i < methodDecls.size(); ++i) {
+			methodDecls.get(i).showTreeImpl(prefix + " ", result);
+		}
+		
+//		System.out.print("done4");
 	}
 }

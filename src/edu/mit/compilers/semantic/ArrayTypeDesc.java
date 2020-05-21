@@ -24,7 +24,7 @@ public class ArrayTypeDesc extends TypeDesc {
 	
 	@Override
 	public String toString() {
-		// Don't consider "int [3][4]"
+		// Not consider "int [3][4]"
 		return type.toString() + "[" + String.valueOf(getLen()) + "]";
 	}	
 	

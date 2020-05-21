@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.logging.*;
 import antlr.Token;
 import edu.mit.compilers.grammar.*;
+import edu.mit.compilers.ir.IR;
 import edu.mit.compilers.tools.CLI;
 import edu.mit.compilers.tools.CLI.Action;
 import edu.mit.compilers.cst.*;
@@ -85,14 +86,17 @@ class Main {
 				
 				
 				CST tree = parser.getCST();
-				String info = tree.showTree();
-				System.out.print(info);
+				// String info = tree.showTree();
+				// System.out.print(info);
 				
 				// After pruned
 				tree.PrunTree();
-				info = tree.showTree();
-				System.out.print(info);
-				System.out.print("Done");
+				String info = tree.showTree();
+				System.out.println(info);
+				
+				IR ir = CSTParser.parseIRProgram(tree);
+				String irInfo = ir.showTree();
+				System.out.println(irInfo);
 			}
 		} catch (Exception e) {
 			// print the error:

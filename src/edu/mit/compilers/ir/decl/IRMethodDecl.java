@@ -37,5 +37,24 @@ public class IRMethodDecl extends IRMemberDecl{
 	public ArrayList<Variable> getVariables() {
 		return Variables;
 	}
+
+	@Override
+	public void showTreeImpl(String prefix, StringBuilder result) {
+		String info = prefix + 
+				" Tag: " + getTag() + 
+				" Return Type: " + returnType.toString() + 
+				" Name : " + getName() + '\n';
+		result.append(info);
+		
+		assert(Variables != null);
+		// Variables 
+		for (int i = 0; i < Variables.size(); ++i) {
+			String subInfo = prefix + " " + Variables.get(i).toString() + '\n';
+			result.append(subInfo);
+		}
+		
+		// Block
+		// block.showTreeImpl(prefix + " ", result);
+	}
 	
 }
