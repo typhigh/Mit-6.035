@@ -8,15 +8,12 @@ import edu.mit.compilers.ir.decl.IRMethodDecl;
 
 public class IRProgram extends IR {
 
-	private ArrayList<IRImportDecl> importDecls;
-	private ArrayList<IRFieldDecl> fieldDecls;
-	private ArrayList<IRMethodDecl> methodDecls;
+	private ArrayList<IRImportDecl> importDecls = new ArrayList<IRImportDecl>();
+	private ArrayList<IRFieldDecl> fieldDecls = new ArrayList<IRFieldDecl>();
+	private ArrayList<IRMethodDecl> methodDecls = new ArrayList<IRMethodDecl>();
 	
 	public IRProgram() {
 		super("IRProgram");
-		importDecls = new ArrayList<IRImportDecl>();
-		fieldDecls = new ArrayList<IRFieldDecl>();
-		methodDecls = new ArrayList<IRMethodDecl>();
 	}
 
 	@Override
@@ -33,9 +30,9 @@ public class IRProgram extends IR {
 		methodDecls.add(decl);
 	}
 	
-	public void addIRFieldDecls(ArrayList<IRFieldDecl> parseIRFieldDecls) {
+	public void addIRFieldDecls(ArrayList<IRFieldDecl> decls) {
 		// TODO Auto-generated method stub
-		fieldDecls.addAll(parseIRFieldDecls);
+		fieldDecls.addAll(decls);
 	}
 	
 	public ArrayList<IRFieldDecl> getFieldDecls() {
@@ -51,9 +48,11 @@ public class IRProgram extends IR {
 	}
 
 	@Override
-	protected void showTreeImpl(String prefix, StringBuilder result) {
+	public void showTreeImpl(String prefix, StringBuilder result) {
 		
-		String info = prefix + " Tag: " + this.getTag() + '\n';
+		String info = prefix + 
+				" DebugID: " + getDebugID() +
+				" Tag: " + getTag() + '\n';
 		result.append(info);
 //		System.out.println("done1");
 		

@@ -41,9 +41,10 @@ public class IRMethodDecl extends IRMemberDecl{
 	@Override
 	public void showTreeImpl(String prefix, StringBuilder result) {
 		String info = prefix + 
+				" DebugID: " + getDebugID() +
 				" Tag: " + getTag() + 
 				" Return Type: " + returnType.toString() + 
-				" Name : " + getName() + '\n';
+				" Identifier : " + getName() + '\n';
 		result.append(info);
 		
 		assert(Variables != null);
@@ -54,7 +55,7 @@ public class IRMethodDecl extends IRMemberDecl{
 		}
 		
 		// Block
-		// block.showTreeImpl(prefix + " ", result);
+		block.showTreeImpl(prefix + " ", result);
 	}
 	
 }

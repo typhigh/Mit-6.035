@@ -20,9 +20,10 @@ public class IRFieldDecl extends IRMemberDecl {
 	@Override
 	public void showTreeImpl(String prefix, StringBuilder result) {
 		String info = prefix + 
+				" DebugID: " + getDebugID() +
 				" Tag: " + getTag() + 
 				" Type: " + type.toString() + 
-				" Name: " + getName() + '\n';
+				" Identifier : " + getName() + '\n';
 		result.append(info);
 	}
 

@@ -30,7 +30,6 @@ tokens
   STATEMENT;
   ASSIGN_EXPR;
   ASSIGN_OP;
-  COMPOUND_ASSIGN_OP;
   INCREMENT;
   METHOD_CALL;
   METHOD_NAME;
@@ -159,15 +158,39 @@ type
 	;
 
 statement
-	: location assign_expr SEMI!
-	| method_call SEMI!
-	| TK_if LPAREN! expr RPAREN! block (TK_else block)?
-	| TK_for LPAREN! ID OP_ASSIGN expr SEMI! expr SEMI! location (compound_assign_op expr | increment) RPAREN! block
-	| TK_while LPAREN! expr RPAREN! block
-	| TK_return (expr)? SEMI!
-	| TK_break SEMI!
-	| TK_continue SEMI!
+	: assign_stmt
+	| method_call_stmt
+	| if_stmt
+	| for_stmt
+	| while_stmt
+	| return_stmt
+	| break_stmt
+	| continue_stmt
 	;   
+
+assign_stmt
+	: location assign_expr SEMI!;
+
+method_call_stmt
+	: method_call SEMI!;
+
+if_stmt
+	: TK_if LPAREN! expr RPAREN! block (TK_else block)?;
+
+for_stmt
+	: TK_for LPAREN! ID OP_ASSIGN expr SEMI! expr SEMI! location (compound_assign_op expr | increment) RPAREN! block;
+
+while_stmt
+	: TK_while LPAREN! expr RPAREN! block;
+
+return_stmt
+	: TK_return (expr)? SEMI!;
+
+break_stmt
+	: TK_break SEMI!;
+
+continue_stmt
+	: TK_continue SEMI!;
 
 assign_expr 
 	: assign_op expr
@@ -176,14 +199,15 @@ assign_expr
 
 assign_op
 	: OP_ASSIGN
-	| compound_assign_op
-	;
-
-compound_assign_op
-	: OP_ASSIGN_PLUS
+	| OP_ASSIGN_PLUS
 	| OP_ASSIGN_MINUS
 	;
 
+compound_assign_op 
+	: OP_ASSIGN_PLUS
+	| OP_ASSIGN_MINUS
+	;
+	
 increment
 	: OP_INC
 	| OP_DEC

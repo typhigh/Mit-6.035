@@ -8,9 +8,20 @@ import edu.mit.compilers.ir.IRProgram;
 import edu.mit.compilers.ir.decl.IRFieldDecl;
 import edu.mit.compilers.ir.decl.IRImportDecl;
 import edu.mit.compilers.ir.decl.IRMethodDecl;
+import edu.mit.compilers.ir.expression.IRExpression;
+import edu.mit.compilers.ir.statement.IRAssignStmt;
 import edu.mit.compilers.ir.statement.IRBlock;
+import edu.mit.compilers.ir.statement.IRBreakStmt;
+import edu.mit.compilers.ir.statement.IRContinueStmt;
+import edu.mit.compilers.ir.statement.IRForStmt;
+import edu.mit.compilers.ir.statement.IRIfStmt;
+import edu.mit.compilers.ir.statement.IRLocation;
+import edu.mit.compilers.ir.statement.IRMethodCallStmt;
+import edu.mit.compilers.ir.statement.IRStatement;
+import edu.mit.compilers.ir.statement.IRWhileStmt;
 import edu.mit.compilers.semantic.ArrayTypeDesc;
 import edu.mit.compilers.semantic.BasicTypeDesc;
+import edu.mit.compilers.semantic.Identifier;
 import edu.mit.compilers.semantic.TypeDesc;
 import edu.mit.compilers.semantic.Variable;
 
@@ -23,9 +34,9 @@ public class CSTParser {
 	private static IRProgram parseIRProgram(CSTNode node) {
 		IRProgram ret = new IRProgram();
 		
-		/// Parse the sub children
-		ArrayList<CSTNode> children = node.getChildren();
-		Iterator<CSTNode> iter = children.iterator();
+		// Parse the sub children
+		// program : (import_decl)* (field_decl)* (method_decl)*
+		Iterator<CSTNode> iter = node.getChildren().iterator();
 		while (iter.hasNext()) {
 			CSTNode child = iter.next();
 			switch(child.getName()) {
@@ -39,7 +50,7 @@ public class CSTParser {
 				ret.addMethodDecl(parseIRMethodDecl(child));
 				break;
 			default:
-				System.out.println("node's name is wrong");
+				System.out.println("node's identifier is wrong");
 			}
 		}
 		return ret;
@@ -53,17 +64,31 @@ public class CSTParser {
 	private static IRMethodDecl parseIRMethodDecl(CSTNode node) {
 		assert(node.getChildrenSize() >= 4);
 		
-		// Method declaration consists of (return)type, name, Variable, block 
+		// Method declaration consists of (return)type, identifier, Variable, block 
 		Token type = node.getChild(0).getChild(0).getToken();
-		Token name = node.getChild(1).getToken();
+		Token identifier = node.getChild(1).getToken();
 		ArrayList<Variable> Variables = parseVariableList(node.getChild(2));
 		IRBlock block = parseIRBlock(node.getChild(3));
-		return new IRMethodDecl(type, name, Variables, block);
+		return new IRMethodDecl(type, identifier, Variables, block);
 	}
 
 	private static IRBlock parseIRBlock(CSTNode node) {
-		//
-		return null;
+		IRBlock ret = new IRBlock();
+		
+		// block : (field_decl)* (statement)* ;
+		Iterator<CSTNode> iter = node.getChildren().iterator();
+		while (iter.hasNext()) {
+			CSTNode child = iter.next();
+			switch(child.getName()) {
+			case "field_decl":
+				ret.addFieldDecls(parseIRFieldDecls(child));
+				break;
+			case "statement":
+				ret.addStatement(parseIRStatement(child));
+				break;
+			}
+		}
+		return ret;
 	}
 
 	private static ArrayList<Variable> parseVariableList(CSTNode node) {
@@ -71,8 +96,8 @@ public class CSTParser {
 		
 		while (node.hasChild() && node.getChildrenSize()>= 3) {
 			Token type = node.getChild(0).getChild(0).getToken();
-			Token name = node.getChild(1).getToken();
-			ret.add(new Variable(type, name));
+			Token identifier = node.getChild(1).getToken();
+			ret.add(new Variable(type, identifier));
 			node = node.getChild(2);
 		}
 		
@@ -88,7 +113,7 @@ public class CSTParser {
 		
 		// Top-down 
 		while (node.hasChild()) {
-			Token name = node.getChild(0).getToken();
+			Token identifier = node.getChild(0).getToken();
 			CSTNode arrayNode = node.getChild(1);
 			TypeDesc nowType = basicType;
 			
@@ -98,11 +123,119 @@ public class CSTParser {
 				int length = Integer.parseInt(lengthToken.getText());
 				nowType = new ArrayTypeDesc(nowType, length);
 			}
-			ret.add(new IRFieldDecl(nowType, name));
+			ret.add(new IRFieldDecl(nowType, identifier));
 			node = node.getChild(2);
 		}
 		
 		return ret;	
 	}
+	
+	private static IRStatement parseIRStatement(CSTNode node) {
+		assert(node.hasChild());
+		node = node.getChild(0);
+		switch(node.getName()) {
+		case "assign_stmt"		: return parseIRAssignStmt(node);
+		case "break_stmt"		: return parseIRBreakStmt(node);
+		case "continue_stmt"	: return parseIRContinueStmt(node);
+		case "for_stmt"			: return parseIRForStmt(node);
+		case "if_stmt"			: return parseIRIfStmt(node);
+		case "method_call_stmt"	: return parseIRMethodCallStmt(node);
+		case "return_stmt"		: return parseIRReturnStmt(node);
+		case "while_stmt"		: return parseIRWhileStmt(node);
+		}
+		return null;
+	}
 
+	private static IRAssignStmt parseIRAssignStmt(CSTNode node) {
+		// assign_stmt: location assign_expr;
+		assert(node.getChildrenSize() == 2);
+		IRLocation location = parseIRLocation(node.getChild(0));
+		node = node.getChild(1);
+		
+		// assign_expr : assign_op expr | increment;
+		CSTNode firstChild = node.getChild(0);
+		String tag = firstChild.getName();
+		String operator;
+		IRAssignStmt ret;
+		if (tag == "assign_op") {
+			// assign_op : OP_ASSIGN | OP_ASSIGN_PLUS | OP_ASSIGN_MINUS;
+			operator = firstChild.getChild(0).getToken().getText();
+			IRExpression expression = parseIRExpression(node.getChild(1));
+			ret = new IRAssignStmt(location, operator, expression);
+		} else if (tag == "increment") {
+			// increment : OP_INC | OP_DEC;
+			operator = firstChild.getChild(0).getToken().getText();
+			ret = new IRAssignStmt(location, operator);
+		} else {
+			throw new RuntimeException("Unknown tag for assign_expr :" + tag);
+		}
+		return ret;
+	}
+
+	private static IRExpression parseIRExpression(CSTNode node) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private static IRLocation parseIRLocation(CSTNode node) {
+		// location : ID | ID expr;
+		IRLocation ret;
+		Identifier identifier = new Identifier(node.getChild(0).getToken());
+		if (node.getChildrenSize() == 2) {
+			IRExpression expression = parseIRExpression(node.getChild(1));
+			ret = new IRLocation(identifier, expression);
+		} else {
+			ret = new IRLocation(identifier);
+		}
+		return ret;
+	}
+
+	private static IRBreakStmt parseIRBreakStmt(CSTNode node) {
+		return new IRBreakStmt();
+	}
+
+	private static IRContinueStmt parseIRContinueStmt(CSTNode node) {
+		return new IRContinueStmt();
+	}
+
+	private static IRForStmt parseIRForStmt(CSTNode node) {
+		// for_stmt : ID OP_ASSIGN expr1  expr2 location (compound_assign_op expr | increment) block;
+		IRForStmt ret;
+		Identifier identifier = new Identifier(node.getChild(0).getToken());
+		String operator1 = node.getChild(1).getToken().getText();
+		IRExpression expr1 = parseIRExpression(node.getChild(2));
+		IRExpression expr2 = parseIRExpression(node.getChild(3));
+		IRLocation location = parseIRLocation(node.getChild(4));
+		IRBlock block = parseIRBlock(node.getLastChild());
+		String operator2;
+		if (node.getChild(5).getName() == "compound_assign_op") {
+			operator2 = node.getChild(5).getChild(0).getChild(0).getToken().getText();
+			IRExpression expr3 = parseIRExpression(node.getChild(6));
+			ret = new IRForStmt(identifier, operator1, expr1, expr2, location, operator2, expr3, block);
+		} else {
+			operator2 = node.getChild(5).getToken().getText();
+			ret = new IRForStmt(identifier, operator1, expr1, expr2, location, operator2, block);
+		}
+		return ret;
+	}
+
+	private static IRIfStmt parseIRIfStmt(CSTNode node) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private static IRMethodCallStmt parseIRMethodCallStmt(CSTNode node) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private static IRStatement parseIRReturnStmt(CSTNode node) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	private static IRWhileStmt parseIRWhileStmt(CSTNode node) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

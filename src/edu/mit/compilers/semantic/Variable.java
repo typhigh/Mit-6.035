@@ -4,19 +4,19 @@ import antlr.Token;
 
 public class Variable {
 	private TypeDesc type;
-	private String name;
+	private Identifier identifier;
 	
 	public Variable(TypeDesc type) {
 		this(type, null);
 	}
 	
-	public Variable(TypeDesc type, Token name) {
+	public Variable(TypeDesc type, Token identifier) {
 		this.type = type;
-		this.name = name.getText();
+		this.identifier = new Identifier(identifier);
 	}
 	
-	public Variable(Token type, Token name) {
-		this(BasicTypeDesc.GetInstance(type.getText()), name);
+	public Variable(Token type, Token identifier) {
+		this(BasicTypeDesc.GetInstance(type.getText()), identifier);
 	}
 
 	public TypeDesc getType() {
@@ -24,14 +24,22 @@ public class Variable {
 	}
 
 	public String getName() {
-		return name;
+		return identifier.name;
 	}
 	
 	public String toString() {
-		assert(name != null);
+		assert(identifier.name != null);
 		return "Tag: Variable" +  
 				" Type: " + type.toString() + 
-				" Name: " + name; 
+				" Name: " + identifier.name; 
+	}
+	
+	public int getLine() {
+		return identifier.line;
+	}
+	
+	public int getColumn() {
+		return identifier.column;
 	}
 	
 }

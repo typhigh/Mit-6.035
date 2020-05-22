@@ -1,7 +1,11 @@
 package edu.mit.compilers.ir;
 
 public abstract class IR {
-	private String tag;
+	private final String tag;
+	
+	// Debug id
+	private int debugID;
+	private static int currentID = 0;
 	
 	// Location information
 	private int line;
@@ -11,16 +15,17 @@ public abstract class IR {
 
 	public IR(String tag) {
 		this.tag = tag;
+		this.debugID = currentID++;
 	}
 	
 	public String getTag() {
 		return tag;
 	}
-
-	public void setTag(String tag) {
-		this.tag = tag;
+	
+	public int getDebugID() {
+		return debugID;
 	}
-
+	
 	public int getLine() {
 		return line;
 	}
@@ -37,11 +42,17 @@ public abstract class IR {
 		this.column = column;
 	}
 
+	/*
+	 * Show the tree
+	 */
 	public String showTree() {
 		StringBuilder result = new StringBuilder("");
 		showTreeImpl("", result);
 		return result.toString();
 	}
 	
-	protected abstract void showTreeImpl(String prefix, StringBuilder result);
+	/*
+	 * The implement of showTree with prefix
+	 */
+	public abstract void showTreeImpl(String prefix, StringBuilder result);
 }

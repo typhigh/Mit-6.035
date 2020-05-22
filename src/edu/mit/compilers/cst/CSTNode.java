@@ -1,7 +1,5 @@
 package edu.mit.compilers.cst;
 import java.util.ArrayList;
-import java.util.Iterator;
-
 import antlr.Token;
 import edu.mit.compilers.utils.TokenUtils;
 /* 

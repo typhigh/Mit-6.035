@@ -17,8 +17,9 @@ public class IRImportDecl extends IRMemberDecl {
 	@Override
 	public void showTreeImpl(String prefix, StringBuilder result) {
 		String info = prefix + 
+				" DebugID: " + getDebugID() +
 				" Tag: " + getTag() + 
-				" Name: " + getName() + '\n';
+				" Identifier : " + getName() + '\n';
 		result.append(info);
 	}
 		
