@@ -15,6 +15,7 @@ import edu.mit.compilers.ir.statement.IRBreakStmt;
 import edu.mit.compilers.ir.statement.IRContinueStmt;
 import edu.mit.compilers.ir.statement.IRForStmt;
 import edu.mit.compilers.ir.statement.IRIfStmt;
+import edu.mit.compilers.ir.statement.IRImportArg;
 import edu.mit.compilers.ir.statement.IRLocation;
 import edu.mit.compilers.ir.statement.IRMethodCallStmt;
 import edu.mit.compilers.ir.statement.IRStatement;
@@ -200,31 +201,71 @@ public class CSTParser {
 
 	private static IRForStmt parseIRForStmt(CSTNode node) {
 		// for_stmt : ID OP_ASSIGN expr1  expr2 location (compound_assign_op expr | increment) block;
-		IRForStmt ret;
 		Identifier identifier = new Identifier(node.getChild(0).getToken());
 		String operator1 = node.getChild(1).getToken().getText();
-		IRExpression expr1 = parseIRExpression(node.getChild(2));
-		IRExpression expr2 = parseIRExpression(node.getChild(3));
+		IRExpression  initValue = parseIRExpression(node.getChild(2));
+		IRAssignStmt initializer = new IRAssignStmt(identifier, operator1, initValue);
+		
+		IRExpression condition = parseIRExpression(node.getChild(3));
 		IRLocation location = parseIRLocation(node.getChild(4));
-		IRBlock block = parseIRBlock(node.getLastChild());
 		String operator2;
+		IRAssignStmt step;
+		
 		if (node.getChild(5).getName() == "compound_assign_op") {
 			operator2 = node.getChild(5).getChild(0).getChild(0).getToken().getText();
-			IRExpression expr3 = parseIRExpression(node.getChild(6));
-			ret = new IRForStmt(identifier, operator1, expr1, expr2, location, operator2, expr3, block);
+			IRExpression stepRValue = parseIRExpression(node.getChild(6));
+			step = new IRAssignStmt(location, operator2, stepRValue);
 		} else {
 			operator2 = node.getChild(5).getToken().getText();
-			ret = new IRForStmt(identifier, operator1, expr1, expr2, location, operator2, block);
+			step = new IRAssignStmt(location, operator2);
+		}
+		
+		IRBlock block = parseIRBlock(node.getLastChild());
+		return new IRForStmt(initializer, condition, step, block);
+	}
+
+	private static IRIfStmt parseIRIfStmt(CSTNode node) {
+		//if_stmt : expr block (block)?;
+		IRIfStmt ret;
+		IRExpression condition = parseIRExpression(node.getChild(0));
+		IRBlock ifBlock = parseIRBlock(node.getChild(1));
+		if (node.getChildrenSize() == 3) {
+			IRBlock elseBlock = parseIRBlock(node.getChild(2));  
+			ret = new IRIfStmt(condition, ifBlock, elseBlock);
+		} else {
+			ret = new IRIfStmt(condition, ifBlock);
 		}
 		return ret;
 	}
 
-	private static IRIfStmt parseIRIfStmt(CSTNode node) {
-		// TODO Auto-generated method stub
-		return null;
+	private static IRMethodCallStmt parseIRMethodCallStmt(CSTNode node) {
+		// method_call_stmt : method_call;
+		assert(node.getChildrenSize() == 1);
+		node = node.getChild(0);
+		
+		// method_call : ID (import_arg_list)?;
+		Identifier identifier = new Identifier(node.getChild(0).getToken());
+		ArrayList<IRImportArg> args;
+		if (node.getChildrenSize() > 1) {
+			args = parseIRImportArgs(node.getChild(1));
+		} else {
+			args = new ArrayList<IRImportArg>();
+		}
+		
+		return new IRMethodCallStmt(identifier, args);
 	}
 
-	private static IRMethodCallStmt parseIRMethodCallStmt(CSTNode node) {
+	private static ArrayList<IRImportArg> parseIRImportArgs(CSTNode node) {
+		// import_arg_list : import_arg import_arg_list_more;
+		ArrayList<IRImportArg> ret = new ArrayList<IRImportArg>();
+		while (node.hasChild()) {
+			ret.add(parseIRImportArg(node.getChild(0)));
+			node = node.getChild(1);
+		}
+		return ret;
+	}
+
+	private static IRImportArg parseIRImportArg(CSTNode node) {
 		// TODO Auto-generated method stub
 		return null;
 	}

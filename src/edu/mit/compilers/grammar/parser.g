@@ -214,10 +214,8 @@ increment
 	;
 
 method_call
-	: method_name LPAREN! (import_arg_list)? RPAREN! ;
+	: ID LPAREN! (import_arg_list)? RPAREN! ;
 
-method_name 
-	: ID ;
 
 location 
 	: ID

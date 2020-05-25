@@ -2,6 +2,7 @@ package edu.mit.compilers.ir.statement;
 
 import edu.mit.compilers.ir.IRVisitor;
 import edu.mit.compilers.ir.expression.IRExpression;
+import edu.mit.compilers.semantic.Identifier;
 
 public class IRAssignStmt extends IRStatement {
 	private final IRLocation location;
@@ -19,6 +20,10 @@ public class IRAssignStmt extends IRStatement {
 	public IRAssignStmt(IRLocation location, String operator) {
 		this(location, operator, null);
 		assert(operator == "++" || operator == "--");
+	}
+	
+	public IRAssignStmt(Identifier identifier, String operator1, IRExpression initValue) {
+		this(new IRLocation(identifier), operator1, initValue);
 	}
 
 	public IRLocation getLocation() {

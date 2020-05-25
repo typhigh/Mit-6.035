@@ -1,11 +1,13 @@
 package edu.mit.compilers.ir.statement;
 
+import edu.mit.compilers.ir.IR;
 import edu.mit.compilers.ir.IRVisitor;
 
-public class IRBreakStmt extends IRStatement {
+public class IRImportArg extends IR {
 
-	public IRBreakStmt() {
-		super("IRBreakStmt");
+	public IRImportArg() {
+		super("IRImportArg");
+		// TODO
 	}
 
 	@Override
@@ -15,10 +17,8 @@ public class IRBreakStmt extends IRStatement {
 
 	@Override
 	public void showTreeImpl(String prefix, StringBuilder result) {
-		String info = prefix + 
-				" DebugID: " + getDebugID() + 
-				" Tag: " + getTag() + '\n';
-		result.append(info);
+		// TODO Auto-generated method stub
+		
 	}
-
+	
 }

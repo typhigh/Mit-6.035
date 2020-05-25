@@ -16,6 +16,7 @@ public class IRContinueStmt extends IRStatement {
 	@Override
 	public void showTreeImpl(String prefix, StringBuilder result) {
 		String info = prefix + 
+				" DebugID: " + getDebugID() + 
 				" Tag: " + getTag() + '\n';
 		result.append(info);
 	}
