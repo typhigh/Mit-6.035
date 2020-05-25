@@ -221,21 +221,37 @@ location
 	: ID
 	| ID LBRACK! expr RBRACK!
 	;
+	
+expr 
+	: expr1 (QUESTION! expr1 COLON! expr1)*;
 
-expr
-	: location expr2
-	| method_call expr2
-	| literal expr2
-	| TK_len LPAREN! ID RPAREN! expr2
-	| OP_MINUS	expr expr2
-	| OP_NOT expr expr2
-	| LPAREN! expr RPAREN! expr2
-	;
+expr1
+	: expr2 (OP_OR expr2)*;
 
-expr2	
-	: ( bin_op )	=> bin_op expr
-	| ( QUESTION ) 	=> QUESTION! expr COLON! expr
-	| 	
+expr2
+	: expr3 (OP_AND expr3)*;
+
+expr3 
+	: expr4 (eq_op expr4)*; 
+
+expr4
+	: expr5 (rel_op expr5)*;
+
+expr5
+	: expr6 ((OP_PLUS | OP_MINUS) expr6)*;
+
+expr6
+	: expr7 ((OP_MUL | OP_DIV | OP_MOD) expr7)*;
+
+expr7
+	: (OP_NOT | OP_MINUS)* expr_base;
+
+expr_base
+	: location
+	| method_call
+	| literal
+	| TK_len LPAREN! ID RPAREN! 
+	| LPAREN! expr RPAREN!
 	;
 
 import_arg_list 
