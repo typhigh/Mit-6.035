@@ -5,9 +5,9 @@ import edu.mit.compilers.ir.expression.IRExpression;
 
 public class IRIfStmt extends IRStatement{
 	
-	private final IRExpression condition;
-	private final IRBlock ifBlock;
-	private final IRBlock elseBlock;
+	private IRExpression condition;
+	private IRBlock ifBlock;
+	private IRBlock elseBlock;
 	
 	public IRIfStmt(IRExpression condition, IRBlock ifBlock, IRBlock elseBlock) {
 		super("IRIfStmt");

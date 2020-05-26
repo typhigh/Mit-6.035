@@ -5,7 +5,7 @@ import edu.mit.compilers.ir.expression.IRExpression;
 
 public class IRForStmt extends IRStatement {
 	
-	private final IRAssignStmt initializer;
+	private IRAssignStmt initializer;
 	private IRExpression condition;
 	private IRAssignStmt step;
 	private IRBlock block;

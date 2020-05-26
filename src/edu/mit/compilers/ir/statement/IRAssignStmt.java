@@ -2,13 +2,14 @@ package edu.mit.compilers.ir.statement;
 
 import edu.mit.compilers.ir.IRVisitor;
 import edu.mit.compilers.ir.expression.IRExpression;
+import edu.mit.compilers.ir.expression.IRLocation;
 import edu.mit.compilers.semantic.Identifier;
 
 public class IRAssignStmt extends IRStatement {
-	private final IRLocation location;
+	private IRLocation location;
 	// Type uses String (simple implement)
-	private final String operator;
-	private final IRExpression value;
+	private String operator;
+	private IRExpression value;
 	
 	public IRAssignStmt(IRLocation location, String operator, IRExpression value) {
 		super("IRAssignStmt");

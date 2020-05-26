@@ -1,15 +1,14 @@
-package edu.mit.compilers.ir.statement;
+package edu.mit.compilers.ir.expression;
 
-import edu.mit.compilers.ir.IR;
 import edu.mit.compilers.ir.IRVisitor;
 import edu.mit.compilers.ir.expression.IRExpression;
 import edu.mit.compilers.semantic.Identifier;
 
-public class IRLocation extends IR {
+public class IRLocation extends IRExpression {
 	
-	private final Identifier identifier;
-	private final boolean isArrayLocation;
-	private final IRExpression location;
+	private Identifier identifier;
+	private boolean isArrayLocation;
+	private IRExpression location;
 	
 	public IRLocation(Identifier identifier, IRExpression location) {
 		super("IRLocation");

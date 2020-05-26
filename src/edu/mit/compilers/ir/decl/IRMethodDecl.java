@@ -10,9 +10,9 @@ import edu.mit.compilers.semantic.Variable;
 
 public class IRMethodDecl extends IRMemberDecl{
 	
-	private final BasicTypeDesc returnType;
-	private final IRBlock block;
-	private final ArrayList<Variable> Variables;
+	private BasicTypeDesc returnType;
+	private IRBlock block;
+	private ArrayList<Variable> Variables;
 	
 	public IRMethodDecl(Token type, Token name, ArrayList<Variable> Variables, IRBlock block) {
 		super("IRMethodDecl", name);

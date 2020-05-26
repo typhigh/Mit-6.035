@@ -8,7 +8,13 @@ import edu.mit.compilers.ir.IRProgram;
 import edu.mit.compilers.ir.decl.IRFieldDecl;
 import edu.mit.compilers.ir.decl.IRImportDecl;
 import edu.mit.compilers.ir.decl.IRMethodDecl;
+import edu.mit.compilers.ir.expression.IRBinaryOpExpr;
 import edu.mit.compilers.ir.expression.IRExpression;
+import edu.mit.compilers.ir.expression.IRLenExpr;
+import edu.mit.compilers.ir.expression.IRLocation;
+import edu.mit.compilers.ir.expression.IRMethodCall;
+import edu.mit.compilers.ir.expression.IRTernaryExpr;
+import edu.mit.compilers.ir.expression.IRUnaryOpExpr;
 import edu.mit.compilers.ir.statement.IRAssignStmt;
 import edu.mit.compilers.ir.statement.IRBlock;
 import edu.mit.compilers.ir.statement.IRBreakStmt;
@@ -16,7 +22,6 @@ import edu.mit.compilers.ir.statement.IRContinueStmt;
 import edu.mit.compilers.ir.statement.IRForStmt;
 import edu.mit.compilers.ir.statement.IRIfStmt;
 import edu.mit.compilers.ir.statement.IRImportArg;
-import edu.mit.compilers.ir.statement.IRLocation;
 import edu.mit.compilers.ir.statement.IRMethodCallStmt;
 import edu.mit.compilers.ir.statement.IRStatement;
 import edu.mit.compilers.ir.statement.IRWhileStmt;
@@ -174,6 +179,81 @@ public class CSTParser {
 	}
 
 	private static IRExpression parseIRExpression(CSTNode node) {
+		assert(node.hasChild());
+		IRExpression ret;
+		switch(node.getName()) {
+		case "expr":
+			// expr : expr1 (expr expr);
+			IRExpression condition = parseIRExpression(node.getChild(0));
+			if (node.getChildrenSize() == 3) {
+				IRExpression first = parseIRExpression(node.getChild(1));
+				IRExpression second = parseIRExpression(node.getChild(2));
+				ret = new IRTernaryExpr(condition, first, second);
+			} else {
+				ret = condition;
+			}
+			break;
+		case "expr1":
+		case "expr2":
+		case "expr3":
+		case "expr4":
+		case "expr5":
+		case "expr6":
+			// xxx : exprx (op exprx)*;
+			// Consider left-associative
+			IRExpression left = parseIRExpression(node.getChild(0));
+			for (int i = 1; i < node.getChildrenSize(); i += 2) { 
+				String operator = parseOperator(node.getChild(i));
+				IRExpression right = parseIRExpression(node.getChild(i+1));
+				left = new IRBinaryOpExpr(left, operator, right);
+			}
+			ret = left;
+			break;
+		case "expr7":
+			// op* expr;
+			// Consider right-associative
+			IRExpression right = parseIRExpression(node.getLastChild());
+			for (int i = node.getChildrenSize()-2; i >= 0; --i) {
+				String operator = parseOperator(node.getChild(i));
+				right = new IRUnaryOpExpr(operator, right);
+			}
+			ret = right;
+			break;
+		case "expr_base":
+			ret = parseExprBaseImpl(node);
+		}
+		return null;
+	}
+
+	private static String parseOperator(CSTNode node) {
+		if (node.hasChild()) {
+			// Maybe rel_op or eq_op
+			node = node.getChild(0);
+		}
+		return  node.getToken().getText();
+	}
+	
+	private static IRExpression parseExprBaseImpl(CSTNode node) {
+		// expr_base : location | method_call | literal | TK_len LPAREN! ID RPAREN! | LPAREN! expr RPAREN!;
+		assert(node.getChildrenSize() == 1);
+		node = node.getChild(0);
+		if (!node.hasChild()) {
+			// ID
+			Identifier identifier = new Identifier(node.getToken());
+			return new IRLenExpr(identifier);
+		}
+		
+		switch(node.getName()) {
+		case "location"		:	return parseIRLocation(node);
+		case "method_call"	:	return parseIRMethodCall(node);
+		case "literal"		:	return parseIRLiteral(node);
+		case "expr"			:	return parseIRExpression(node);
+		default :
+			throw new RuntimeException("Wrong token: " + node.getToken().getText());
+		}
+	}
+
+	private static IRExpression parseIRLiteral(CSTNode node) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -242,7 +322,10 @@ public class CSTParser {
 		// method_call_stmt : method_call;
 		assert(node.getChildrenSize() == 1);
 		node = node.getChild(0);
-		
+		return new IRMethodCallStmt(parseIRMethodCall(node));
+	}
+
+	private static IRMethodCall parseIRMethodCall(CSTNode node) {
 		// method_call : ID (import_arg_list)?;
 		Identifier identifier = new Identifier(node.getChild(0).getToken());
 		ArrayList<IRImportArg> args;
@@ -252,7 +335,7 @@ public class CSTParser {
 			args = new ArrayList<IRImportArg>();
 		}
 		
-		return new IRMethodCallStmt(identifier, args);
+		return new IRMethodCall(identifier, args);
 	}
 
 	private static ArrayList<IRImportArg> parseIRImportArgs(CSTNode node) {

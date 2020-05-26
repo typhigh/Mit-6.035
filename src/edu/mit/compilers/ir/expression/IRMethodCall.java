@@ -1,0 +1,49 @@
+package edu.mit.compilers.ir.expression;
+
+import java.util.ArrayList;
+import edu.mit.compilers.ir.IRVisitor;
+import edu.mit.compilers.ir.statement.IRImportArg;
+import edu.mit.compilers.semantic.Identifier;
+
+public class IRMethodCall extends IRExpression {
+
+	private Identifier identifier;
+	private ArrayList<IRImportArg> args;
+
+	public IRMethodCall(Identifier identifier, ArrayList<IRImportArg> args) {
+		super("IRMethodCall");
+		this.identifier = identifier;
+		this.args = args;
+		assert(args != null);
+	}
+
+	public Identifier getIdentifier() {
+		return identifier;
+	}
+	
+	public String getName() {
+		return identifier.name;
+	}
+
+	public ArrayList<IRImportArg> getArgs() {
+		return args;
+	}
+
+	@Override
+	public <T> T accept(IRVisitor<T> visitor) {
+		return visitor.visit(this);
+	}
+
+	@Override
+	public void showTreeImpl(String prefix, StringBuilder result) {
+		String info = prefix + 
+				" DebugID: " + getDebugID() + 
+				" Tag: " + getTag() + 
+				" Identifier: " + getName() + '\n';
+		result.append(info);
+		for (int i = 0; i < args.size(); ++i) {
+			args.get(i).showTreeImpl(prefix + " ", result);
+		}
+	}
+
+}

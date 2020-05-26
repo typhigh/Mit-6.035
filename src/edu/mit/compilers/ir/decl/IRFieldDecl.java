@@ -5,7 +5,7 @@ import edu.mit.compilers.ir.IRVisitor;
 import edu.mit.compilers.semantic.TypeDesc;
 
 public class IRFieldDecl extends IRMemberDecl {
-	TypeDesc type;
+	private TypeDesc type;
 	public IRFieldDecl(TypeDesc type, Token token) {
 		super("IRFieldDecl", token);
 		this.type = type;

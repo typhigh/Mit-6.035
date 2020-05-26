@@ -223,7 +223,7 @@ location
 	;
 	
 expr 
-	: expr1 (QUESTION! expr1 COLON! expr1)*;
+	: expr1 (QUESTION! expr COLON! expr)?;
 
 expr1
 	: expr2 (OP_OR expr2)*;
@@ -244,7 +244,7 @@ expr6
 	: expr7 ((OP_MUL | OP_DIV | OP_MOD) expr7)*;
 
 expr7
-	: (OP_NOT | OP_MINUS)* expr_base;
+	: (OP_NOT | OP_MINUS)*  expr_base;
 
 expr_base
 	: location

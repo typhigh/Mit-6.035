@@ -1,0 +1,29 @@
+package edu.mit.compilers.ir.expression;
+
+import edu.mit.compilers.ir.IRVisitor;
+
+public class IRUnaryOpExpr extends IRExpression {
+
+	private String operator;
+	private IRExpression right;
+	
+	public IRUnaryOpExpr(String operator, IRExpression right) {
+		super("IRUnaryOpExpr");
+		// TODO Auto-generated constructor stub
+		this.operator = operator;
+		this.right = right;
+	}
+
+	@Override
+	public <T> T accept(IRVisitor<T> visitor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void showTreeImpl(String prefix, StringBuilder result) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+}
