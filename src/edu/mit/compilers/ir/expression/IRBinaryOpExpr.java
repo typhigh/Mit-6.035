@@ -23,6 +23,11 @@ public class IRBinaryOpExpr extends IRExpression {
 		return right;
 	}
 
+
+	public String getOperator() {
+		return operator;
+	}
+	
 	@Override
 	public <T> T accept(IRVisitor<T> visitor) {
 		return visitor.visit(this);
@@ -30,12 +35,13 @@ public class IRBinaryOpExpr extends IRExpression {
 
 	@Override
 	public void showTreeImpl(String prefix, StringBuilder result) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public String getOperator() {
-		return operator;
+		String info = prefix + 
+				" DebugID: " + getDebugID() +
+				" Tag: " + getTag() + 
+				" Operator: " + getOperator() + "\n";
+		result.append(info);
+		left.showTreeImpl(prefix + " ", result);
+		right.showTreeImpl(prefix + " ", result);
 	}
 	
 }

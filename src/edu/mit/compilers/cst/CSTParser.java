@@ -4,25 +4,31 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import antlr.Token;
+import edu.mit.compilers.grammar.DecafParserTokenTypes;
 import edu.mit.compilers.ir.IRProgram;
 import edu.mit.compilers.ir.decl.IRFieldDecl;
 import edu.mit.compilers.ir.decl.IRImportDecl;
 import edu.mit.compilers.ir.decl.IRMethodDecl;
 import edu.mit.compilers.ir.expression.IRBinaryOpExpr;
+import edu.mit.compilers.ir.expression.IREmptyExpr;
 import edu.mit.compilers.ir.expression.IRExpression;
 import edu.mit.compilers.ir.expression.IRLenExpr;
 import edu.mit.compilers.ir.expression.IRLocation;
 import edu.mit.compilers.ir.expression.IRMethodCall;
 import edu.mit.compilers.ir.expression.IRTernaryExpr;
 import edu.mit.compilers.ir.expression.IRUnaryOpExpr;
+import edu.mit.compilers.ir.expression.literal.IRBoolLiteral;
+import edu.mit.compilers.ir.expression.literal.IRCharLiteral;
+import edu.mit.compilers.ir.expression.literal.IRIntLiteral;
+import edu.mit.compilers.ir.expression.literal.IRStringLiteral;
 import edu.mit.compilers.ir.statement.IRAssignStmt;
 import edu.mit.compilers.ir.statement.IRBlock;
 import edu.mit.compilers.ir.statement.IRBreakStmt;
 import edu.mit.compilers.ir.statement.IRContinueStmt;
 import edu.mit.compilers.ir.statement.IRForStmt;
 import edu.mit.compilers.ir.statement.IRIfStmt;
-import edu.mit.compilers.ir.statement.IRImportArg;
 import edu.mit.compilers.ir.statement.IRMethodCallStmt;
+import edu.mit.compilers.ir.statement.IRReturnStmt;
 import edu.mit.compilers.ir.statement.IRStatement;
 import edu.mit.compilers.ir.statement.IRWhileStmt;
 import edu.mit.compilers.semantic.ArrayTypeDesc;
@@ -254,8 +260,25 @@ public class CSTParser {
 	}
 
 	private static IRExpression parseIRLiteral(CSTNode node) {
-		// TODO Auto-generated method stub
-		return null;
+		// literal	: INT | CHAR | bool_literal
+		assert(node.hasChild());
+		node = node.getChild(0);
+		if (node.getName() == "bool_literal") {
+			// bool_literal : TK_true | TK_false;
+			assert(node.hasChild());
+			node = node.getChild(0);
+			return new IRBoolLiteral(node.getToken());
+		} 
+		
+		if (node.getToken().getType() == DecafParserTokenTypes.INT) {
+			return new IRIntLiteral(node.getToken());
+		}
+		
+		if (node.getToken().getType() == DecafParserTokenTypes.CHAR){
+			return new IRCharLiteral(node.getToken());
+		}
+		
+		throw new RuntimeException("Unexpected literal: " + node.getName());
 	}
 
 	private static IRLocation parseIRLocation(CSTNode node) {
@@ -328,38 +351,53 @@ public class CSTParser {
 	private static IRMethodCall parseIRMethodCall(CSTNode node) {
 		// method_call : ID (import_arg_list)?;
 		Identifier identifier = new Identifier(node.getChild(0).getToken());
-		ArrayList<IRImportArg> args;
+		ArrayList<IRExpression> args;
 		if (node.getChildrenSize() > 1) {
-			args = parseIRImportArgs(node.getChild(1));
+			args = parseImportArgsImpl(node.getChild(1));
 		} else {
-			args = new ArrayList<IRImportArg>();
+			args = new ArrayList<IRExpression>();
 		}
 		
 		return new IRMethodCall(identifier, args);
 	}
 
-	private static ArrayList<IRImportArg> parseIRImportArgs(CSTNode node) {
+	private static ArrayList<IRExpression> parseImportArgsImpl(CSTNode node) {
 		// import_arg_list : import_arg import_arg_list_more;
-		ArrayList<IRImportArg> ret = new ArrayList<IRImportArg>();
+		ArrayList<IRExpression> ret = new ArrayList<IRExpression>();
 		while (node.hasChild()) {
-			ret.add(parseIRImportArg(node.getChild(0)));
+			ret.add(parseImportArgImpl(node.getChild(0)));
 			node = node.getChild(1);
 		}
 		return ret;
 	}
 
-	private static IRImportArg parseIRImportArg(CSTNode node) {
-		// TODO Auto-generated method stub
-		return null;
+	private static IRExpression parseImportArgImpl(CSTNode node) {
+		// import_arg : expr | STRING;
+		assert(node.hasChild());
+		node = node.getChild(0);
+		if (node.getName() == "expr") {
+			return parseIRExpression(node);
+		} else {
+			return new IRStringLiteral(node.getToken());
+		}
 	}
 
 	private static IRStatement parseIRReturnStmt(CSTNode node) {
-		// TODO Auto-generated method stub
-		return null;
+		// return_stmt: (expr)? ;
+		IRExpression expr;
+		if (node.hasChild()) {
+			expr = parseIRExpression(node.getChild(0));
+		} else {
+			expr = new IREmptyExpr();
+		}
+		return new IRReturnStmt(expr);
 	}
 	
 	private static IRWhileStmt parseIRWhileStmt(CSTNode node) {
-		// TODO Auto-generated method stub
-		return null;
+		// while_stmt: expr block;
+		assert(node.hasChild());
+		IRExpression condition = parseIRExpression(node.getChild(0));
+		IRBlock block = parseIRBlock(node.getChild(1));
+		return new IRWhileStmt(condition, block);
 	}
 }

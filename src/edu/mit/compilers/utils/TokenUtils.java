@@ -47,6 +47,15 @@ public class TokenUtils {
 				type == DecafParserTokenTypes.RBRACK || 
 				type == DecafParserTokenTypes.RCURLY || 
 				type == DecafParserTokenTypes.RPAREN || 
-				type == DecafParserTokenTypes.SEMI;
+				type == DecafParserTokenTypes.SEMI ||
+				type == DecafParserTokenTypes.TK_break || 
+				type == DecafParserTokenTypes.TK_continue || 
+				type == DecafParserTokenTypes.TK_else ||
+				type == DecafParserTokenTypes.TK_for ||
+				type == DecafParserTokenTypes.TK_if ||
+				type == DecafParserTokenTypes.TK_import ||
+				type == DecafParserTokenTypes.TK_len ||
+				type == DecafParserTokenTypes.TK_return ||
+				type == DecafParserTokenTypes.TK_while;
 	}
 }

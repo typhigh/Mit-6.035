@@ -14,16 +14,27 @@ public class IRUnaryOpExpr extends IRExpression {
 		this.right = right;
 	}
 
+	public String getOperator() {
+		return operator;
+	}
+
+	public IRExpression getRight() {
+		return right;
+	}
+	
 	@Override
 	public <T> T accept(IRVisitor<T> visitor) {
-		// TODO Auto-generated method stub
-		return null;
+		return visitor.visit(this);
 	}
 
 	@Override
 	public void showTreeImpl(String prefix, StringBuilder result) {
-		// TODO Auto-generated method stub
-		
+		String info = prefix + 
+				" DebugID: " + getDebugID() +
+				" Tag: " + getTag() + 
+				" Operator: " + getOperator() + "\n";
+		result.append(info);
+		right.showTreeImpl(prefix + " ", result);
 	}
 	
 }

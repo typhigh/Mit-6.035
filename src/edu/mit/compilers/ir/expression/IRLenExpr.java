@@ -13,6 +13,15 @@ public class IRLenExpr extends IRExpression {
 		this.identifier = identifier;
 	}
 
+
+	public Identifier getIdentifier() {
+		return identifier;
+	}
+	
+	public String getName() {
+		return identifier.name;
+	}
+	
 	@Override
 	public <T> T accept(IRVisitor<T> visitor) {
 		return visitor.visit(this);
@@ -20,13 +29,11 @@ public class IRLenExpr extends IRExpression {
 
 	@Override
 	public void showTreeImpl(String prefix, StringBuilder result) {
-		// TODO Auto-generated method stub
-		
+		String info = prefix + 
+				" DebugID: " + getDebugID() +
+				" Tag: " + getTag() + 
+				" Identifier: " + getName() + "\n";
+		result.append(info);
 	}
-
-	public Identifier getIdentifier() {
-		return identifier;
-	}
-	
 	
 }

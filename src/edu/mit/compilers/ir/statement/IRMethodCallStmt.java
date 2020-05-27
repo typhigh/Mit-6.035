@@ -3,6 +3,7 @@ package edu.mit.compilers.ir.statement;
 import java.util.ArrayList;
 
 import edu.mit.compilers.ir.IRVisitor;
+import edu.mit.compilers.ir.expression.IRExpression;
 import edu.mit.compilers.ir.expression.IRMethodCall;
 import edu.mit.compilers.semantic.Identifier;
 
@@ -10,7 +11,7 @@ public class IRMethodCallStmt extends IRStatement {
 		
 	private IRMethodCall methodCall;
 	
-	public IRMethodCallStmt(Identifier identifier, ArrayList<IRImportArg> args) {
+	public IRMethodCallStmt(Identifier identifier, ArrayList<IRExpression> args) {
 		this(new IRMethodCall(identifier, args));
 	}
 
@@ -27,7 +28,7 @@ public class IRMethodCallStmt extends IRStatement {
 		return methodCall.getName();
 	}
 
-	public ArrayList<IRImportArg> getArgs() {
+	public ArrayList<IRExpression> getArgs() {
 		return methodCall.getArgs();
 	}
 

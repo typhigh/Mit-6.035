@@ -1,28 +1,29 @@
 package edu.mit.compilers.ir.expression.literal;
 
+import antlr.Token;
 import edu.mit.compilers.ir.IRVisitor;
 
-public class IRBoolLiteral extends IRLiteral {
+public class IRBoolLiteral extends IRLiteral<Boolean> {
 
-	private boolean value; 
-	public IRBoolLiteral(boolean value) {
-		super("IRBoolLiteral");
-		this.value = value;
+	public IRBoolLiteral(Token token) {
+		super("IRBoolLiteral", parseTokenValue(token), token);
 	}
 
-	public boolean isValue() {
-		return value;
+	private static Boolean parseTokenValue(Token token) {
+		String text = token.getText();
+		if (text == "true") {
+			return true;
+		} else if (text == "false") {
+			return false;
+		} else {
+			throw new RuntimeException("Expected bool literal such as true or false not: "+ text);
+		}
 	}
-	
+
+
 	@Override
 	public <T> T accept(IRVisitor<T> visitor) {
 		return visitor.visit(this);
-	}
-
-	@Override
-	public void showTreeImpl(String prefix, StringBuilder result) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

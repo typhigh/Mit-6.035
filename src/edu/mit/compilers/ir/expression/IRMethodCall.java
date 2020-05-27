@@ -1,16 +1,16 @@
 package edu.mit.compilers.ir.expression;
 
 import java.util.ArrayList;
+
 import edu.mit.compilers.ir.IRVisitor;
-import edu.mit.compilers.ir.statement.IRImportArg;
 import edu.mit.compilers.semantic.Identifier;
 
 public class IRMethodCall extends IRExpression {
 
 	private Identifier identifier;
-	private ArrayList<IRImportArg> args;
+	private ArrayList<IRExpression> args;
 
-	public IRMethodCall(Identifier identifier, ArrayList<IRImportArg> args) {
+	public IRMethodCall(Identifier identifier, ArrayList<IRExpression> args) {
 		super("IRMethodCall");
 		this.identifier = identifier;
 		this.args = args;
@@ -25,7 +25,7 @@ public class IRMethodCall extends IRExpression {
 		return identifier.name;
 	}
 
-	public ArrayList<IRImportArg> getArgs() {
+	public ArrayList<IRExpression> getArgs() {
 		return args;
 	}
 
