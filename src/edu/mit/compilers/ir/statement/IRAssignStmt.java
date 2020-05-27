@@ -20,7 +20,7 @@ public class IRAssignStmt extends IRStatement {
 	
 	public IRAssignStmt(IRLocation location, String operator) {
 		this(location, operator, null);
-		assert(operator == "++" || operator == "--");
+		assert(operator.equals("++") || operator.equals("--"));
 	}
 	
 	public IRAssignStmt(Identifier identifier, String operator1, IRExpression initValue) {
@@ -53,6 +53,8 @@ public class IRAssignStmt extends IRStatement {
 		result.append(info);
 		
 		location.showTreeImpl(prefix + " ", result);
-		value.showTreeImpl(prefix + " ", result);
+		if (value != null) {
+			value.showTreeImpl(prefix + " ", result);
+		}
 	}
 }

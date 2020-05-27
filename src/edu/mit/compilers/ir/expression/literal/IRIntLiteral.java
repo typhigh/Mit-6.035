@@ -2,6 +2,7 @@ package edu.mit.compilers.ir.expression.literal;
 
 import antlr.Token;
 import edu.mit.compilers.ir.IRVisitor;
+import edu.mit.compilers.utils.StringUtils;
 
 public class IRIntLiteral extends IRLiteral<Integer> {
 	
@@ -10,7 +11,13 @@ public class IRIntLiteral extends IRLiteral<Integer> {
 	}
 	
 	private static Integer parseTokenValue(Token token) {
-		return Integer.valueOf(token.getText());
+		String text = token.getText();
+		if (text.contains("0x") || text.contains("0X")) {
+			String value = text.substring(2);
+			return StringUtils.parseHexInt(value);
+		} else {
+			return Integer.valueOf(text);
+		}
 	}
 
 	@Override

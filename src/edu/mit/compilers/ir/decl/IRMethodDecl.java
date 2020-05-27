@@ -50,7 +50,7 @@ public class IRMethodDecl extends IRMemberDecl{
 		assert(Variables != null);
 		// Variables 
 		for (int i = 0; i < Variables.size(); ++i) {
-			String subInfo = prefix + " " + Variables.get(i).toString() + '\n';
+			String subInfo = prefix + "  " + Variables.get(i).toString() + '\n';
 			result.append(subInfo);
 		}
 		

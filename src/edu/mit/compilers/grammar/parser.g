@@ -137,7 +137,8 @@ method_decl
 
 method_decl_type
 	: type
-	| TK_void;
+	| TK_void
+	;
 
 method_decl_args_list
 	: type ID method_decl_args_list_more

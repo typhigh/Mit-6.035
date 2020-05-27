@@ -8,6 +8,7 @@ public class IRReturnStmt extends IRStatement {
 	private IRExpression expr;
 	public IRReturnStmt(IRExpression expr) {
 		super("IRReturnStmt");
+		assert(expr != null);
 		this.expr = expr;
 	}
 

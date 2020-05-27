@@ -69,15 +69,26 @@ public class CSTParser {
 	}
 	
 	private static IRImportDecl parseIRImportDecl(CSTNode node) { 
-		assert(node.getChildren().size() >= 2);
-		return new IRImportDecl(node.getChildren().get(1).getToken());
+		// import_decl : ID;
+		assert(node.getChildren().size() == 1);
+		return new IRImportDecl(node.getChildren().get(0).getToken());
 	}
 	
 	private static IRMethodDecl parseIRMethodDecl(CSTNode node) {
-		assert(node.getChildrenSize() >= 4);
+		assert(node.getChildrenSize() == 4);
 		
+		// method_decl : method_decl_type ID method_decl_args_list block;
 		// Method declaration consists of (return)type, identifier, Variable, block 
-		Token type = node.getChild(0).getChild(0).getToken();
+		
+		// method_decl_type : type | TK_void;
+		CSTNode cur = node.getChild(0).getChild(0);
+		Token type = cur.getToken();
+		if (cur.hasChild()) {
+			cur = cur.getChild(0);
+			type = cur.getToken();
+		} 
+		assert(type != null);
+		
 		Token identifier = node.getChild(1).getToken();
 		ArrayList<Variable> Variables = parseVariableList(node.getChild(2));
 		IRBlock block = parseIRBlock(node.getChild(3));
@@ -131,9 +142,8 @@ public class CSTParser {
 			
 			/// this type maybe array type
 			if (arrayNode.hasChild()) {
-				Token lengthToken = arrayNode.getChild(0).getToken();
-				int length = Integer.parseInt(lengthToken.getText());
-				nowType = new ArrayTypeDesc(nowType, length);
+				Token size = arrayNode.getChild(0).getToken();
+				nowType = new ArrayTypeDesc(nowType, new IRIntLiteral(size));
 			}
 			ret.add(new IRFieldDecl(nowType, identifier));
 			node = node.getChild(2);
@@ -169,12 +179,12 @@ public class CSTParser {
 		String tag = firstChild.getName();
 		String operator;
 		IRAssignStmt ret;
-		if (tag == "assign_op") {
+		if (tag.equals("assign_op")) {
 			// assign_op : OP_ASSIGN | OP_ASSIGN_PLUS | OP_ASSIGN_MINUS;
 			operator = firstChild.getChild(0).getToken().getText();
 			IRExpression expression = parseIRExpression(node.getChild(1));
 			ret = new IRAssignStmt(location, operator, expression);
-		} else if (tag == "increment") {
+		} else if (tag.equals("increment")) {
 			// increment : OP_INC | OP_DEC;
 			operator = firstChild.getChild(0).getToken().getText();
 			ret = new IRAssignStmt(location, operator);
@@ -189,6 +199,7 @@ public class CSTParser {
 		IRExpression ret;
 		switch(node.getName()) {
 		case "expr":
+		{
 			// expr : expr1 (expr expr);
 			IRExpression condition = parseIRExpression(node.getChild(0));
 			if (node.getChildrenSize() == 3) {
@@ -199,12 +210,14 @@ public class CSTParser {
 				ret = condition;
 			}
 			break;
+		}
 		case "expr1":
 		case "expr2":
 		case "expr3":
 		case "expr4":
 		case "expr5":
 		case "expr6":
+		{
 			// xxx : exprx (op exprx)*;
 			// Consider left-associative
 			IRExpression left = parseIRExpression(node.getChild(0));
@@ -215,7 +228,9 @@ public class CSTParser {
 			}
 			ret = left;
 			break;
+		}
 		case "expr7":
+		{
 			// op* expr;
 			// Consider right-associative
 			IRExpression right = parseIRExpression(node.getLastChild());
@@ -225,10 +240,20 @@ public class CSTParser {
 			}
 			ret = right;
 			break;
-		case "expr_base":
-			ret = parseExprBaseImpl(node);
 		}
-		return null;
+		case "expr_base":
+		{
+			ret = parseExprBaseImpl(node);
+			break;
+		}
+		default:
+		{
+			throw new RuntimeException("Unknown expr type: " + node.getName());
+		}
+		}
+		
+		assert(ret != null);
+		return ret;
 	}
 
 	private static String parseOperator(CSTNode node) {
@@ -304,6 +329,7 @@ public class CSTParser {
 
 	private static IRForStmt parseIRForStmt(CSTNode node) {
 		// for_stmt : ID OP_ASSIGN expr1  expr2 location (compound_assign_op expr | increment) block;
+		assert(node.getChildrenSize() >= 7);
 		Identifier identifier = new Identifier(node.getChild(0).getToken());
 		String operator1 = node.getChild(1).getToken().getText();
 		IRExpression  initValue = parseIRExpression(node.getChild(2));
@@ -314,12 +340,14 @@ public class CSTParser {
 		String operator2;
 		IRAssignStmt step;
 		
-		if (node.getChild(5).getName() == "compound_assign_op") {
-			operator2 = node.getChild(5).getChild(0).getChild(0).getToken().getText();
+		if (node.getChild(5).getName().equals("compound_assign_op")) {
+			// compound_assign_op : OP_ASSIGN_PLUS | OP_ASSIGN_MINUS;
+			operator2 = node.getChild(5).getChild(0).getToken().getText();
 			IRExpression stepRValue = parseIRExpression(node.getChild(6));
 			step = new IRAssignStmt(location, operator2, stepRValue);
 		} else {
-			operator2 = node.getChild(5).getToken().getText();
+			// increment : OP_INC | OP_DEC;
+			operator2 = node.getChild(5).getChild(0).getToken().getText();
 			step = new IRAssignStmt(location, operator2);
 		}
 		
@@ -375,7 +403,7 @@ public class CSTParser {
 		// import_arg : expr | STRING;
 		assert(node.hasChild());
 		node = node.getChild(0);
-		if (node.getName() == "expr") {
+		if (node.getName().equals("expr")) {
 			return parseIRExpression(node);
 		} else {
 			return new IRStringLiteral(node.getToken());

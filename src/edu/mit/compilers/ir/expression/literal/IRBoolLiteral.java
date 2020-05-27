@@ -11,9 +11,10 @@ public class IRBoolLiteral extends IRLiteral<Boolean> {
 
 	private static Boolean parseTokenValue(Token token) {
 		String text = token.getText();
-		if (text == "true") {
+		System.out.println("."+text+".");
+		if (text.equals("true")) {
 			return true;
-		} else if (text == "false") {
+		} else if (text.equals("false")) {
 			return false;
 		} else {
 			throw new RuntimeException("Expected bool literal such as true or false not: "+ text);
