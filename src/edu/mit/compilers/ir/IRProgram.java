@@ -72,4 +72,13 @@ public class IRProgram extends IR {
 		
 //		System.out.print("done4");
 	}
+
+	@Override
+	public ArrayList<IR> getChildren() {
+		ArrayList<IR> ret = new ArrayList<IR>();
+		ret.addAll(importDecls);
+		ret.addAll(fieldDecls);
+		ret.addAll(methodDecls);
+		return ret;
+	}
 }

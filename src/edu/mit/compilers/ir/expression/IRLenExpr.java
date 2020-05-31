@@ -1,5 +1,8 @@
 package edu.mit.compilers.ir.expression;
 
+import java.util.ArrayList;
+
+import edu.mit.compilers.ir.IR;
 import edu.mit.compilers.ir.IRVisitor;
 import edu.mit.compilers.semantic.Identifier;
 
@@ -34,6 +37,12 @@ public class IRLenExpr extends IRExpression {
 				" Tag: " + getTag() + 
 				" Identifier: " + getName() + "\n";
 		result.append(info);
+	}
+
+
+	@Override
+	public ArrayList<IR> getChildren() {
+		return null;
 	}
 	
 }

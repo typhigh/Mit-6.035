@@ -3,6 +3,7 @@ package edu.mit.compilers.ir.decl;
 import java.util.ArrayList;
 
 import antlr.Token;
+import edu.mit.compilers.ir.IR;
 import edu.mit.compilers.ir.IRVisitor;
 import edu.mit.compilers.ir.statement.IRBlock;
 import edu.mit.compilers.semantic.BasicTypeDesc;
@@ -56,6 +57,13 @@ public class IRMethodDecl extends IRMemberDecl{
 		
 		// Block
 		block.showTreeImpl(prefix + " ", result);
+	}
+
+	@Override
+	public ArrayList<IR> getChildren() {
+		ArrayList<IR> ret = new ArrayList<IR>();
+		ret.add(block);
+		return ret;
 	}
 	
 }

@@ -1,5 +1,8 @@
 package edu.mit.compilers.ir.statement;
 
+import java.util.ArrayList;
+
+import edu.mit.compilers.ir.IR;
 import edu.mit.compilers.ir.IRVisitor;
 import edu.mit.compilers.ir.expression.IRExpression;
 
@@ -28,6 +31,13 @@ public class IRReturnStmt extends IRStatement {
 				" Tag: " + getTag() + '\n';
 		result.append(info);
 		expr.showTreeImpl(prefix + " ", result);
+	}
+
+	@Override
+	public ArrayList<IR> getChildren() {
+		ArrayList<IR> ret = new ArrayList<IR>();
+		ret.add(expr);
+		return ret;
 	}
 
 }

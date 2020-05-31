@@ -1,5 +1,8 @@
 package edu.mit.compilers.ir.statement;
 
+import java.util.ArrayList;
+
+import edu.mit.compilers.ir.IR;
 import edu.mit.compilers.ir.IRVisitor;
 import edu.mit.compilers.ir.expression.IRExpression;
 
@@ -38,6 +41,17 @@ public class IRIfStmt extends IRStatement{
 		if (elseBlock != null) {
 			elseBlock.showTreeImpl(prefix + " ", result);
 		}
+	}
+
+	@Override
+	public ArrayList<IR> getChildren() {
+		ArrayList<IR> ret = new ArrayList<IR>();
+		ret.add(condition);
+		ret.add(ifBlock);
+		if (elseBlock != null) {
+			ret.add(elseBlock);
+		}
+		return ret;
 	}
 
 }

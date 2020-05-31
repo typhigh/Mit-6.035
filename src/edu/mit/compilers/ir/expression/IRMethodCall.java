@@ -2,6 +2,7 @@ package edu.mit.compilers.ir.expression;
 
 import java.util.ArrayList;
 
+import edu.mit.compilers.ir.IR;
 import edu.mit.compilers.ir.IRVisitor;
 import edu.mit.compilers.semantic.Identifier;
 
@@ -44,6 +45,13 @@ public class IRMethodCall extends IRExpression {
 		for (int i = 0; i < args.size(); ++i) {
 			args.get(i).showTreeImpl(prefix + " ", result);
 		}
+	}
+
+	@Override
+	public ArrayList<IR> getChildren() {
+		ArrayList<IR> ret = new ArrayList<IR>();
+		ret.addAll(args);
+		return ret;
 	}
 
 }

@@ -1,5 +1,8 @@
 package edu.mit.compilers.ir.statement;
 
+import java.util.ArrayList;
+
+import edu.mit.compilers.ir.IR;
 import edu.mit.compilers.ir.IRVisitor;
 import edu.mit.compilers.ir.expression.IRExpression;
 
@@ -34,5 +37,13 @@ public class IRWhileStmt extends IRStatement {
 		result.append(info);
 		condition.showTreeImpl(prefix + " ", result);
 		block.showTreeImpl(prefix + " ", result);
+	}
+
+	@Override
+	public ArrayList<IR> getChildren() {
+		ArrayList<IR> ret = new ArrayList<IR>();
+		ret.add(condition);
+		ret.add(block);
+		return ret;
 	}
 }

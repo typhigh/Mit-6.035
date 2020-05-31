@@ -1,5 +1,8 @@
 package edu.mit.compilers.ir.expression;
 
+import java.util.ArrayList;
+
+import edu.mit.compilers.ir.IR;
 import edu.mit.compilers.ir.IRVisitor;
 
 public class IRUnaryOpExpr extends IRExpression {
@@ -35,6 +38,13 @@ public class IRUnaryOpExpr extends IRExpression {
 				" Operator: " + getOperator() + "\n";
 		result.append(info);
 		right.showTreeImpl(prefix + " ", result);
+	}
+
+	@Override
+	public ArrayList<IR> getChildren() {
+		ArrayList<IR> ret = new ArrayList<IR>();
+		ret.add(right);
+		return ret;
 	}
 	
 }

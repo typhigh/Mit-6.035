@@ -1,6 +1,9 @@
 package edu.mit.compilers.ir.expression.literal;
 
+import java.util.ArrayList;
+
 import antlr.Token;
+import edu.mit.compilers.ir.IR;
 import edu.mit.compilers.ir.expression.IRExpression;
 
 public abstract class IRLiteral<T> extends IRExpression {
@@ -25,4 +28,10 @@ public abstract class IRLiteral<T> extends IRExpression {
 				" Value: " + value + "\n";
 		result.append(info);
 	}
+	
+	public ArrayList<IR> getChildren() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -1,6 +1,9 @@
 package edu.mit.compilers.ir.decl;
 
+import java.util.ArrayList;
+
 import antlr.Token;
+import edu.mit.compilers.ir.IR;
 import edu.mit.compilers.ir.IRVisitor;
 import edu.mit.compilers.semantic.TypeDesc;
 
@@ -25,6 +28,11 @@ public class IRFieldDecl extends IRMemberDecl {
 				" Type: " + type.toString() + 
 				" Identifier : " + getName() + '\n';
 		result.append(info);
+	}
+
+	@Override
+	public ArrayList<IR> getChildren() {
+		return null;
 	}
 
 }

@@ -51,5 +51,13 @@ public class IRBlock extends IR {
 			statements.get(i).showTreeImpl(prefix + " ", result);
 		}
 	}
+
+	@Override
+	public ArrayList<IR> getChildren() {
+		ArrayList<IR> ret = new ArrayList<IR>();
+		ret.addAll(fieldDecls);
+		ret.addAll(statements);
+		return ret;
+	}
 	
 }

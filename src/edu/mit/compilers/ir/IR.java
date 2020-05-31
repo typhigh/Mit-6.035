@@ -1,5 +1,7 @@
 package edu.mit.compilers.ir;
 
+import java.util.ArrayList;
+
 public abstract class IR {
 	private final String tag;
 	
@@ -11,8 +13,13 @@ public abstract class IR {
 	private int line;
 	private int column;
 	
+	// Parent (in ir-tree)
+	private IR parent = null;
+	
 	public abstract<T> T accept(IRVisitor<T> visitor);
 
+	public abstract ArrayList<IR> getChildren();
+	
 	public IR(String tag) {
 		this.tag = tag;
 		this.debugID = currentID++;
@@ -55,4 +62,12 @@ public abstract class IR {
 	 * The implement of showTree with prefix
 	 */
 	public abstract void showTreeImpl(String prefix, StringBuilder result);
+
+	public IR getParent() {
+		return parent;
+	}
+
+	public void setParent(IR parent) {
+		this.parent = parent;
+	}
 }

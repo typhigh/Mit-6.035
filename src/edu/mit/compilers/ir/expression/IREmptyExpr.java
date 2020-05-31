@@ -1,5 +1,8 @@
 package edu.mit.compilers.ir.expression;
 
+import java.util.ArrayList;
+
+import edu.mit.compilers.ir.IR;
 import edu.mit.compilers.ir.IRVisitor;
 
 public class IREmptyExpr extends IRExpression {
@@ -19,6 +22,11 @@ public class IREmptyExpr extends IRExpression {
 				" DebugID: " + getDebugID() +
 				" Tag: " + getTag() + '\n';
 		result.append(info);
+	}
+
+	@Override
+	public ArrayList<IR> getChildren() {
+		return null;
 	}
 
 }

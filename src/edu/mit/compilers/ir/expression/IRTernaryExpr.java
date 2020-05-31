@@ -1,5 +1,8 @@
 package edu.mit.compilers.ir.expression;
 
+import java.util.ArrayList;
+
+import edu.mit.compilers.ir.IR;
 import edu.mit.compilers.ir.IRVisitor;
 
 /*
@@ -44,6 +47,15 @@ public class IRTernaryExpr extends IRExpression {
 		condition.showTreeImpl(prefix + " ", result);
 		first.showTreeImpl(prefix + " ", result);
 		second.showTreeImpl(prefix + " ", result);
+	}
+
+	@Override
+	public ArrayList<IR> getChildren() {
+		ArrayList<IR> ret = new ArrayList<IR>();
+		ret.add(condition);
+		ret.add(first);
+		ret.add(second);
+		return ret;
 	}
 
 }

@@ -1,6 +1,9 @@
 package edu.mit.compilers.ir.expression.literal;
 
+import java.util.ArrayList;
+
 import antlr.Token;
+import edu.mit.compilers.ir.IR;
 import edu.mit.compilers.ir.IRVisitor;
 
 public class IRBoolLiteral extends IRLiteral<Boolean> {
@@ -26,5 +29,4 @@ public class IRBoolLiteral extends IRLiteral<Boolean> {
 	public <T> T accept(IRVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
-
 }
