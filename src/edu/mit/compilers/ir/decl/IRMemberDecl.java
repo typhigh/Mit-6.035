@@ -1,29 +1,18 @@
 package edu.mit.compilers.ir.decl;
 
-import antlr.Token;
-import edu.mit.compilers.ir.*;
-import edu.mit.compilers.semantic.Identifier;
+import edu.mit.compilers.ir.common.IR;
+import edu.mit.compilers.ir.common.IRVariable;
 
 public abstract class IRMemberDecl extends IR {
-	private Identifier identifier; 
+	private IRVariable variable; 
 	
-	public IRMemberDecl(String tag, Token token) {
+	public IRMemberDecl(String tag, IRVariable variable) {
 		super(tag);
-		this.identifier = new Identifier(token);
-		setLine(token.getLine());
+		this.variable = variable;
+		setLine(variable.getLine());
 	}
 
-	public String getName() {
-		return identifier.name;
-	}
-	
-	@Override
-	public int getLine() {
-		return identifier.line;
-	}
-	
-	@Override
-	public int getColumn() {
-		return identifier.column;
+	public IRVariable getVariable() {
+		return variable;
 	}
 }

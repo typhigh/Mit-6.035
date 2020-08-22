@@ -2,8 +2,8 @@ package edu.mit.compilers.ir.statement;
 
 import java.util.ArrayList;
 
-import edu.mit.compilers.ir.IR;
-import edu.mit.compilers.ir.IRVisitor;
+import edu.mit.compilers.ir.common.IR;
+import edu.mit.compilers.ir.common.IRVisitor;
 import edu.mit.compilers.ir.decl.IRFieldDecl;
 
 public class IRBlock extends IR {
@@ -36,21 +36,6 @@ public class IRBlock extends IR {
 		return visitor.visit(this);
 	}
 
-	@Override
-	public void showTreeImpl(String prefix, StringBuilder result) {
-		String info = prefix + 
-				" DebugID: " + getDebugID() +
-				" Tag: " + getTag() + '\n';
-		result.append(info);
-		
-		for (int i = 0; i < fieldDecls.size(); ++i) {
-			fieldDecls.get(i).showTreeImpl(prefix + " ", result);
-		}
-		
-		for (int i = 0; i < statements.size(); ++i) {
-			statements.get(i).showTreeImpl(prefix + " ", result);
-		}
-	}
 
 	@Override
 	public ArrayList<IR> getChildren() {

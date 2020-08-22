@@ -3,32 +3,25 @@ package edu.mit.compilers.ir.decl;
 import java.util.ArrayList;
 
 import antlr.Token;
-import edu.mit.compilers.ir.IR;
-import edu.mit.compilers.ir.IRVisitor;
+import edu.mit.compilers.ir.common.IR;
+import edu.mit.compilers.ir.common.IRVariable;
+import edu.mit.compilers.ir.common.IRVisitor;
 
 public class IRImportDecl extends IRMemberDecl {
 
-	public IRImportDecl(Token id) {
-		super("IRImportDecl", id);
-	}
-
-	@Override
-	public <T> T accept(IRVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
-
-	@Override
-	public void showTreeImpl(String prefix, StringBuilder result) {
-		String info = prefix + 
-				" DebugID: " + getDebugID() +
-				" Tag: " + getTag() + 
-				" Identifier : " + getName() + '\n';
-		result.append(info);
+	public IRImportDecl(IRVariable variable) {
+		super("IRImportDecl", variable);
 	}
 
 	@Override
 	public ArrayList<IR> getChildren() {
-		return null;
+		ArrayList<IR> children = new ArrayList<IR>();
+		children.add(getVariable());
+		return children;
 	}
-		
+	
+	@Override
+	public <T> T accept(IRVisitor<T> visitor) {
+		return visitor.visit(this);
+	}	
 }

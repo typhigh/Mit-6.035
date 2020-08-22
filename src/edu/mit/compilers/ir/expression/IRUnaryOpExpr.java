@@ -2,8 +2,8 @@ package edu.mit.compilers.ir.expression;
 
 import java.util.ArrayList;
 
-import edu.mit.compilers.ir.IR;
-import edu.mit.compilers.ir.IRVisitor;
+import edu.mit.compilers.ir.common.IR;
+import edu.mit.compilers.ir.common.IRVisitor;
 
 public class IRUnaryOpExpr extends IRExpression {
 
@@ -31,20 +31,16 @@ public class IRUnaryOpExpr extends IRExpression {
 	}
 
 	@Override
-	public void showTreeImpl(String prefix, StringBuilder result) {
-		String info = prefix + 
-				" DebugID: " + getDebugID() +
-				" Tag: " + getTag() + 
-				" Operator: " + getOperator() + "\n";
-		result.append(info);
-		right.showTreeImpl(prefix + " ", result);
-	}
-
-	@Override
 	public ArrayList<IR> getChildren() {
 		ArrayList<IR> ret = new ArrayList<IR>();
 		ret.add(right);
 		return ret;
 	}
 	
+	public String getInfoForShow(String prefix) {
+		return prefix + 
+				" DebugID: " + getDebugID() + 
+				" Tag: " + getTag() + 
+				" Op: " + getOperator() + '\n';
+	}
 }

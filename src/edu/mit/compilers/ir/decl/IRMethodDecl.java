@@ -2,32 +2,27 @@ package edu.mit.compilers.ir.decl;
 
 import java.util.ArrayList;
 
-import antlr.Token;
-import edu.mit.compilers.ir.IR;
-import edu.mit.compilers.ir.IRVisitor;
+import edu.mit.compilers.ir.common.IR;
+import edu.mit.compilers.ir.common.IRParameterList;
+import edu.mit.compilers.ir.common.IRVariable;
+import edu.mit.compilers.ir.common.IRVisitor;
 import edu.mit.compilers.ir.statement.IRBlock;
-import edu.mit.compilers.semantic.BasicTypeDesc;
-import edu.mit.compilers.semantic.Variable;
+import edu.mit.compilers.ir.type.IRBasicType;
 
 public class IRMethodDecl extends IRMemberDecl{
 	
-	private BasicTypeDesc returnType;
+	private IRBasicType returnType;
 	private IRBlock block;
-	private ArrayList<Variable> Variables;
+	private IRParameterList paraList;
 	
-	public IRMethodDecl(Token type, Token name, ArrayList<Variable> Variables, IRBlock block) {
-		super("IRMethodDecl", name);
-		this.returnType = BasicTypeDesc.GetInstance(type.getText());
+	public IRMethodDecl(IRVariable variable, IRBasicType type, IRParameterList paraList, IRBlock block) {
+		super("IRMethodDecl", variable);
+		this.returnType = type;
 		this.block = block;
-		this.Variables = Variables;
+		this.paraList = paraList;
 	}
-
-	@Override
-	public <T> T accept(IRVisitor<T> visitor) {
-		return visitor.visit(this);
-	}
-
-	public BasicTypeDesc getReturnType() {
+	
+	public IRBasicType getReturnType() {
 		return returnType;
 	}
 
@@ -35,35 +30,22 @@ public class IRMethodDecl extends IRMemberDecl{
 		return block;
 	}
 
-	public ArrayList<Variable> getVariables() {
-		return Variables;
-	}
-
-	@Override
-	public void showTreeImpl(String prefix, StringBuilder result) {
-		String info = prefix + 
-				" DebugID: " + getDebugID() +
-				" Tag: " + getTag() + 
-				" Return Type: " + returnType.toString() + 
-				" Identifier : " + getName() + '\n';
-		result.append(info);
-		
-		assert(Variables != null);
-		// Variables 
-		for (int i = 0; i < Variables.size(); ++i) {
-			String subInfo = prefix + "  " + Variables.get(i).toString() + '\n';
-			result.append(subInfo);
-		}
-		
-		// Block
-		block.showTreeImpl(prefix + " ", result);
-	}
+	public IRParameterList getParaList() {
+		return paraList;
+	}	
 
 	@Override
 	public ArrayList<IR> getChildren() {
 		ArrayList<IR> ret = new ArrayList<IR>();
+		ret.add(getVariable());
+		ret.add(returnType);
+		ret.add(paraList);
 		ret.add(block);
 		return ret;
 	}
 	
+	@Override
+	public <T> T accept(IRVisitor<T> visitor) {
+		return visitor.visit(this);
+	}
 }

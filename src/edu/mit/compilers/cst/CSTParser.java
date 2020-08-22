@@ -5,7 +5,11 @@ import java.util.Iterator;
 
 import antlr.Token;
 import edu.mit.compilers.grammar.DecafParserTokenTypes;
-import edu.mit.compilers.ir.IRProgram;
+import edu.mit.compilers.ir.common.IRArgumentList;
+import edu.mit.compilers.ir.common.IRParameter;
+import edu.mit.compilers.ir.common.IRParameterList;
+import edu.mit.compilers.ir.common.IRProgram;
+import edu.mit.compilers.ir.common.IRVariable;
 import edu.mit.compilers.ir.decl.IRFieldDecl;
 import edu.mit.compilers.ir.decl.IRImportDecl;
 import edu.mit.compilers.ir.decl.IRMethodDecl;
@@ -31,11 +35,9 @@ import edu.mit.compilers.ir.statement.IRMethodCallStmt;
 import edu.mit.compilers.ir.statement.IRReturnStmt;
 import edu.mit.compilers.ir.statement.IRStatement;
 import edu.mit.compilers.ir.statement.IRWhileStmt;
-import edu.mit.compilers.semantic.ArrayTypeDesc;
-import edu.mit.compilers.semantic.BasicTypeDesc;
-import edu.mit.compilers.semantic.Identifier;
-import edu.mit.compilers.semantic.TypeDesc;
-import edu.mit.compilers.semantic.Variable;
+import edu.mit.compilers.ir.type.IRArrayType;
+import edu.mit.compilers.ir.type.IRBasicType;
+import edu.mit.compilers.ir.type.IRType;
 
 public class CSTParser {
 
@@ -71,7 +73,8 @@ public class CSTParser {
 	private static IRImportDecl parseIRImportDecl(CSTNode node) { 
 		// import_decl : ID;
 		assert(node.getChildren().size() == 1);
-		return new IRImportDecl(node.getChildren().get(0).getToken());
+		IRVariable variable = new IRVariable(node.getChild(0).getToken());
+		return new IRImportDecl(variable);
 	}
 	
 	private static IRMethodDecl parseIRMethodDecl(CSTNode node) {
@@ -82,17 +85,18 @@ public class CSTParser {
 		
 		// method_decl_type : type | TK_void;
 		CSTNode cur = node.getChild(0).getChild(0);
-		Token type = cur.getToken();
+		Token typeToken = cur.getToken();
 		if (cur.hasChild()) {
 			cur = cur.getChild(0);
-			type = cur.getToken();
+			typeToken = cur.getToken();
 		} 
-		assert(type != null);
+		assert(typeToken != null);
 		
-		Token identifier = node.getChild(1).getToken();
-		ArrayList<Variable> Variables = parseVariableList(node.getChild(2));
+		IRBasicType type = IRBasicType.GetInstance(typeToken.getText());
+		IRVariable variable = new IRVariable(node.getChild(1).getToken());
+		IRParameterList paraList = parseIRFormalParaList(node.getChild(2));
 		IRBlock block = parseIRBlock(node.getChild(3));
-		return new IRMethodDecl(type, identifier, Variables, block);
+		return new IRMethodDecl(variable, type, paraList, block);
 	}
 
 	private static IRBlock parseIRBlock(CSTNode node) {
@@ -114,38 +118,40 @@ public class CSTParser {
 		return ret;
 	}
 
-	private static ArrayList<Variable> parseVariableList(CSTNode node) {
-		ArrayList<Variable> ret = new ArrayList<Variable>();
+	private static IRParameterList parseIRFormalParaList(CSTNode node) {
+		ArrayList<IRParameter> paras = new ArrayList<IRParameter>();
 		
 		while (node.hasChild() && node.getChildrenSize()>= 3) {
-			Token type = node.getChild(0).getChild(0).getToken();
-			Token identifier = node.getChild(1).getToken();
-			ret.add(new Variable(type, identifier));
+			Token typeToken = node.getChild(0).getChild(0).getToken();
+			IRBasicType type = IRBasicType.GetInstance(typeToken.getText());
+			IRVariable variable = new IRVariable(node.getChild(1).getToken());
+			
+			paras.add(new IRParameter(type, variable));
 			node = node.getChild(2);
 		}
 		
-		return ret;
+		return new IRParameterList(paras);
 	}
 
 	private static ArrayList<IRFieldDecl> parseIRFieldDecls(CSTNode node) {
-		Token type = node.getChild(0).getChild(0).getToken();
-		BasicTypeDesc basicType = BasicTypeDesc.GetInstance(type.getText());
+		Token typeToken = node.getChild(0).getChild(0).getToken();
+		IRBasicType type = IRBasicType.GetInstance(typeToken.getText());
 		
 		node = node.getChildren().get(1);
 		ArrayList<IRFieldDecl> ret = new ArrayList<IRFieldDecl>();
 		
 		// Top-down 
 		while (node.hasChild()) {
-			Token identifier = node.getChild(0).getToken();
+			IRVariable variable = new IRVariable(node.getChild(0).getToken());
 			CSTNode arrayNode = node.getChild(1);
-			TypeDesc nowType = basicType;
+			IRType nowType = type;
 			
 			/// this type maybe array type
 			if (arrayNode.hasChild()) {
 				Token size = arrayNode.getChild(0).getToken();
-				nowType = new ArrayTypeDesc(nowType, new IRIntLiteral(size));
+				nowType = new IRArrayType(nowType, new IRIntLiteral(size));
 			}
-			ret.add(new IRFieldDecl(nowType, identifier));
+			ret.add(new IRFieldDecl(nowType, variable));
 			node = node.getChild(2);
 		}
 		
@@ -270,8 +276,8 @@ public class CSTParser {
 		node = node.getChild(0);
 		if (!node.hasChild()) {
 			// ID
-			Identifier identifier = new Identifier(node.getToken());
-			return new IRLenExpr(identifier);
+			IRVariable variable = new IRVariable(node.getToken());
+			return new IRLenExpr(variable);
 		}
 		
 		switch(node.getName()) {
@@ -309,12 +315,12 @@ public class CSTParser {
 	private static IRLocation parseIRLocation(CSTNode node) {
 		// location : ID | ID expr;
 		IRLocation ret;
-		Identifier identifier = new Identifier(node.getChild(0).getToken());
+		IRVariable variable = new IRVariable(node.getChild(0).getToken());
 		if (node.getChildrenSize() == 2) {
 			IRExpression expression = parseIRExpression(node.getChild(1));
-			ret = new IRLocation(identifier, expression);
+			ret = new IRLocation(variable, expression);
 		} else {
-			ret = new IRLocation(identifier);
+			ret = new IRLocation(variable);
 		}
 		return ret;
 	}
@@ -330,10 +336,10 @@ public class CSTParser {
 	private static IRForStmt parseIRForStmt(CSTNode node) {
 		// for_stmt : ID OP_ASSIGN expr1  expr2 location (compound_assign_op expr | increment) block;
 		assert(node.getChildrenSize() >= 7);
-		Identifier identifier = new Identifier(node.getChild(0).getToken());
+		IRVariable variable = new IRVariable(node.getChild(0).getToken());
 		String operator1 = node.getChild(1).getToken().getText();
 		IRExpression  initValue = parseIRExpression(node.getChild(2));
-		IRAssignStmt initializer = new IRAssignStmt(identifier, operator1, initValue);
+		IRAssignStmt initializer = new IRAssignStmt(variable, operator1, initValue);
 		
 		IRExpression condition = parseIRExpression(node.getChild(3));
 		IRLocation location = parseIRLocation(node.getChild(4));
@@ -378,15 +384,16 @@ public class CSTParser {
 
 	private static IRMethodCall parseIRMethodCall(CSTNode node) {
 		// method_call : ID (import_arg_list)?;
-		Identifier identifier = new Identifier(node.getChild(0).getToken());
+		IRVariable variable = new IRVariable(node.getChild(0).getToken());
 		ArrayList<IRExpression> args;
 		if (node.getChildrenSize() > 1) {
 			args = parseImportArgsImpl(node.getChild(1));
 		} else {
 			args = new ArrayList<IRExpression>();
 		}
+		IRArgumentList argList = new IRArgumentList(args);
 		
-		return new IRMethodCall(identifier, args);
+		return new IRMethodCall(variable, argList);
 	}
 
 	private static ArrayList<IRExpression> parseImportArgsImpl(CSTNode node) {

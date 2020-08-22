@@ -2,11 +2,11 @@ package edu.mit.compilers.ir.statement;
 
 import java.util.ArrayList;
 
-import edu.mit.compilers.ir.IR;
-import edu.mit.compilers.ir.IRVisitor;
+import edu.mit.compilers.ir.common.IR;
+import edu.mit.compilers.ir.common.IRVariable;
+import edu.mit.compilers.ir.common.IRVisitor;
 import edu.mit.compilers.ir.expression.IRExpression;
 import edu.mit.compilers.ir.expression.IRLocation;
-import edu.mit.compilers.semantic.Identifier;
 
 public class IRAssignStmt extends IRStatement {
 	private IRLocation location;
@@ -26,8 +26,8 @@ public class IRAssignStmt extends IRStatement {
 		assert(operator.equals("++") || operator.equals("--"));
 	}
 	
-	public IRAssignStmt(Identifier identifier, String operator1, IRExpression initValue) {
-		this(new IRLocation(identifier), operator1, initValue);
+	public IRAssignStmt(IRVariable variable, String operator1, IRExpression initValue) {
+		this(new IRLocation(variable), operator1, initValue);
 	}
 
 	public IRLocation getLocation() {
@@ -47,19 +47,6 @@ public class IRAssignStmt extends IRStatement {
 		return visitor.visit(this);
 	}
 
-	@Override
-	public void showTreeImpl(String prefix, StringBuilder result) {
-		String info = prefix + 
-				" DebugID: " + getDebugID() + 
-				" Tag: " + getTag() + 
-				" Operator: " + getOperator() + '\n';
-		result.append(info);
-		
-		location.showTreeImpl(prefix + " ", result);
-		if (value != null) {
-			value.showTreeImpl(prefix + " ", result);
-		}
-	}
 
 	@Override
 	public ArrayList<IR> getChildren() {
@@ -67,5 +54,12 @@ public class IRAssignStmt extends IRStatement {
 		ret.add(location);
 		ret.add(value);
 		return ret;
+	}
+	
+	public String getInfoForShow(String prefix) {
+		return prefix + 
+				" DebugID: " + getDebugID() + 
+				" Tag: " + getTag() + 
+				" Op: " + getOperator() + '\n';
 	}
 }

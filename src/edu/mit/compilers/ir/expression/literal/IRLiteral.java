@@ -3,7 +3,7 @@ package edu.mit.compilers.ir.expression.literal;
 import java.util.ArrayList;
 
 import antlr.Token;
-import edu.mit.compilers.ir.IR;
+import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.expression.IRExpression;
 
 public abstract class IRLiteral<T> extends IRExpression {
@@ -21,17 +21,8 @@ public abstract class IRLiteral<T> extends IRExpression {
 		return value;
 	}
 	
-	public void showTreeImpl(String prefix, StringBuilder result) {
-		String info = prefix + 
-				" DebugID: " + getDebugID() +
-				" Tag: " + getTag() + 
-				" Value: " + value + "\n";
-		result.append(info);
-	}
-	
 	public ArrayList<IR> getChildren() {
-		// TODO Auto-generated method stub
-		return null;
+		return getEmptyChildren();
 	}
 
 }

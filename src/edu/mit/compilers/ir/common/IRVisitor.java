@@ -1,4 +1,4 @@
-package edu.mit.compilers.ir;
+package edu.mit.compilers.ir.common;
 
 import edu.mit.compilers.ir.decl.IRFieldDecl;
 import edu.mit.compilers.ir.decl.IRImportDecl;

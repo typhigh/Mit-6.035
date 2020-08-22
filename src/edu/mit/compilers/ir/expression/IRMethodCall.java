@@ -2,32 +2,29 @@ package edu.mit.compilers.ir.expression;
 
 import java.util.ArrayList;
 
-import edu.mit.compilers.ir.IR;
-import edu.mit.compilers.ir.IRVisitor;
-import edu.mit.compilers.semantic.Identifier;
+import edu.mit.compilers.ir.common.IR;
+import edu.mit.compilers.ir.common.IRArgumentList;
+import edu.mit.compilers.ir.common.IRVariable;
+import edu.mit.compilers.ir.common.IRVisitor;
 
 public class IRMethodCall extends IRExpression {
 
-	private Identifier identifier;
-	private ArrayList<IRExpression> args;
+	private IRVariable variable;
+	private IRArgumentList argList;
 
-	public IRMethodCall(Identifier identifier, ArrayList<IRExpression> args) {
+	public IRMethodCall(IRVariable variable, IRArgumentList argList) {
 		super("IRMethodCall");
-		this.identifier = identifier;
-		this.args = args;
-		assert(args != null);
+		this.variable = variable;
+		this.argList = argList;
+		assert(argList != null);
 	}
 
-	public Identifier getIdentifier() {
-		return identifier;
+	public IRVariable getvariable() {
+		return variable;
 	}
 	
-	public String getName() {
-		return identifier.name;
-	}
-
-	public ArrayList<IRExpression> getArgs() {
-		return args;
+	public IRArgumentList getArgList() {
+		return argList;
 	}
 
 	@Override
@@ -36,22 +33,10 @@ public class IRMethodCall extends IRExpression {
 	}
 
 	@Override
-	public void showTreeImpl(String prefix, StringBuilder result) {
-		String info = prefix + 
-				" DebugID: " + getDebugID() + 
-				" Tag: " + getTag() + 
-				" Identifier: " + getName() + '\n';
-		result.append(info);
-		for (int i = 0; i < args.size(); ++i) {
-			args.get(i).showTreeImpl(prefix + " ", result);
-		}
-	}
-
-	@Override
 	public ArrayList<IR> getChildren() {
 		ArrayList<IR> ret = new ArrayList<IR>();
-		ret.addAll(args);
+		ret.add(variable);
+		ret.add(argList);
 		return ret;
 	}
-
 }

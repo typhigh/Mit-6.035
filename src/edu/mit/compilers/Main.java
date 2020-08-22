@@ -3,7 +3,7 @@ package edu.mit.compilers;
 import java.io.*;
 import antlr.Token;
 import edu.mit.compilers.grammar.*;
-import edu.mit.compilers.ir.IR;
+import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.tools.CLI;
 import edu.mit.compilers.tools.CLI.Action;
 import edu.mit.compilers.cst.*;
@@ -83,7 +83,6 @@ class Main {
 					System.exit(1);
 				}
 				
-				
 				CST tree = parser.getCST();
 				
 				// After pruned
@@ -91,11 +90,12 @@ class Main {
 				String info = tree.showTree();
 				System.out.println(info);
 				
-				
+				// Get IR-tree 
 				IR ir = CSTParser.parseIRProgram(tree);
 				String irInfo = ir.showTree();
 				System.out.println(irInfo);
 				
+				// Semantic check
 			}
 		} catch (Exception e) {
 			// print the error:

@@ -1,4 +1,4 @@
-package edu.mit.compilers.ir;
+package edu.mit.compilers.ir.common;
 
 import java.util.ArrayList;
 
@@ -13,12 +13,11 @@ public abstract class IR {
 	private int line;
 	private int column;
 	
+	// Empty children
+	private final static ArrayList<IR> emptyChildren = new ArrayList<IR>();
+	
 	// Parent (in ir-tree)
 	private IR parent = null;
-	
-	public abstract<T> T accept(IRVisitor<T> visitor);
-
-	public abstract ArrayList<IR> getChildren();
 	
 	public IR(String tag) {
 		this.tag = tag;
@@ -61,7 +60,21 @@ public abstract class IR {
 	/*
 	 * The implement of showTree with prefix
 	 */
-	public abstract void showTreeImpl(String prefix, StringBuilder result);
+	public void showTreeImpl(String prefix, StringBuilder result) {
+		result.append(getInfoForShow(prefix));
+		ArrayList<IR> children = getChildren();
+		assert(children != null);
+		for (int i = 0; i < children.size(); ++i) {
+			children.get(i).showTreeImpl(prefix + " ", result);
+		}
+	}
+	
+	/*
+	 * The info of the node
+	 */
+	public String getInfoForShow(String prefix) {
+		return prefix + " DebugID: " + getDebugID() + " Tag: " + getTag() + '\n';
+	}
 
 	public IR getParent() {
 		return parent;
@@ -69,5 +82,19 @@ public abstract class IR {
 
 	public void setParent(IR parent) {
 		this.parent = parent;
+	}
+	
+	/*
+	 * Return children of IR 
+	 */
+	public abstract ArrayList<IR> getChildren();
+	
+	/*
+	 * accept function for visitor 
+	 */
+	public abstract<T> T accept(IRVisitor<T> visitor);
+	
+	public static ArrayList<IR> getEmptyChildren() {
+		return emptyChildren;
 	}
 }

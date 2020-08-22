@@ -2,8 +2,8 @@ package edu.mit.compilers.ir.statement;
 
 import java.util.ArrayList;
 
-import edu.mit.compilers.ir.IR;
-import edu.mit.compilers.ir.IRVisitor;
+import edu.mit.compilers.ir.common.IR;
+import edu.mit.compilers.ir.common.IRVisitor;
 import edu.mit.compilers.ir.expression.IRExpression;
 
 public class IRIfStmt extends IRStatement{
@@ -25,22 +25,7 @@ public class IRIfStmt extends IRStatement{
 
 	@Override
 	public <T> T accept(IRVisitor<T> visitor) {
-		// TODO Auto-generated method stub
 		return visitor.visit(this);
-	}
-
-	@Override
-	public void showTreeImpl(String prefix, StringBuilder result) {
-		// TODO Auto-generated method stub
-		String info = prefix + 
-				" DebugID: " + getDebugID() + 
-				" Tag: " + getTag() + '\n';
-		result.append(info);
-		condition.showTreeImpl(prefix + " ", result);
-		ifBlock.showTreeImpl(prefix + " ", result);
-		if (elseBlock != null) {
-			elseBlock.showTreeImpl(prefix + " ", result);
-		}
 	}
 
 	@Override

@@ -1,32 +1,17 @@
 package edu.mit.compilers.semantic;
-import java.util.Iterator;
-import java.util.LinkedList;
-import edu.mit.compilers.ir.IR;
-import edu.mit.compilers.ir.decl.IRFieldDecl;
+import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.decl.IRMemberDecl;
-import edu.mit.compilers.ir.decl.IRMethodDecl;
 
 public class SimpleEnvStack implements EnvStack {
 
-	private class KeyValue {
-		public String key;
-		public IRMemberDecl value;
-		public KeyValue(String key, IRMemberDecl value) {
-			this.key = key;
-			this.value = value;
-		}
-	};
-	
-	private LinkedList<KeyValue> stack = new LinkedList<KeyValue>();
-
 	@Override
-	public boolean pushMemberDecl(String identifier, IRMemberDecl decl) {
-		stack.push(new KeyValue(identifier, decl));
-		return true;
+	public boolean pushMemberDecl(IRMemberDecl decl) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override
-	public boolean popMemberDecl(String identifier) {
+	public boolean popMemberDecl(IRMemberDecl decl) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -44,10 +29,27 @@ public class SimpleEnvStack implements EnvStack {
 	}
 
 	@Override
-	public IR contain(String identifier) {
+	public IR seek(String identifier) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
 
+	@Override
+	public boolean contain(String identifier) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void pushEnv() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void popEnv() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }
