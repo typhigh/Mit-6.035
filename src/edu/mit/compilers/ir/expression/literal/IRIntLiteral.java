@@ -7,9 +7,16 @@ import edu.mit.compilers.utils.StringUtils;
 public class IRIntLiteral extends IRLiteral<Integer> {
 	
 	public IRIntLiteral(Token token) {
-		super("IntLiteral", parseTokenValue(token), token);
+		this(parseTokenValue(token), token);
 	}
-	
+
+	/*
+	* For test
+	*/
+	private IRIntLiteral(Integer value, Token token) {
+		super("IntLiteral", value, token);
+	}
+
 	private static Integer parseTokenValue(Token token) {
 		String text = token.getText();
 		if (text.contains("0x") || text.contains("0X")) {

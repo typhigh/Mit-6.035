@@ -1,9 +1,22 @@
 package edu.mit.compilers.semantic;
 
+import java.util.ArrayList;
+
 import edu.mit.compilers.ir.common.IR;
+import edu.mit.compilers.ir.common.IRVariable;
 import edu.mit.compilers.ir.decl.IRMemberDecl;
 
 public interface EnvStack {
+	
+	/*
+	 * Set global env by other env
+	 */
+	public boolean SetGlobalEnv(EnvStack env);
+	
+	/*
+	 * Set global env by decls directly
+	 */
+	public boolean SetGlobalEnc(ArrayList<IRMemberDecl> decls);
 	
 	/*
 	 * Push IRFieldDecl to the EnvStack 
@@ -30,12 +43,12 @@ public interface EnvStack {
 	 * If contain the identifier, return the "ir" (method or field decl) from top to down
 	 * Otherwise, return null
 	 */
-	public IR seek(String identifier);
+	public IR seek(IRVariable identifier);
 	
 	/*
 	 * Whether contain the id
 	 */
-	public boolean contain(String identifier);
+	public boolean contain(IRVariable identifier);
 	
 	/*
 	 * Push new env (maybe global or local block)
