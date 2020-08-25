@@ -1,8 +1,8 @@
 package edu.mit.compilers.ir.common;
 
-import java.util.ArrayList;
-
 import antlr.Token;
+
+import java.util.ArrayList;
 
 public class IRVariable extends IR {
 	private String name;
@@ -31,4 +31,7 @@ public class IRVariable extends IR {
 		return visitor.visit(this);
 	}
 
+    public boolean hasSameName(IRVariable variable) {
+		return getName().equals(variable.getName());
+    }
 }

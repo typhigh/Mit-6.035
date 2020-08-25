@@ -1,80 +1,88 @@
 package edu.mit.compilers.semantic;
 
-import java.util.ArrayList;
-
-import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRVariable;
 import edu.mit.compilers.ir.decl.IRMemberDecl;
 
+import java.util.ArrayList;
+
 public class SimpleEnvStack implements EnvStack {
+
+	private final ArrayList<IRMemberDecl> stacks;
+	private final ArrayList<Integer> blockBases;
+
+	public SimpleEnvStack() {
+		stacks = new ArrayList<>();
+		blockBases = new ArrayList<>();
+		blockBases.add(0);
+	}
 
 	@Override
 	public boolean pushMemberDecl(IRMemberDecl decl) {
-		// TODO Auto-generated method stub
-		assert(false);
-		return false;
-	}
-
-	@Override
-	public boolean popMemberDecl(IRMemberDecl decl) {
-		// TODO Auto-generated method stub
-		assert(false);
-		return false;
-	}
-
-	@Override
-	public boolean popMemberDecl(int count) {
-		// TODO Auto-generated method stub
-		assert(false);
-		return false;
+		assert blockBases.size() >= 1 : "must have at least one block";
+		return stacks.add(decl);
 	}
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-		assert(false);
-
+		stacks.clear();
+		blockBases.clear();
+		blockBases.add(0);
 	}
 
 	@Override
-	public IR seek(IRVariable identifier) {
-		// TODO Auto-generated method stub
-		assert(false);
+	public IRMemberDecl seek(IRVariable identifier) {
+		for (int i = stacks.size() - 1; i >= 0; --i) {
+			// from top to down
+			IRMemberDecl decl = stacks.get(i);
+			if (decl.getVariable().hasSameName(identifier)) {
+				return decl;
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public boolean contain(IRVariable identifier) {
-		// TODO Auto-generated method stub
-		assert(false);
-		return false;
+		return seek(identifier) != null;
 	}
 
 	@Override
-	public void pushEnv() {
-		// TODO Auto-generated method stub
-		assert(false);
-
+	public void pushBlock() {
+		blockBases.add(stacks.size());
 	}
 
 	@Override
-	public void popEnv() {
-		// TODO Auto-generated method stub
-		assert(false);
+	public void popBlock() {
+		assert blockBases.size() >= 1 : "must have at least one block";
+		int base = blockBases.get(blockBases.size() - 1);
+
+		// Remove this block
+		for (int i = stacks.size() - 1; i >= base; --i) {
+			stacks.remove(i);
+		}
+		blockBases.remove(blockBases.size() - 1);
+	}
+
+	@Override
+	public ArrayList<IRMemberDecl> getGlobalDecls() {
+		// [0, end)
+		int end = blockBases.size() == 1 ? stacks.size() : blockBases.get(1);
+		ArrayList<IRMemberDecl> ret = new ArrayList<>();
+		for (int i = 0; i < end; ++i) {
+			ret.add(stacks.get(i));
+		}
+		return ret;
 	}
 
 	@Override
 	public boolean SetGlobalEnv(EnvStack env) {
-		// TODO Auto-generated method stub
-		assert(false);
-		return false;
+		return SetGlobalEnv(env.getGlobalDecls());
 	}
 
 	@Override
-	public boolean SetGlobalEnc(ArrayList<IRMemberDecl> decls) {
-		// TODO Auto-generated method stub
-		assert(false);
-		return false;
+	public boolean SetGlobalEnv(ArrayList<IRMemberDecl> decls) {
+		assert blockBases.size() == 1 : "must have no block";
+		clear();
+		return stacks.addAll(decls);
 	}
-	
 }
