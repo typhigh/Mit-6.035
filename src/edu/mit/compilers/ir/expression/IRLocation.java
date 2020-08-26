@@ -1,11 +1,10 @@
 package edu.mit.compilers.ir.expression;
 
-import java.util.ArrayList;
-
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRVariable;
 import edu.mit.compilers.ir.common.IRVisitor;
-import edu.mit.compilers.ir.expression.IRExpression;
+
+import java.util.ArrayList;
 
 public class IRLocation extends IRExpression {
 	
@@ -46,7 +45,7 @@ public class IRLocation extends IRExpression {
 
 	@Override
 	public ArrayList<IR> getChildren() {
-		ArrayList<IR> ret = new ArrayList<IR>();
+		ArrayList<IR> ret = new ArrayList<>();
 		ret.add(variable);
 		if (isArrayLocation) {
 			ret.add(location);

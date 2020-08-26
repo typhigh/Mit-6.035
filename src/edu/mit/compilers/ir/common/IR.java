@@ -6,7 +6,7 @@ public abstract class IR {
 	private final String tag;
 	
 	// Debug id
-	private int debugID;
+	private final int debugID;
 	private static int currentID = 0;
 	
 	// Location information
@@ -14,7 +14,7 @@ public abstract class IR {
 	private int column;
 	
 	// Empty children
-	private final static ArrayList<IR> emptyChildren = new ArrayList<IR>();
+	private final static ArrayList<IR> emptyChildren = new ArrayList<>();
 	
 	// Parent (in ir-tree)
 	private IR parent = null;
@@ -52,7 +52,7 @@ public abstract class IR {
 	 * Show the tree
 	 */
 	public String showTree() {
-		StringBuilder result = new StringBuilder("");
+		StringBuilder result = new StringBuilder();
 		showTreeImpl("", result);
 		return result.toString();
 	}
@@ -64,8 +64,8 @@ public abstract class IR {
 		result.append(getInfoForShow(prefix));
 		ArrayList<IR> children = getChildren();
 		assert(children != null);
-		for (int i = 0; i < children.size(); ++i) {
-			children.get(i).showTreeImpl(prefix + " ", result);
+		for (IR child : children) {
+			child.showTreeImpl(prefix + " ", result);
 		}
 	}
 	

@@ -1,10 +1,10 @@
 package edu.mit.compilers.ir.type;
 
-import java.util.ArrayList;
-
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRVisitor;
 import edu.mit.compilers.ir.expression.literal.IRIntLiteral;
+
+import java.util.ArrayList;
 
 /*
  * Simple Array type
@@ -37,7 +37,7 @@ public class IRArrayType extends IRType {
 	@Override
 	public String toString() {
 		// Not consider "int [3][4]"
-		return type.toString() + "[" + String.valueOf(len.getValue()) + "]";
+		return type.toString() + "[" + len.getValue() + "]";
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class IRArrayType extends IRType {
 
 	@Override
 	public ArrayList<IR> getChildren() {
-		ArrayList<IR> ret = new ArrayList<IR>();
+		ArrayList<IR> ret = new ArrayList<>();
 		ret.add(type);
 		ret.add(len);
 		return ret;

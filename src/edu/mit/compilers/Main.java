@@ -1,12 +1,19 @@
 package edu.mit.compilers;
 
-import java.io.*;
 import antlr.Token;
-import edu.mit.compilers.grammar.*;
+import edu.mit.compilers.cst.CST;
+import edu.mit.compilers.cst.CSTParser;
+import edu.mit.compilers.grammar.DecafParser;
+import edu.mit.compilers.grammar.DecafParserTokenTypes;
+import edu.mit.compilers.grammar.DecafScanner;
+import edu.mit.compilers.grammar.DecafScannerTokenTypes;
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.tools.CLI;
 import edu.mit.compilers.tools.CLI.Action;
-import edu.mit.compilers.cst.*;
+
+import java.io.DataInputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
 
 
 class Main {
@@ -26,7 +33,7 @@ class Main {
 					try {
 						for (token = scanner.nextToken(); token.getType() != DecafParserTokenTypes.EOF; token = scanner
 								.nextToken()) {
-							String type = "";
+							String type;
 							String text = token.getText();
 							switch (token.getType()) {
 							// TODO: add strings for the other types here...

@@ -1,8 +1,9 @@
 package edu.mit.compilers.cst;
-import java.util.ArrayList;
 import antlr.Token;
 import edu.mit.compilers.utils.TokenUtils;
-/* 
+
+import java.util.ArrayList;
+/*
  * Concrete Tree Node
  * The first tree of the parser
  */
@@ -17,10 +18,10 @@ public class CSTNode {
 	
 	// For Debug
 	private static int currentID = 0;
-	private int debugID;
+	private final int debugID;
 	
 	public CSTNode() {
-		this.children = new ArrayList<CSTNode>();
+		this.children = new ArrayList<>();
 		this.parent = null;
 		
 		// not thread safe
@@ -64,7 +65,7 @@ public class CSTNode {
 	 * Get the children copy
 	 */
 	public ArrayList<CSTNode> getChildrenCopy() {
-		return new ArrayList<CSTNode>(children);
+		return new ArrayList<>(children);
 	}
 
 	public void setParent(CSTNode parent) {

@@ -16,10 +16,8 @@ public class IRParameterList extends IR {
 	
 	@Override
 	public ArrayList<IR> getChildren() {
-		ArrayList<IR> ret = new ArrayList<IR>(paraList);
-		for (IR para : paraList) {
-			ret.add(para);
-		}
+		ArrayList<IR> ret = new ArrayList<>(paraList);
+		ret.addAll(paraList);
 		return ret;
 	} 
 

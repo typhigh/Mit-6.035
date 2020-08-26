@@ -11,8 +11,7 @@ import edu.mit.compilers.ir.type.IRType;
 public class IRMaker {
 
 	private static Token MakeToken(String text) {
-		Token token = new FakeToken(0, text);
-		return token;
+		return new FakeToken(0, text);
 	}
 	
 	public static IRType MakeIRType(String typeName, boolean isArray, int len) {

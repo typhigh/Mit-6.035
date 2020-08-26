@@ -7,10 +7,10 @@ public class StringUtils {
 		if (value.contains("0x") || value.contains("0X")) {
 			value = value.substring(2);
 		}
-		Integer ret = 0;
+		int ret = 0;
 		for (int i = 0; i < value.length(); ++i) {
 			char now = value.charAt(i);
-			int plus = 0;
+			int plus;
 			if (now >= '0' && now <= '9') {
 				plus = now - '0';
 			} else if (now >= 'a' && now <= 'f') {

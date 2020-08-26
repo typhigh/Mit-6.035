@@ -1,43 +1,22 @@
 package edu.mit.compilers.cst;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import antlr.Token;
 import edu.mit.compilers.grammar.DecafParserTokenTypes;
-import edu.mit.compilers.ir.common.IRArgumentList;
-import edu.mit.compilers.ir.common.IRParameter;
-import edu.mit.compilers.ir.common.IRParameterList;
-import edu.mit.compilers.ir.common.IRProgram;
-import edu.mit.compilers.ir.common.IRVariable;
+import edu.mit.compilers.ir.common.*;
 import edu.mit.compilers.ir.decl.IRFieldDecl;
 import edu.mit.compilers.ir.decl.IRImportDecl;
 import edu.mit.compilers.ir.decl.IRMethodDecl;
-import edu.mit.compilers.ir.expression.IRBinaryOpExpr;
-import edu.mit.compilers.ir.expression.IREmptyExpr;
-import edu.mit.compilers.ir.expression.IRExpression;
-import edu.mit.compilers.ir.expression.IRLenExpr;
-import edu.mit.compilers.ir.expression.IRLocation;
-import edu.mit.compilers.ir.expression.IRMethodCall;
-import edu.mit.compilers.ir.expression.IRTernaryExpr;
-import edu.mit.compilers.ir.expression.IRUnaryOpExpr;
+import edu.mit.compilers.ir.expression.*;
 import edu.mit.compilers.ir.expression.literal.IRBoolLiteral;
 import edu.mit.compilers.ir.expression.literal.IRCharLiteral;
 import edu.mit.compilers.ir.expression.literal.IRIntLiteral;
 import edu.mit.compilers.ir.expression.literal.IRStringLiteral;
-import edu.mit.compilers.ir.statement.IRAssignStmt;
-import edu.mit.compilers.ir.statement.IRBlock;
-import edu.mit.compilers.ir.statement.IRBreakStmt;
-import edu.mit.compilers.ir.statement.IRContinueStmt;
-import edu.mit.compilers.ir.statement.IRForStmt;
-import edu.mit.compilers.ir.statement.IRIfStmt;
-import edu.mit.compilers.ir.statement.IRMethodCallStmt;
-import edu.mit.compilers.ir.statement.IRReturnStmt;
-import edu.mit.compilers.ir.statement.IRStatement;
-import edu.mit.compilers.ir.statement.IRWhileStmt;
+import edu.mit.compilers.ir.statement.*;
 import edu.mit.compilers.ir.type.IRArrayType;
 import edu.mit.compilers.ir.type.IRBasicType;
 import edu.mit.compilers.ir.type.IRType;
+
+import java.util.ArrayList;
 
 public class CSTParser {
 
@@ -50,21 +29,19 @@ public class CSTParser {
 		
 		// Parse the sub children
 		// program : (import_decl)* (field_decl)* (method_decl)*
-		Iterator<CSTNode> iter = node.getChildren().iterator();
-		while (iter.hasNext()) {
-			CSTNode child = iter.next();
-			switch(child.getName()) {
-			case "import_decl":
-				ret.addIRImportDecl(parseIRImportDecl(child));
-				break;
-			case "field_decl":
-				ret.addIRFieldDecls(parseIRFieldDecls(child));
-				break;
-			case "method_decl":
-				ret.addMethodDecl(parseIRMethodDecl(child));
-				break;
-			default:
-				System.out.println("node's identifier is wrong");
+		for (CSTNode child : node.getChildren()) {
+			switch (child.getName()) {
+				case "import_decl":
+					ret.addIRImportDecl(parseIRImportDecl(child));
+					break;
+				case "field_decl":
+					ret.addIRFieldDecls(parseIRFieldDecls(child));
+					break;
+				case "method_decl":
+					ret.addMethodDecl(parseIRMethodDecl(child));
+					break;
+				default:
+					System.out.println("node's identifier is wrong");
 			}
 		}
 		return ret;
@@ -103,23 +80,21 @@ public class CSTParser {
 		IRBlock ret = new IRBlock();
 		
 		// block : (field_decl)* (statement)* ;
-		Iterator<CSTNode> iter = node.getChildren().iterator();
-		while (iter.hasNext()) {
-			CSTNode child = iter.next();
-			switch(child.getName()) {
-			case "field_decl":
-				ret.addFieldDecls(parseIRFieldDecls(child));
-				break;
-			case "statement":
-				ret.addStatement(parseIRStatement(child));
-				break;
+		for (CSTNode child : node.getChildren()) {
+			switch (child.getName()) {
+				case "field_decl":
+					ret.addFieldDecls(parseIRFieldDecls(child));
+					break;
+				case "statement":
+					ret.addStatement(parseIRStatement(child));
+					break;
 			}
 		}
 		return ret;
 	}
 
 	private static IRParameterList parseIRFormalParaList(CSTNode node) {
-		ArrayList<IRParameter> paras = new ArrayList<IRParameter>();
+		ArrayList<IRParameter> paras = new ArrayList<>();
 		
 		while (node.hasChild() && node.getChildrenSize()>= 3) {
 			Token typeToken = node.getChild(0).getChild(0).getToken();
@@ -138,7 +113,7 @@ public class CSTParser {
 		IRBasicType type = IRBasicType.GetInstance(typeToken.getText());
 		
 		node = node.getChildren().get(1);
-		ArrayList<IRFieldDecl> ret = new ArrayList<IRFieldDecl>();
+		ArrayList<IRFieldDecl> ret = new ArrayList<>();
 		
 		// Top-down 
 		while (node.hasChild()) {
@@ -163,8 +138,8 @@ public class CSTParser {
 		node = node.getChild(0);
 		switch(node.getName()) {
 		case "assign_stmt"		: return parseIRAssignStmt(node);
-		case "break_stmt"		: return parseIRBreakStmt(node);
-		case "continue_stmt"	: return parseIRContinueStmt(node);
+		case "break_stmt"		: return parseIRBreakStmt();
+		case "continue_stmt"	: return parseIRContinueStmt();
 		case "for_stmt"			: return parseIRForStmt(node);
 		case "if_stmt"			: return parseIRIfStmt(node);
 		case "method_call_stmt"	: return parseIRMethodCallStmt(node);
@@ -294,7 +269,7 @@ public class CSTParser {
 		// literal	: INT | CHAR | bool_literal
 		assert(node.hasChild());
 		node = node.getChild(0);
-		if (node.getName() == "bool_literal") {
+		if (node.getName().equals("bool_literal")) {
 			// bool_literal : TK_true | TK_false;
 			assert(node.hasChild());
 			node = node.getChild(0);
@@ -325,11 +300,11 @@ public class CSTParser {
 		return ret;
 	}
 
-	private static IRBreakStmt parseIRBreakStmt(CSTNode node) {
+	private static IRBreakStmt parseIRBreakStmt() {
 		return new IRBreakStmt();
 	}
 
-	private static IRContinueStmt parseIRContinueStmt(CSTNode node) {
+	private static IRContinueStmt parseIRContinueStmt() {
 		return new IRContinueStmt();
 	}
 
@@ -389,7 +364,7 @@ public class CSTParser {
 		if (node.getChildrenSize() > 1) {
 			args = parseImportArgsImpl(node.getChild(1));
 		} else {
-			args = new ArrayList<IRExpression>();
+			args = new ArrayList<>();
 		}
 		IRArgumentList argList = new IRArgumentList(args);
 		
@@ -398,7 +373,7 @@ public class CSTParser {
 
 	private static ArrayList<IRExpression> parseImportArgsImpl(CSTNode node) {
 		// import_arg_list : import_arg import_arg_list_more;
-		ArrayList<IRExpression> ret = new ArrayList<IRExpression>();
+		ArrayList<IRExpression> ret = new ArrayList<>();
 		while (node.hasChild()) {
 			ret.add(parseImportArgImpl(node.getChild(0)));
 			node = node.getChild(1);

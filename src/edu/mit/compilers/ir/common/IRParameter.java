@@ -1,8 +1,8 @@
 package edu.mit.compilers.ir.common;
 
-import java.util.ArrayList;
-
 import edu.mit.compilers.ir.type.IRType;
+
+import java.util.ArrayList;
 
 public class IRParameter extends IR {
 
@@ -25,7 +25,7 @@ public class IRParameter extends IR {
 
 	@Override
 	public ArrayList<IR> getChildren() {
-		ArrayList<IR> ret = new ArrayList<IR>();
+		ArrayList<IR> ret = new ArrayList<>();
 		ret.add(type);
 		ret.add(variable);
 		return ret;

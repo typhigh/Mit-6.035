@@ -11,48 +11,48 @@ public interface EnvStack {
 	 * Set global env by other env
 	 * Must be invoked before pushing block
 	 */
-	public boolean SetGlobalEnv(EnvStack env);
+	boolean SetGlobalEnv(EnvStack env);
 	
 	/*
 	 * Set global env by decls directly
 	 * Must be invoked before pushing block
 	 */
-	public boolean SetGlobalEnv(ArrayList<IRMemberDecl> decls);
+	boolean SetGlobalEnv(ArrayList<IRMemberDecl> decls);
 	
 	/*
 	 * Push IRFieldDecl to the EnvStack 
 	 */
-	public boolean pushMemberDecl(IRMemberDecl decl);
+	boolean pushMemberDecl(IRMemberDecl decl);
 	
 	/*
 	 * Clear the env stack
 	 */
-	public void clear();
+	void clear();
 	
 	/*
 	 * Seek the member decl by id
 	 * If contain the identifier, return the "ir" (method or field decl) from top to down
 	 * Otherwise, return null
 	 */
-	public IRMemberDecl seek(IRVariable identifier);
+	IRMemberDecl seek(IRVariable identifier);
 	
 	/*
 	 * Whether contain the id
 	 */
-	public boolean contain(IRVariable identifier);
+	boolean contain(IRVariable identifier);
 	
 	/*
 	 * Push new block (maybe global or local block)
 	 */
-	public void pushBlock();
+	void pushBlock();
 	
 	/*
 	 * Pop old env
  	 */
-	public void popBlock();
+	void popBlock();
 
 	/*
 	 * Get global decls
 	 */
-	public ArrayList<IRMemberDecl> getGlobalDecls();
+	ArrayList<IRMemberDecl> getGlobalDecls();
 }

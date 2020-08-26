@@ -57,8 +57,8 @@ public class SimpleEnvStack implements EnvStack {
 		int base = blockBases.get(blockBases.size() - 1);
 
 		// Remove this block
-		for (int i = stacks.size() - 1; i >= base; --i) {
-			stacks.remove(i);
+		if (stacks.size() > base) {
+			stacks.subList(base, stacks.size()).clear();
 		}
 		blockBases.remove(blockBases.size() - 1);
 	}

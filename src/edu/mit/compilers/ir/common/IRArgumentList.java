@@ -1,8 +1,8 @@
 package edu.mit.compilers.ir.common;
 
-import java.util.ArrayList;
-
 import edu.mit.compilers.ir.expression.IRExpression;
+
+import java.util.ArrayList;
 
 public class IRArgumentList extends IR {
 
@@ -18,8 +18,7 @@ public class IRArgumentList extends IR {
 
 	@Override
 	public ArrayList<IR> getChildren() {
-		ArrayList<IR> ret = new ArrayList<IR>(argList);
-		return ret;
+		return new ArrayList<>(argList);
 	}
 
 	@Override

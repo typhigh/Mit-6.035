@@ -1,9 +1,9 @@
 package edu.mit.compilers.ir.expression;
 
-import java.util.ArrayList;
-
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRVisitor;
+
+import java.util.ArrayList;
 
 public class IRUnaryOpExpr extends IRExpression {
 
@@ -32,7 +32,7 @@ public class IRUnaryOpExpr extends IRExpression {
 
 	@Override
 	public ArrayList<IR> getChildren() {
-		ArrayList<IR> ret = new ArrayList<IR>();
+		ArrayList<IR> ret = new ArrayList<>();
 		ret.add(right);
 		return ret;
 	}

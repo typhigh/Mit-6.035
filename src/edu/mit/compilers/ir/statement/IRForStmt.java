@@ -1,10 +1,10 @@
 package edu.mit.compilers.ir.statement;
 
-import java.util.ArrayList;
-
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRVisitor;
 import edu.mit.compilers.ir.expression.IRExpression;
+
+import java.util.ArrayList;
 
 public class IRForStmt extends IRStatement {
 	
@@ -29,7 +29,7 @@ public class IRForStmt extends IRStatement {
 
 	@Override
 	public ArrayList<IR> getChildren() {
-		ArrayList<IR> ret = new ArrayList<IR>();
+		ArrayList<IR> ret = new ArrayList<>();
 		ret.add(initializer);
 		ret.add(condition);
 		ret.add(step);

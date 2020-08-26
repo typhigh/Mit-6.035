@@ -1,15 +1,15 @@
 package edu.mit.compilers.ir.statement;
 
-import java.util.ArrayList;
-
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRVisitor;
 import edu.mit.compilers.ir.decl.IRFieldDecl;
 
+import java.util.ArrayList;
+
 public class IRBlock extends IR {
 	
-	private ArrayList<IRFieldDecl> fieldDecls = new ArrayList<IRFieldDecl>();
-	private ArrayList<IRStatement> statements = new ArrayList<IRStatement>();
+	private ArrayList<IRFieldDecl> fieldDecls = new ArrayList<>();
+	private ArrayList<IRStatement> statements = new ArrayList<>();
 	
 	public IRBlock() {
 		super("IRBlock");	
@@ -39,7 +39,7 @@ public class IRBlock extends IR {
 
 	@Override
 	public ArrayList<IR> getChildren() {
-		ArrayList<IR> ret = new ArrayList<IR>();
+		ArrayList<IR> ret = new ArrayList<>();
 		ret.addAll(fieldDecls);
 		ret.addAll(statements);
 		return ret;

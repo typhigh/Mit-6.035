@@ -1,9 +1,6 @@
 package edu.mit.compilers.ir.expression.literal;
 
-import java.util.ArrayList;
-
 import antlr.Token;
-import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRVisitor;
 
 public class IRBoolLiteral extends IRLiteral<Boolean> {

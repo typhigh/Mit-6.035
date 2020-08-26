@@ -1,11 +1,11 @@
 package edu.mit.compilers.ir.decl;
 
-import java.util.ArrayList;
-
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRVariable;
 import edu.mit.compilers.ir.common.IRVisitor;
 import edu.mit.compilers.ir.type.IRType;
+
+import java.util.ArrayList;
 
 public class IRFieldDecl extends IRMemberDecl {
 	private IRType type;
@@ -16,7 +16,7 @@ public class IRFieldDecl extends IRMemberDecl {
 
 	@Override
 	public ArrayList<IR> getChildren() {
-		ArrayList<IR> children = new ArrayList<IR>();
+		ArrayList<IR> children = new ArrayList<>();
 		children.add(type);
 		children.add(getVariable());
 		return children;

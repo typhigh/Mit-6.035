@@ -1,16 +1,16 @@
 package edu.mit.compilers.ir.common;
 
-import java.util.ArrayList;
-
 import edu.mit.compilers.ir.decl.IRFieldDecl;
 import edu.mit.compilers.ir.decl.IRImportDecl;
 import edu.mit.compilers.ir.decl.IRMethodDecl;
 
+import java.util.ArrayList;
+
 public class IRProgram extends IR {
 
-	private ArrayList<IRImportDecl> importDecls = new ArrayList<IRImportDecl>();
-	private ArrayList<IRFieldDecl> fieldDecls = new ArrayList<IRFieldDecl>();
-	private ArrayList<IRMethodDecl> methodDecls = new ArrayList<IRMethodDecl>();
+	private ArrayList<IRImportDecl> importDecls = new ArrayList<>();
+	private ArrayList<IRFieldDecl> fieldDecls = new ArrayList<>();
+	private ArrayList<IRMethodDecl> methodDecls = new ArrayList<>();
 	
 	public IRProgram() {
 		super("IRProgram");
@@ -43,7 +43,7 @@ public class IRProgram extends IR {
 
 	@Override
 	public ArrayList<IR> getChildren() {
-		ArrayList<IR> ret = new ArrayList<IR>();
+		ArrayList<IR> ret = new ArrayList<>();
 		ret.addAll(importDecls);
 		ret.addAll(fieldDecls);
 		ret.addAll(methodDecls);

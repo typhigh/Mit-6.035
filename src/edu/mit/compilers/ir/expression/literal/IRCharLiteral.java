@@ -13,15 +13,20 @@ public class IRCharLiteral extends IRLiteral<Character> {
 		String line = token.getText();
 		char value = line.charAt(0);
 		if (value == '\\') {
-			if (line == "\\n") {
-				value = '\n';
-			} else if (line == "\\r") {
-				value = '\r';
-			} else if (line == "\\t") {
-				value = '\t';
-			} else {
-				value = line.charAt(1);
-			} 
+			switch (line) {
+				case "\\n":
+					value = '\n';
+					break;
+				case "\\r":
+					value = '\r';
+					break;
+				case "\\t":
+					value = '\t';
+					break;
+				default:
+					value = line.charAt(1);
+					break;
+			}
 		}
 		return value;
 	}

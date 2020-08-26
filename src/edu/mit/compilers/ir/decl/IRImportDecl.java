@@ -1,11 +1,10 @@
 package edu.mit.compilers.ir.decl;
 
-import java.util.ArrayList;
-
-import antlr.Token;
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRVariable;
 import edu.mit.compilers.ir.common.IRVisitor;
+
+import java.util.ArrayList;
 
 public class IRImportDecl extends IRMemberDecl {
 
@@ -15,7 +14,7 @@ public class IRImportDecl extends IRMemberDecl {
 
 	@Override
 	public ArrayList<IR> getChildren() {
-		ArrayList<IR> children = new ArrayList<IR>();
+		ArrayList<IR> children = new ArrayList<>();
 		children.add(getVariable());
 		return children;
 	}
