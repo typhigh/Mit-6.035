@@ -17,7 +17,7 @@ public class IRLenExpr extends IRExpression {
 	}
 
 
-	public IRVariable getvariable() {
+	public IRVariable getVariable() {
 		return variable;
 	}
 	
@@ -33,5 +33,4 @@ public class IRLenExpr extends IRExpression {
 		ret.add(variable);
 		return ret;
 	}
-	
 }

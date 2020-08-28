@@ -1,9 +1,9 @@
 package edu.mit.compilers.ir.expression;
 
-import java.util.ArrayList;
-
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRVisitor;
+
+import java.util.ArrayList;
 
 public class IREmptyExpr extends IRExpression {
 
@@ -20,5 +20,4 @@ public class IREmptyExpr extends IRExpression {
 	public ArrayList<IR> getChildren() {
 		return getEmptyChildren();
 	}
-
 }

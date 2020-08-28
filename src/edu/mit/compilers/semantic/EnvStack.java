@@ -11,13 +11,13 @@ public interface EnvStack {
 	 * Set global env by other env
 	 * Must be invoked before pushing block
 	 */
-	boolean SetGlobalEnv(EnvStack env);
+	boolean setGlobalEnv(EnvStack env);
 	
 	/*
 	 * Set global env by decls directly
 	 * Must be invoked before pushing block
 	 */
-	boolean SetGlobalEnv(ArrayList<IRMemberDecl> decls);
+	boolean setGlobalEnv(ArrayList<IRMemberDecl> decls);
 	
 	/*
 	 * Push IRFieldDecl to the EnvStack 

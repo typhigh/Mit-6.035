@@ -1,9 +1,9 @@
 package edu.mit.compilers.ir.type;
 
-import java.util.ArrayList;
-
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRVisitor;
+
+import java.util.ArrayList;
 
 public class IRBasicType extends IRType {
 
@@ -11,6 +11,7 @@ public class IRBasicType extends IRType {
 
 	//Type instance
 	public static final IRBasicType IntType = new IRBasicType("int", 4);
+	public static final IRBasicType CharType = new IRBasicType("char", 1);
 	public static final IRBasicType BoolType = new IRBasicType("bool", 1);
 	public static final IRBasicType VoidType = new IRBasicType("void", 0);
 	

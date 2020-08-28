@@ -31,5 +31,4 @@ public class IRIntLiteral extends IRLiteral<Integer> {
 	public <T> T accept(IRVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
-
 }

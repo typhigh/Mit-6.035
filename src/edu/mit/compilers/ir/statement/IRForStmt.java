@@ -1,6 +1,7 @@
 package edu.mit.compilers.ir.statement;
 
 import edu.mit.compilers.ir.common.IR;
+import edu.mit.compilers.ir.common.IRBlock;
 import edu.mit.compilers.ir.common.IRVisitor;
 import edu.mit.compilers.ir.expression.IRExpression;
 

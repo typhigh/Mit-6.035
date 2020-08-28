@@ -43,29 +43,29 @@ class EnvStackTest {
 
 		// Set global env
 		ArrayList<IRMemberDecl> decls = new ArrayList<>();
-		decls.add(IRMaker.MakeIRFieldDecl("int", true, 2, "g"));
-		env.SetGlobalEnv(decls);
+		decls.add(IRMaker.makeIRFieldDecl("int", true, 2, "g"));
+		env.setGlobalEnv(decls);
 		
 		env.pushBlock();
-		IRFieldDecl decl1 = IRMaker.MakeIRFieldDecl("int", "a");
+		IRFieldDecl decl1 = IRMaker.makeIRFieldDecl("int", "a");
 		env.pushMemberDecl(decl1);
-		assertTrue(env.contain(IRMaker.MakeIRVariable("a")));
-		assertTrue(env.contain(IRMaker.MakeIRVariable("g")));
-		IRFieldDecl decl2 = IRMaker.MakeIRFieldDecl("int", "b");
+		assertTrue(env.contain(IRMaker.makeIRVariable("a")));
+		assertTrue(env.contain(IRMaker.makeIRVariable("g")));
+		IRFieldDecl decl2 = IRMaker.makeIRFieldDecl("int", "b");
 		env.pushMemberDecl(decl2);
 
 		env.pushBlock();
-		IRFieldDecl decl3 = IRMaker.MakeIRFieldDecl("int", "c");
+		IRFieldDecl decl3 = IRMaker.makeIRFieldDecl("int", "c");
 		env.pushMemberDecl(decl3);
-		assertTrue(env.contain(IRMaker.MakeIRVariable("b")));
-		assertTrue(env.contain(IRMaker.MakeIRVariable("c")));
-		assertFalse(env.contain(IRMaker.MakeIRVariable("d")));
+		assertTrue(env.contain(IRMaker.makeIRVariable("b")));
+		assertTrue(env.contain(IRMaker.makeIRVariable("c")));
+		assertFalse(env.contain(IRMaker.makeIRVariable("d")));
 		env.popBlock();
 
-		IRFieldDecl decl4 = IRMaker.MakeIRFieldDecl("int", "d");
+		IRFieldDecl decl4 = IRMaker.makeIRFieldDecl("int", "d");
 		env.pushMemberDecl(decl4);
-		assertTrue(env.contain(IRMaker.MakeIRVariable("d")));
-		assertFalse(env.contain(IRMaker.MakeIRVariable("c")));
+		assertTrue(env.contain(IRMaker.makeIRVariable("d")));
+		assertFalse(env.contain(IRMaker.makeIRVariable("c")));
 		env.popBlock();
 	}
 

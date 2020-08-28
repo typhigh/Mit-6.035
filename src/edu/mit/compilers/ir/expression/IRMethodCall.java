@@ -19,7 +19,7 @@ public class IRMethodCall extends IRExpression {
 		assert(argList != null);
 	}
 
-	public IRVariable getvariable() {
+	public IRVariable getVariable() {
 		return variable;
 	}
 	

@@ -12,16 +12,16 @@ import java.util.ArrayList;
 public class IRArrayType extends IRType {
 	
 	// Internal type 
-	private final IRType type;
+	private final IRBasicType type;
 	private IRIntLiteral len;
 	
-	public IRArrayType(IRType type, IRIntLiteral len) {
+	public IRArrayType(IRBasicType type, IRIntLiteral len) {
 		super("IRArrayType", len.getValue() * type.getSize());
 		this.type = type;
 		this.len = len;
 	}
 
-	public IRType getType() {
+	public IRBasicType getBasicType() {
 		return type;
 	}
 	

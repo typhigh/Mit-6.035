@@ -14,6 +14,10 @@ public class IRFieldDecl extends IRMemberDecl {
 		this.type = type;
 	}
 
+	public IRType getType() {
+		return type;
+	}
+
 	@Override
 	public ArrayList<IR> getChildren() {
 		ArrayList<IR> children = new ArrayList<>();

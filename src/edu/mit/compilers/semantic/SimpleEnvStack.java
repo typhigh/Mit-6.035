@@ -75,12 +75,12 @@ public class SimpleEnvStack implements EnvStack {
 	}
 
 	@Override
-	public boolean SetGlobalEnv(EnvStack env) {
-		return SetGlobalEnv(env.getGlobalDecls());
+	public boolean setGlobalEnv(EnvStack env) {
+		return setGlobalEnv(env.getGlobalDecls());
 	}
 
 	@Override
-	public boolean SetGlobalEnv(ArrayList<IRMemberDecl> decls) {
+	public boolean setGlobalEnv(ArrayList<IRMemberDecl> decls) {
 		assert blockBases.size() == 1 : "must have no block";
 		clear();
 		return stacks.addAll(decls);

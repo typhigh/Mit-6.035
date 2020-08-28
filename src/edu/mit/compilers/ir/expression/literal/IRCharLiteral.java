@@ -35,5 +35,4 @@ public class IRCharLiteral extends IRLiteral<Character> {
 	public <T> T accept(IRVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
-	
 }

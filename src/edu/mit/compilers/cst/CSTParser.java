@@ -124,7 +124,7 @@ public class CSTParser {
 			/// this type maybe array type
 			if (arrayNode.hasChild()) {
 				Token size = arrayNode.getChild(0).getToken();
-				nowType = new IRArrayType(nowType, new IRIntLiteral(size));
+				nowType = new IRArrayType((IRBasicType) nowType, new IRIntLiteral(size));
 			}
 			ret.add(new IRFieldDecl(nowType, variable));
 			node = node.getChild(2);

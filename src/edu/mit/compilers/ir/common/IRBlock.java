@@ -1,8 +1,7 @@
-package edu.mit.compilers.ir.statement;
+package edu.mit.compilers.ir.common;
 
-import edu.mit.compilers.ir.common.IR;
-import edu.mit.compilers.ir.common.IRVisitor;
 import edu.mit.compilers.ir.decl.IRFieldDecl;
+import edu.mit.compilers.ir.statement.IRStatement;
 
 import java.util.ArrayList;
 

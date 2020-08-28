@@ -15,7 +15,7 @@ public class IRLocation extends IRExpression {
 	public IRLocation(IRVariable variable, IRExpression location) {
 		super("IRLocation");
 		this.variable = variable;
-		this.isArrayLocation = true;
+		this.isArrayLocation = location == null ? false : true;
 		this.location = location;
 	}
 	

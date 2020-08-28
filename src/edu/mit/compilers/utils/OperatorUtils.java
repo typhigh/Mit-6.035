@@ -2,29 +2,29 @@ package edu.mit.compilers.utils;
 
 public class OperatorUtils {
 	
-	public static boolean IsUnary(String operator) {
+	public static boolean isUnary(String operator) {
 		return operator.equals("-") || operator.equals("!");
 	}
 	
-	public static boolean IsBinary(String operator) {
-		return IsRel(operator) 
-				|| IsEq(operator)
-				|| IsArith(operator)
-				|| IsCond(operator);
+	public static boolean isBinary(String operator) {
+		return isRel(operator)
+				|| isEq(operator)
+				|| isArith(operator)
+				|| isCond(operator);
 	}
 	
-	public static boolean IsRel(String operator) {
+	public static boolean isRel(String operator) {
 		return operator.equals("<")
 				|| operator.equals(">")
 				|| operator.equals("<=")
 				|| operator.equals(">=");
 	}
 	
-	public static boolean IsEq(String operator) {
+	public static boolean isEq(String operator) {
 		return operator.equals("==") || operator.equals("!=");
 	}
 	
-	public static boolean IsArith(String operator) {
+	public static boolean isArith(String operator) {
 		return operator.equals("+")
 				|| operator.equals("-")
 				|| operator.equals("*")
@@ -32,7 +32,7 @@ public class OperatorUtils {
 				|| operator.equals("%");
 	}
 	
-	public static boolean IsCond(String operator) {
+	public static boolean isCond(String operator) {
 		return operator.equals("&&") || operator.equals("||");
 	}
 }

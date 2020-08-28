@@ -46,5 +46,4 @@ public class IRTernaryExpr extends IRExpression {
 		ret.add(second);
 		return ret;
 	}
-
 }

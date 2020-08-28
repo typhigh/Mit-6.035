@@ -17,7 +17,6 @@ import edu.mit.compilers.ir.expression.literal.IRCharLiteral;
 import edu.mit.compilers.ir.expression.literal.IRIntLiteral;
 import edu.mit.compilers.ir.expression.literal.IRStringLiteral;
 import edu.mit.compilers.ir.statement.IRAssignStmt;
-import edu.mit.compilers.ir.statement.IRBlock;
 import edu.mit.compilers.ir.statement.IRBreakStmt;
 import edu.mit.compilers.ir.statement.IRContinueStmt;
 import edu.mit.compilers.ir.statement.IRForStmt;
@@ -26,6 +25,9 @@ import edu.mit.compilers.ir.statement.IRMethodCallStmt;
 import edu.mit.compilers.ir.statement.IRReturnStmt;
 import edu.mit.compilers.ir.statement.IRStatement;
 import edu.mit.compilers.ir.statement.IRWhileStmt;
+import edu.mit.compilers.ir.type.IRArrayType;
+import edu.mit.compilers.ir.type.IRBasicType;
+import edu.mit.compilers.ir.type.IRType;
 
 /*
  * IRVisit: for semantic-check and optimizer
@@ -34,26 +36,38 @@ public abstract class IRVisitor<T> {
 	
 	public abstract T visit(IR ir);
 
-	/*IR*/
+	/*common*/
 	/**********************************/
-	public T visit(IRProgram ir) {
+	public T visit(IRArgumentList ir) {
 		return visit((IR) ir);
 	}
-	
-	public T visit(IRMemberDecl ir) {
-		return visit((IR) ir);
-	}
-	
+
 	public T visit(IRBlock ir) {
 		return visit((IR) ir);
 	}
-	
-	public T visit(IRExpression ir) {
+
+	public T visit(IRParameter ir) {
 		return visit((IR) ir);
 	}
-	
-	/*IRMemberDecl*/
+
+	public T visit(IRParameterList ir) {
+		return visit((IR) ir);
+	}
+
+	public T visit(IRProgram ir) {
+		return visit((IR) ir);
+	}
+
+	public T visit(IRVariable ir) {
+		return visit((IR) ir);
+	}
+
+	/*decl*/
 	/**********************************/
+	public T visit(IRMemberDecl ir) {
+		return visit((IR) ir);
+	}
+
 	public T visit(IRFieldDecl ir) {
 		return visit((IRMemberDecl) ir);
 	}
@@ -66,12 +80,12 @@ public abstract class IRVisitor<T> {
 		return visit((IRMemberDecl) ir);
 	}
 	
-	public T visit(IRStatement ir) {
+	/*expression*/
+	/**********************************/
+	public T visit(IRExpression ir) {
 		return visit((IR) ir);
 	}
-	
-	/*IRExpression*/
-	/**********************************/
+
 	public T visit(IRBinaryOpExpr ir) {
 		return visit((IRExpression) ir);
 	}
@@ -116,8 +130,12 @@ public abstract class IRVisitor<T> {
 		return visit((IRExpression) ir);
 	}
 	
-	/*IRStatement*/
+	/*statement*/
 	/**********************************/
+	public T visit(IRStatement ir) {
+		return visit((IR) ir);
+	}
+
 	public T visit(IRAssignStmt ir) {
 		return visit((IRStatement) ir);
 	}
@@ -148,6 +166,20 @@ public abstract class IRVisitor<T> {
 	
 	public T visit(IRWhileStmt ir) {
 		return visit((IRStatement) ir);
+	}
+
+	/*type*/
+	/**********************************/
+	public T visit(IRType ir) {
+		return visit((IR) ir);
+	}
+
+	public T visit(IRArrayType ir) {
+		return visit((IRType) ir);
+	}
+
+	public T visit(IRBasicType ir) {
+		return visit((IRType) ir);
 	}
 }
 

@@ -13,5 +13,4 @@ public class IRStringLiteral extends IRLiteral<String> {
 	public <T> T accept(IRVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
-	
 }

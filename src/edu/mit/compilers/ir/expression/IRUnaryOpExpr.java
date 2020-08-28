@@ -12,7 +12,6 @@ public class IRUnaryOpExpr extends IRExpression {
 	
 	public IRUnaryOpExpr(String operator, IRExpression right) {
 		super("IRUnaryOpExpr");
-		// TODO Auto-generated constructor stub
 		this.operator = operator;
 		this.right = right;
 	}
