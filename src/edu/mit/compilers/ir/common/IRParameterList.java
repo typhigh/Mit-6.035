@@ -15,7 +15,15 @@ public class IRParameterList extends IR {
 	public ArrayList<IRFieldDecl> getParaList() {
 		return paraList;
 	}
-	
+
+	public IRFieldDecl get(int index) {
+		return getParaList().get(index);
+	}
+
+	public int size() {
+		return getParaList().size();
+	}
+
 	@Override
 	public ArrayList<IR> getChildren() {
 		ArrayList<IR> ret = new ArrayList<>(paraList);

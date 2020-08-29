@@ -12,8 +12,16 @@ public class IRArgumentList extends IR {
 		this.argList = argList;
 	}
 
-	public ArrayList<IRExpression> getArgs() {
+	public ArrayList<IRExpression> getArgList() {
 		return argList;
+	}
+
+	public IRExpression get(int index) {
+		return getArgList().get(index);
+	}
+
+	public int size() {
+		return getArgList().size();
 	}
 
 	@Override

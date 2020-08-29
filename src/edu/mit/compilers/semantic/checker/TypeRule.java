@@ -159,8 +159,8 @@ public class TypeRule extends SemanticRule {
 
     @Override
     public SemanticError visit(IRStringLiteral ir) {
-        assert false;
-        return null;
+        ir.setType(IRBasicType.StringType);
+        return SemanticError.NoError;
     }
 
     @Override

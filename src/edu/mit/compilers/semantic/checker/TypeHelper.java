@@ -23,13 +23,17 @@ public class TypeHelper {
             return null;
         }
 
-        if (!decl.getTag().equals("IRMethodDecl")) {
+        if (!decl.getTag().equals("IRMethodDecl") && !decl.getTag().equals("IRImportDecl")) {
             error.line = variable.getLine();
             error.error = "<id> " + variable.toString() +
-                    " must be an method variable but it is " + decl.getTag();
+                    " must be an method (or import) variable but it is " + decl.getTag();
             return null;
         }
 
+        // TODO : support import
+        if (decl.getTag().equals("IRImportDecl")) {
+            return null;
+        }
         return ((IRMethodDecl) decl).getType();
     }
 
@@ -77,6 +81,9 @@ public class TypeHelper {
         return type;
     }
 
+    /*
+     * Check if the type of expression is expected
+     */
     public static boolean checkExpressionType(EnvStack env, SemanticError error, IRExpression expr, IRType expected) {
         assert expected != null;
         IRType type = expr.getType();
@@ -93,6 +100,9 @@ public class TypeHelper {
         return true;
     }
 
+    /*
+     * Check if the types of two expression are equal
+     */
     public static boolean checkIfTypeEqual(EnvStack env, SemanticError error, IRExpression left, IRExpression right) {
         if (!left.getType().equals(right.getType())) {
             error.line = left.getLine();

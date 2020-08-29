@@ -14,6 +14,7 @@ public class IRBasicType extends IRType {
 	public static final IRBasicType CharType = new IRBasicType("char", 1);
 	public static final IRBasicType BoolType = new IRBasicType("bool", 1);
 	public static final IRBasicType VoidType = new IRBasicType("void", 0);
+	public static final IRBasicType StringType = new IRBasicType("string", 0);
 	
 	protected IRBasicType(String typeName, int size) {
 		super("IRBasicType", size);

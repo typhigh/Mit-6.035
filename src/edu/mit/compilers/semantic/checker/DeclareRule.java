@@ -7,10 +7,10 @@ import edu.mit.compilers.ir.expression.literal.IRIntLiteral;
 import edu.mit.compilers.ir.type.IRArrayType;
 
 /*
-    1. No identifier is declared twice in the same scope. This includes import identifiers, which
-    exist in the global scope.
-    2. No identifier is used before it is declared
-    4. The <int_literal> in an array declaration must be greater than 0
+ *  1. No identifier is declared twice in the same scope. This includes import identifiers, which
+ *  exist in the global scope.
+ *  2. No identifier is used before it is declared
+ *  4. The <int_literal> in an array declaration must be greater than 0
  */
 public class DeclareRule extends SemanticRule {
     @Override

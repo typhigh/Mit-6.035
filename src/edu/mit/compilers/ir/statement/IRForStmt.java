@@ -15,7 +15,6 @@ public class IRForStmt extends IRStatement {
 	private IRBlock block;
 
 	public IRForStmt(IRAssignStmt initializer, IRExpression condition, IRAssignStmt step, IRBlock block) {
-		// TODO Auto-generated constructor stub
 		super("IRForStmt");
 		this.initializer = initializer;
 		this.condition = condition;
