@@ -94,14 +94,14 @@ public class CSTParser {
 	}
 
 	private static IRParameterList parseIRFormalParaList(CSTNode node) {
-		ArrayList<IRParameter> paras = new ArrayList<>();
+		ArrayList<IRFieldDecl> paras = new ArrayList<>();
 		
 		while (node.hasChild() && node.getChildrenSize()>= 3) {
 			Token typeToken = node.getChild(0).getChild(0).getToken();
 			IRBasicType type = IRBasicType.GetInstance(typeToken.getText());
 			IRVariable variable = new IRVariable(node.getChild(1).getToken());
 			
-			paras.add(new IRParameter(type, variable));
+			paras.add(new IRFieldDecl(type, variable));
 			node = node.getChild(2);
 		}
 		

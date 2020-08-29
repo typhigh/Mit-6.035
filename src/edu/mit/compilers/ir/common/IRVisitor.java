@@ -33,7 +33,7 @@ import edu.mit.compilers.ir.type.IRType;
  * IRVisit: for semantic-check and optimizer
  */
 public abstract class IRVisitor<T> {
-	
+
 	public abstract T visit(IR ir);
 
 	/*common*/
@@ -43,10 +43,6 @@ public abstract class IRVisitor<T> {
 	}
 
 	public T visit(IRBlock ir) {
-		return visit((IR) ir);
-	}
-
-	public T visit(IRParameter ir) {
 		return visit((IR) ir);
 	}
 

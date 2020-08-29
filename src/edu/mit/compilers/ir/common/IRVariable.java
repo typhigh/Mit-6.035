@@ -1,11 +1,16 @@
 package edu.mit.compilers.ir.common;
 
 import antlr.Token;
+import edu.mit.compilers.ir.decl.IRMemberDecl;
 
 import java.util.ArrayList;
 
 public class IRVariable extends IR {
 	private String name;
+
+	// Helper info filled by semantic checker
+	private IRMemberDecl declaredFrom = null;
+
 	public IRVariable(String name, int line, int column) {
 		super("IRVariable");
 		this.name = name;
@@ -19,6 +24,14 @@ public class IRVariable extends IR {
 
 	public String getName() {
 		return name;
+	}
+
+	public IRMemberDecl getDeclaredFrom() {
+		return declaredFrom;
+	}
+
+	public void setDeclaredFrom(IRMemberDecl declaredFrom) {
+		this.declaredFrom = declaredFrom;
 	}
 
 	@Override

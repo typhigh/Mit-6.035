@@ -23,9 +23,12 @@ public class IRProgram extends IR {
 	public void addMethodDecl(IRMethodDecl decl) {
 		methodDecls.add(decl);
 	}
-	
+
+	public void addIRFieldDecl(IRFieldDecl decl) {
+		fieldDecls.add(decl);
+	}
+
 	public void addIRFieldDecls(ArrayList<IRFieldDecl> decls) {
-		// TODO Auto-generated method stub
 		fieldDecls.addAll(decls);
 	}
 	

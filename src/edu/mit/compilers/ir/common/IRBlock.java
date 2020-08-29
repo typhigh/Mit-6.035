@@ -9,11 +9,24 @@ public class IRBlock extends IR {
 	
 	private ArrayList<IRFieldDecl> fieldDecls = new ArrayList<>();
 	private ArrayList<IRStatement> statements = new ArrayList<>();
-	
+	private boolean newScope = true;
+
 	public IRBlock() {
 		super("IRBlock");	
 	}
-	
+
+	public boolean isNewScope() {
+		return newScope;
+	}
+
+	public void setNewScope(boolean newScope) {
+		this.newScope = newScope;
+	}
+
+	public void addFieldDecl(IRFieldDecl decl) {
+		this.fieldDecls.add(decl);
+	}
+
 	public void addFieldDecls(ArrayList<IRFieldDecl> decls) {
 		this.fieldDecls.addAll(decls);
 	}
@@ -43,5 +56,4 @@ public class IRBlock extends IR {
 		ret.addAll(statements);
 		return ret;
 	}
-	
 }

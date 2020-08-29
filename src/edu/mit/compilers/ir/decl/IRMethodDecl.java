@@ -21,6 +21,8 @@ public class IRMethodDecl extends IRMemberDecl{
 		this.type = type;
 		this.block = block;
 		this.paraList = paraList;
+
+		this.block.setNewScope(false);
 	}
 	
 	public IRBasicType getType() {

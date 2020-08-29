@@ -10,6 +10,7 @@ public class SemanticChecker {
 
     private EnvStack env = null;
     private String fileName = null;
+    private String output = null;
     private ArrayList<SemanticRule> rulesDoneBefore = new ArrayList<>();
     private ArrayList<SemanticRule> rulesDoneAfter = new ArrayList<>();
     private ArrayList<SemanticError> errors = new ArrayList<>();
@@ -24,12 +25,32 @@ public class SemanticChecker {
         errors.clear();
 
         rulesDoneBefore.clear();
-        rulesDoneBefore.add(new PushBlockRule());
         rulesDoneBefore.add(new DeclareRule());
+        rulesDoneBefore.add(new MainMethodRule());
+        rulesDoneBefore.add(new PushBlockRule());
 
         rulesDoneAfter.clear();
         rulesDoneAfter.add(new TypeRule());
         rulesDoneAfter.add(new PopBlockRule());
+
+        for (SemanticRule rule : rulesDoneBefore) {
+            rule.setEnv(env);
+        }
+
+        for (SemanticRule rule : rulesDoneAfter) {
+            rule.setEnv(env);
+        }
+    }
+
+    public void reportErrors() {
+        for (SemanticError error : errors) {
+            if (output == null) {
+                System.out.println(fileName + ":" + error.line + " : " + error.error);
+            } else {
+                // TODO : support file output
+                assert false;
+            }
+        }
     }
 
     public ArrayList<SemanticError> check(IR root) {

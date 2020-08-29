@@ -19,6 +19,7 @@ public class IRArrayType extends IRType {
 		super("IRArrayType", len.getValue() * type.getSize());
 		this.type = type;
 		this.len = len;
+		this.setLine(type.getLine());
 	}
 
 	public IRBasicType getBasicType() {

@@ -1,14 +1,18 @@
 package JunitTest.TestTool;
 
 import antlr.Token;
+import edu.mit.compilers.ir.common.IRBlock;
+import edu.mit.compilers.ir.common.IRParameterList;
 import edu.mit.compilers.ir.common.IRVariable;
 import edu.mit.compilers.ir.decl.IRFieldDecl;
-import edu.mit.compilers.ir.decl.IRMemberDecl;
+import edu.mit.compilers.ir.decl.IRImportDecl;
 import edu.mit.compilers.ir.decl.IRMethodDecl;
 import edu.mit.compilers.ir.expression.literal.IRIntLiteral;
 import edu.mit.compilers.ir.type.IRArrayType;
 import edu.mit.compilers.ir.type.IRBasicType;
 import edu.mit.compilers.ir.type.IRType;
+
+import java.util.ArrayList;
 
 public class IRMaker {
 
@@ -38,11 +42,23 @@ public class IRMaker {
 		return new IRFieldDecl(type, variable);
 	}
 
-	public static IRMemberDecl makeIRMethodDecl(String typeName, String variableName) {
+	public static IRMethodDecl makeIRMethodDecl(String typeName, String variableName, IRParameterList list, IRBlock block) {
 		IRType type = makeIRType(typeName, false, 0);
 		IRVariable variable = makeIRVariable(variableName);
-		return new IRMethodDecl(variable, (IRBasicType) type, null, null);
+		if (list == null) {
+			list = new IRParameterList(new ArrayList<>());
+		}
+		if (block == null) {
+			block = new IRBlock();
+		}
+		return new IRMethodDecl(variable, (IRBasicType) type, list, block);
+	}
 
+	public static IRImportDecl makeIRImportDecl(String variableName) {
+		return new IRImportDecl(makeIRVariable(variableName));
+	}
 
+	public static IRMethodDecl makeMainMethod(IRBlock block) {
+		return makeIRMethodDecl("void", "main", null, block);
 	}
 }

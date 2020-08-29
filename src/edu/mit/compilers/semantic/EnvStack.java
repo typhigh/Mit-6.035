@@ -35,7 +35,12 @@ public interface EnvStack {
 	 * Otherwise, return null
 	 */
 	IRMemberDecl seek(IRVariable identifier);
-	
+
+	/*
+	 * If the identifier is declared in the current scope, return the last declare
+	 * Otherwise return null
+	 */
+	IRMemberDecl lastDeclaredInCurrentBlock(IRVariable identifier);
 	/*
 	 * Whether contain the id
 	 */

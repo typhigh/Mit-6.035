@@ -31,8 +31,22 @@ public class SimpleEnvStack implements EnvStack {
 
 	@Override
 	public IRMemberDecl seek(IRVariable identifier) {
-		for (int i = stacks.size() - 1; i >= 0; --i) {
-			// from top to down
+		return seekLastDeclaredInRange(identifier, 0, stacks.size()-1);
+	}
+
+	@Override
+	public IRMemberDecl lastDeclaredInCurrentBlock(IRVariable identifier) {
+		if (blockBases.isEmpty()) {
+			return null;
+		}
+
+		int left = blockBases.get(blockBases.size()-1);
+		int right = stacks.size() - 1;
+		return seekLastDeclaredInRange(identifier, left, right);
+	}
+
+	private IRMemberDecl seekLastDeclaredInRange(IRVariable identifier, int low, int high) {
+		for (int i = high; i >= low; --i) {
 			IRMemberDecl decl = stacks.get(i);
 			if (decl.getVariable().hasSameName(identifier)) {
 				return decl;
