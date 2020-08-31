@@ -30,8 +30,10 @@ public class SemanticChecker {
         rulesDoneBefore.add(new PushBlockRule());
 
         rulesDoneAfter.clear();
+        rulesDoneAfter.add(new ArgumentRule());
         rulesDoneAfter.add(new TypeRule());
         rulesDoneAfter.add(new PopBlockRule());
+        rulesDoneAfter.add(new MethodCallRule());
 
         for (SemanticRule rule : rulesDoneBefore) {
             rule.setEnv(env);

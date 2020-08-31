@@ -112,7 +112,7 @@ public class CSTNode {
 	public void addChild(CSTNode child) {
 		children.add(child);
 		child.setParent(this);
-		System.out.println("Add a child From " + debugID + " " + child.debugID);
+		// System.out.println("Add a child From " + debugID + " " + child.debugID);
 	}
 	
 	public void addChild(String name) {

@@ -44,7 +44,20 @@ public class IRVariable extends IR {
 		return visitor.visit(this);
 	}
 
-    public boolean hasSameName(IRVariable variable) {
+	@Override
+	public String getInfoForShow(String prefix) {
+		return prefix +
+				" DebugID: " + getDebugID() +
+				" Tag: " + getTag() +
+				" Name: " + getName() + '\n';
+	}
+
+	@Override
+	public String toString() {
+		return getName();
+	}
+
+	public boolean hasSameName(IRVariable variable) {
 		return getName().equals(variable.getName());
     }
 }

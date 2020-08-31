@@ -8,12 +8,15 @@ import edu.mit.compilers.grammar.DecafParserTokenTypes;
 import edu.mit.compilers.grammar.DecafScanner;
 import edu.mit.compilers.grammar.DecafScannerTokenTypes;
 import edu.mit.compilers.ir.common.IR;
+import edu.mit.compilers.semantic.checker.SemanticChecker;
+import edu.mit.compilers.semantic.checker.SemanticError;
 import edu.mit.compilers.tools.CLI;
 import edu.mit.compilers.tools.CLI.Action;
 
 import java.io.DataInputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 
 class Main {
@@ -89,20 +92,31 @@ class Main {
 				if (parser.getError()) {
 					System.exit(1);
 				}
-				
+
 				CST tree = parser.getCST();
-				
+
 				// After pruned
 				tree.PrunTree();
-				String info = tree.showTree();
-				System.out.println(info);
-				
-				// Get IR-tree 
+				if (CLI.debug) {
+					String info = tree.showTree();
+					System.out.println(info);
+				}
+
+				// Get IR-tree
 				IR ir = CSTParser.parseIRProgram(tree);
-				String irInfo = ir.showTree();
-				System.out.println(irInfo);
-				
+				if (CLI.debug){
+					String irInfo = ir.showTree();
+					System.out.println(irInfo);
+				}
+
 				// Semantic check
+				SemanticChecker check = new SemanticChecker();
+				check.init("test.sh");
+				ArrayList<SemanticError> errors = check.check(ir);
+				if (!errors.isEmpty()) {
+					check.reportErrors();
+					System.exit(1);
+				}
 			}
 		} catch (Exception e) {
 			// print the error:

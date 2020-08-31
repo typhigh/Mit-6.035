@@ -24,6 +24,8 @@ public class IRParameterList extends IR {
 		return getParaList().size();
 	}
 
+	public boolean isEmpty() {return getParaList().isEmpty();}
+
 	@Override
 	public ArrayList<IR> getChildren() {
 		ArrayList<IR> ret = new ArrayList<>(paraList);
