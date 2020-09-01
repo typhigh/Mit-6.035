@@ -25,9 +25,12 @@ public class SemanticChecker {
         errors.clear();
 
         rulesDoneBefore.clear();
+        rulesDoneBefore.add(new SetParentHepler());
+
         rulesDoneBefore.add(new DeclareRule());
         rulesDoneBefore.add(new MainMethodRule());
         rulesDoneBefore.add(new PushBlockRule());
+
 
         rulesDoneAfter.clear();
         rulesDoneAfter.add(new ArgumentRule());
