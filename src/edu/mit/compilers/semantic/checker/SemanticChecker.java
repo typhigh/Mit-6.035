@@ -47,7 +47,7 @@ public class SemanticChecker {
     public void reportErrors() {
         for (SemanticError error : errors) {
             if (output == null) {
-                System.out.println(fileName + ":" + error.line + " : " + error.error);
+                System.out.println(fileName + ":" + error.toString());
             } else {
                 // TODO : support file output
                 assert false;

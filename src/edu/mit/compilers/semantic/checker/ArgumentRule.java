@@ -29,8 +29,11 @@ public class ArgumentRule extends SemanticRule {
             IRExpression arg = ir.getArgList().get(i);
             IRType type = arg.getType();
             if (type.equals(IRBasicType.StringType) || type.isArrayType()) {
-                error.line = arg.getLine();
-                error.error = "the " + i + "th <argument> type is not support(string, array)";
+                error.set(
+                        "the " + i + "th <argument> type is not support(string, array) in non-import methods",
+                        7,
+                        arg.getLine()
+                );
                 return error;
             }
         }

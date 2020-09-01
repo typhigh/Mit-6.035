@@ -22,9 +22,7 @@ public class MainMethodRule extends SemanticRule {
         for (IRMethodDecl methodDecl : ir.getMethodDecls()) {
             if (methodDecl.getVariable().getName().equals("main")) {
                 if (hasMain) {
-                    error.line = methodDecl.getLine();
-                    error.error = "main method has been declared repeatedly";
-                    return error;
+                    continue;
                 }
                 hasMain = true;
                 mainDecl = methodDecl;
@@ -32,20 +30,28 @@ public class MainMethodRule extends SemanticRule {
         }
 
         if (!hasMain) {
-            error.line = 0;
-            error.error = "main method has not been declared";
+            error.set(
+                    "main method has not been declared",
+                    3
+            );
             return error;
         }
 
         if (!mainDecl.getType().equals(IRBasicType.VoidType)) {
-            error.line = mainDecl.getLine();
-            error.error = "main method only supports void return type, not the " + mainDecl.getType().getTypeName();
+            error.set(
+                    "main method only supports void return type, not the " + mainDecl.getType().getTypeName(),
+                    3,
+                    mainDecl.getLine()
+            );
             return error;
         }
 
         if (!mainDecl.getParaList().isEmpty()) {
-            error.line = mainDecl.getLine();
-            error.error = "main method only supports empty parameter list";
+            error.set(
+                    "main method only supports empty parameter list",
+                    3,
+                    mainDecl.getLine()
+            );
             return error;
         }
 

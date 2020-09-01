@@ -32,9 +32,9 @@ public class MethodCallRule extends SemanticRule {
         IRParameterList paraList = ((IRMethodDecl) declaredFrom).getParaList();
         IRArgumentList argList = ir.getArgList();
         if (argList.size() != paraList.size()) {
-            error.line = ir.getLine();
-            error.error = "<method call> " + ir.getVariable().getName() +
+            String info = "<method call> " + ir.getVariable().getName() +
                     " arguments have " + argList.size() + " element and parameters have " + paraList.size();
+            error.set(info, 5, ir.getLine());
             return error;
         }
 
@@ -47,8 +47,12 @@ public class MethodCallRule extends SemanticRule {
             }
 
             if (!argType.equals(paraType)) {
-                error.line = argList.get(i).getLine();
-                error.error = "the " + i + "th <argument> not matched to the parameter";
+                error.set(
+                        "the " + i + "th <argument> not matched to the parameter",
+                        5,
+                        argList.get(i).getLine(),
+                        argList.get(i).getColumn()
+                );
                 return error;
             }
         }

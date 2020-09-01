@@ -18,8 +18,12 @@ public class DeclareRule extends SemanticRule {
         SemanticError error = new SemanticError();
         IRMemberDecl declaredFrom = getEnv().seek(ir);
         if (declaredFrom == null) {
-            error.line = ir.getLine();
-            error.error = "<id> " + ir.toString() + " should have been declared";
+            error.set(
+                    "<identifier> " + ir.getName() + " is used without been declared",
+                    2,
+                    ir.getLine(),
+                    ir.getColumn()
+            );
             return error;
         }
 
@@ -34,8 +38,11 @@ public class DeclareRule extends SemanticRule {
         if (decl != null) {
             // twice declared in one scope
             error = new SemanticError();
-            error.line = ir.getLine();
-            error.error = "<id> " + ir.getVariable().toString() + " has been declared repeatedly";
+            error.set(
+                    "<identifier> " + ir.getVariable().getName() + " is declared repeatedly in the same scope",
+                    1,
+                    ir.getLine()
+            );
         } else {
             getEnv().pushMemberDecl(ir);
             error = SemanticError.NoError;
@@ -50,8 +57,11 @@ public class DeclareRule extends SemanticRule {
         int value = len.getValue();
         if (value <= 0) {
             error = new SemanticError();
-            error.line = ir.getLine();
-            error.error = "the <len> " + value + " in array declaration must be greater than 0";
+            error.set(
+                    "the <len> " + value + " in array declaration must be greater than 0",
+                    4,
+                    ir.getLine()
+            );
         } else {
             error = SemanticError.NoError;
         }

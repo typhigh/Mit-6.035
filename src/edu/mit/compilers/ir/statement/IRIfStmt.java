@@ -24,6 +24,10 @@ public class IRIfStmt extends IRStatement{
 		this(condition, ifBlock, null);
 	}
 
+	public IRExpression getCondition() {
+		return condition;
+	}
+
 	@Override
 	public <T> T accept(IRVisitor<T> visitor) {
 		return visitor.visit(this);

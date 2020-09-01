@@ -16,7 +16,7 @@ public class TypeHelper {
      * If true, return its (basic) type
      * otherwise return null and fill error
      */
-    public static IRBasicType checkMethodVariableAndReturnType(EnvStack env, SemanticError error, IRVariable variable) {
+    public static IRBasicType checkMethodVariableAndGetType(EnvStack env, SemanticError error, int ruleId, IRVariable variable) {
         IRMemberDecl decl = env.seek(variable);
         if (decl == null) {
             // do nothing
@@ -24,9 +24,9 @@ public class TypeHelper {
         }
 
         if (!decl.getTag().equals("IRMethodDecl") && !decl.getTag().equals("IRImportDecl")) {
-            error.line = variable.getLine();
-            error.error = "<id> " + variable.toString() +
+            String info = "<id> " + variable.toString() +
                     " must be an method (or import) variable but it is " + decl.getTag();
+            error.set(info, ruleId, variable.getLine(), variable.getColumn());
             return null;
         }
 
@@ -42,7 +42,8 @@ public class TypeHelper {
      * If true, return its type
      * otherwise return null and fill error
      */
-    public static IRType checkFieldVariableAndReturnType(EnvStack env, SemanticError error, IRVariable variable) {
+    public static IRType checkFieldVariableAndGetType(EnvStack env, SemanticError error,
+                                                         int ruleId, IRVariable variable) {
         IRMemberDecl decl = env.seek(variable);
         if (decl == null) {
             // do nothing
@@ -50,8 +51,8 @@ public class TypeHelper {
         }
 
         if (!decl.getTag().equals("IRFieldDecl")) {
-            error.line = variable.getLine();
-            error.error = "<id> " + variable.toString() + " must be an variable but this is " + decl.getTag();
+            String info = "<id> " + variable.toString() + " must be an variable but this is " + decl.getTag();
+            error.set(info, ruleId, variable.getLine(), variable.getColumn());
             return null;
         }
 
@@ -63,19 +64,19 @@ public class TypeHelper {
      * If true, return its type
      * otherwise return null and fill error
      */
-    public static IRType checkFieldVariableAndReturnType(EnvStack env, SemanticError error,
+    public static IRType checkFieldVariableAndGetType(EnvStack env, SemanticError error, int ruleId,
                                                      IRVariable variable, boolean isArray)
     {
-        IRType type = checkFieldVariableAndReturnType(env, error, variable);
+        IRType type = checkFieldVariableAndGetType(env, error, ruleId, variable);
         if (type == null) {
             return null;
         }
 
         String expectType = isArray ? "array-type" : "basic-type";
         if (type.isArrayType() != isArray) {
-            error.line = variable.getLine();
-            error.error = "<id> " + variable.toString() + " must be an variable with " + expectType +
+            String info = "<id> " + variable.toString() + " must be an variable with " + expectType +
                     " but this type is " + type.toString();
+            error.set(info, ruleId, variable.getLine(), variable.getColumn());
             return null;
         }
         return type;
@@ -84,7 +85,8 @@ public class TypeHelper {
     /*
      * Check if the type of expression is expected
      */
-    public static boolean checkExpressionType(EnvStack env, SemanticError error, IRExpression expr, IRType expected) {
+    public static boolean checkExpressionType(EnvStack env, SemanticError error, int ruleId,
+                                              IRExpression expr, IRType expected) {
         assert expected != null;
         IRType type = expr.getType();
         if (type == null) {
@@ -93,8 +95,8 @@ public class TypeHelper {
         }
 
         if (type.equals(expected)) {
-            error.line = expr.getLine();
-            error.error = "<expression> should have type " + expected.toString() + " but not " + type.toString();
+            String info = "<expression> should have type " + expected.toString() + " but not " + type.toString();
+            error.set(info, ruleId, expr.getLine());
             return false;
         }
         return true;
@@ -103,11 +105,12 @@ public class TypeHelper {
     /*
      * Check if the types of two expression are equal
      */
-    public static boolean checkIfTypeEqual(EnvStack env, SemanticError error, IRExpression left, IRExpression right) {
+    public static boolean checkIfTypeEqual(EnvStack env, SemanticError error, int ruleId,
+                                           IRExpression left, IRExpression right) {
         if (!left.getType().equals(right.getType())) {
-            error.line = left.getLine();
-            error.error = "<left> type is " + left.getType().toString() +
+            String info = "<left> type is " + left.getType().toString() +
                     " and <right> type is " + right.getType().toString();
+            error.set(info, ruleId, left.getLine());
             return false;
         }
         return true;
