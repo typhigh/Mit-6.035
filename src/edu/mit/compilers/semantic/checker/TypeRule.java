@@ -5,7 +5,7 @@ import edu.mit.compilers.ir.expression.literal.IRBoolLiteral;
 import edu.mit.compilers.ir.expression.literal.IRCharLiteral;
 import edu.mit.compilers.ir.expression.literal.IRIntLiteral;
 import edu.mit.compilers.ir.expression.literal.IRStringLiteral;
-import edu.mit.compilers.ir.statement.IRIfStmt;
+import edu.mit.compilers.ir.statement.*;
 import edu.mit.compilers.ir.type.IRArrayType;
 import edu.mit.compilers.ir.type.IRBasicType;
 import edu.mit.compilers.ir.type.IRType;
@@ -189,6 +189,38 @@ public class TypeRule extends SemanticRule {
     public SemanticError visit(IRIfStmt ir) {
         SemanticError error = new SemanticError();
         TypeHelper.checkExpressionType(getEnv(), error, 14, ir.getCondition(), IRBasicType.BoolType);
+        return error;
+    }
+
+    @Override
+    public SemanticError visit(IRWhileStmt ir) {
+        SemanticError error = new SemanticError();
+        TypeHelper.checkExpressionType(getEnv(), error, 14, ir.getCondition(), IRBasicType.BoolType);
+        return error;
+    }
+
+    @Override
+    public SemanticError visit(IRForStmt ir) {
+        SemanticError error = new SemanticError();
+        TypeHelper.checkExpressionType(getEnv(), error, 14, ir.getCondition(), IRBasicType.BoolType);
+        return error;
+    }
+
+    @Override
+    public SemanticError visit(IRAssignStmt ir) {
+        SemanticError error = new SemanticError();
+        TypeHelper.checkIfTypeEqual(getEnv(), error, 19, ir.getLocation(), ir.getValue());
+        return error;
+    }
+
+    @Override
+    public SemanticError visit(IRPlusAssignStmt ir) {
+        SemanticError error = new SemanticError();
+        TypeHelper.checkExpressionType(getEnv(), error, 20, ir.getLocation(), IRBasicType.IntType);
+        if (error.hasError()) {
+            return error;
+        }
+        TypeHelper.checkExpressionType(getEnv(), error, 20, ir.getValue(), IRBasicType.IntType);
         return error;
     }
 

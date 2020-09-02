@@ -149,7 +149,7 @@ public class CSTParser {
 		return null;
 	}
 
-	private static IRAssignStmt parseIRAssignStmt(CSTNode node) {
+	private static IRStatement parseIRAssignStmt(CSTNode node) {
 		// assign_stmt: location assign_expr;
 		assert(node.getChildrenSize() == 2);
 		IRLocation location = parseIRLocation(node.getChild(0));
@@ -159,16 +159,22 @@ public class CSTParser {
 		CSTNode firstChild = node.getChild(0);
 		String tag = firstChild.getName();
 		String operator;
-		IRAssignStmt ret;
+		IRStatement ret;
 		if (tag.equals("assign_op")) {
 			// assign_op : OP_ASSIGN | OP_ASSIGN_PLUS | OP_ASSIGN_MINUS;
 			operator = firstChild.getChild(0).getToken().getText();
 			IRExpression expression = parseIRExpression(node.getChild(1));
-			ret = new IRAssignStmt(location, operator, expression);
+			if (operator.equals("=")) {
+				ret = new IRAssignStmt(location, expression);
+			} else {
+				assert operator.equals("+=") || operator.equals("-=") : "unknown operator " + operator;
+				ret = new IRPlusAssignStmt(location, operator, expression);
+			}
 		} else if (tag.equals("increment")) {
 			// increment : OP_INC | OP_DEC;
 			operator = firstChild.getChild(0).getToken().getText();
-			ret = new IRAssignStmt(location, operator);
+			assert operator.equals("++") || operator.equals("--");
+			ret = new IRPlusAssignStmt(location, operator);
 		} else {
 			throw new RuntimeException("Unknown tag for assign_expr :" + tag);
 		}
@@ -313,23 +319,24 @@ public class CSTParser {
 		assert(node.getChildrenSize() >= 7);
 		IRVariable variable = new IRVariable(node.getChild(0).getToken());
 		String operator1 = node.getChild(1).getToken().getText();
-		IRExpression  initValue = parseIRExpression(node.getChild(2));
-		IRAssignStmt initializer = new IRAssignStmt(variable, operator1, initValue);
+		assert operator1.equals("=");
+		IRExpression initValue = parseIRExpression(node.getChild(2));
+		IRAssignStmt initializer = new IRAssignStmt(variable, initValue);
 		
 		IRExpression condition = parseIRExpression(node.getChild(3));
 		IRLocation location = parseIRLocation(node.getChild(4));
 		String operator2;
-		IRAssignStmt step;
+		IRPlusAssignStmt step;
 		
 		if (node.getChild(5).getName().equals("compound_assign_op")) {
 			// compound_assign_op : OP_ASSIGN_PLUS | OP_ASSIGN_MINUS;
 			operator2 = node.getChild(5).getChild(0).getToken().getText();
 			IRExpression stepRValue = parseIRExpression(node.getChild(6));
-			step = new IRAssignStmt(location, operator2, stepRValue);
+			step = new IRPlusAssignStmt(location, operator2, stepRValue);
 		} else {
 			// increment : OP_INC | OP_DEC;
 			operator2 = node.getChild(5).getChild(0).getToken().getText();
-			step = new IRAssignStmt(location, operator2);
+			step = new IRPlusAssignStmt(location, operator2);
 		}
 		
 		IRBlock block = parseIRBlock(node.getLastChild());

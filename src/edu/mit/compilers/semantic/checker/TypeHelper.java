@@ -107,6 +107,11 @@ public class TypeHelper {
      */
     public static boolean checkIfTypeEqual(EnvStack env, SemanticError error, int ruleId,
                                            IRExpression left, IRExpression right) {
+        if (left.getType() == null || right.getType() == null) {
+            // do nothing
+            return true;
+        }
+
         if (!left.getType().equals(right.getType())) {
             String info = "<left> type is " + left.getType().toString() +
                     " and <right> type is " + right.getType().toString();

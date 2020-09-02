@@ -11,15 +11,19 @@ public class IRForStmt extends IRStatement {
 	
 	private IRAssignStmt initializer;
 	private IRExpression condition;
-	private IRAssignStmt step;
+	private IRPlusAssignStmt step;
 	private IRBlock block;
 
-	public IRForStmt(IRAssignStmt initializer, IRExpression condition, IRAssignStmt step, IRBlock block) {
+	public IRForStmt(IRAssignStmt initializer, IRExpression condition, IRPlusAssignStmt step, IRBlock block) {
 		super("IRForStmt");
 		this.initializer = initializer;
 		this.condition = condition;
 		this.step = step;
 		this.block = block;
+	}
+
+	public IRExpression getCondition() {
+		return condition;
 	}
 
 	@Override

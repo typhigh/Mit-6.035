@@ -10,32 +10,21 @@ import java.util.ArrayList;
 
 public class IRAssignStmt extends IRStatement {
 	private IRLocation location;
-	// Type uses String (simple implement)
-	private String operator;
 	private IRExpression value;
 	
-	public IRAssignStmt(IRLocation location, String operator, IRExpression value) {
+	public IRAssignStmt(IRLocation location, IRExpression value) {
 		super("IRAssignStmt");
 		this.location = location;
-		this.operator = operator;
+		assert value != null;
 		this.value = value;
 	}
 	
-	public IRAssignStmt(IRLocation location, String operator) {
-		this(location, operator, null);
-		assert(operator.equals("++") || operator.equals("--"));
-	}
-	
-	public IRAssignStmt(IRVariable variable, String operator1, IRExpression initValue) {
-		this(new IRLocation(variable), operator1, initValue);
+	public IRAssignStmt(IRVariable variable, IRExpression value) {
+		this(new IRLocation(variable), value);
 	}
 
 	public IRLocation getLocation() {
 		return location;
-	}
-
-	public String getOperator() {
-		return operator;
 	}
 
 	public IRExpression getValue() {
@@ -54,12 +43,5 @@ public class IRAssignStmt extends IRStatement {
 		ret.add(location);
 		ret.add(value);
 		return ret;
-	}
-	
-	public String getInfoForShow(String prefix) {
-		return prefix + 
-				" DebugID: " + getDebugID() + 
-				" Tag: " + getTag() + 
-				" Op: " + getOperator() + '\n';
 	}
 }

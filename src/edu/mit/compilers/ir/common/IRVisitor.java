@@ -16,15 +16,7 @@ import edu.mit.compilers.ir.expression.literal.IRBoolLiteral;
 import edu.mit.compilers.ir.expression.literal.IRCharLiteral;
 import edu.mit.compilers.ir.expression.literal.IRIntLiteral;
 import edu.mit.compilers.ir.expression.literal.IRStringLiteral;
-import edu.mit.compilers.ir.statement.IRAssignStmt;
-import edu.mit.compilers.ir.statement.IRBreakStmt;
-import edu.mit.compilers.ir.statement.IRContinueStmt;
-import edu.mit.compilers.ir.statement.IRForStmt;
-import edu.mit.compilers.ir.statement.IRIfStmt;
-import edu.mit.compilers.ir.statement.IRMethodCallStmt;
-import edu.mit.compilers.ir.statement.IRReturnStmt;
-import edu.mit.compilers.ir.statement.IRStatement;
-import edu.mit.compilers.ir.statement.IRWhileStmt;
+import edu.mit.compilers.ir.statement.*;
 import edu.mit.compilers.ir.type.IRArrayType;
 import edu.mit.compilers.ir.type.IRBasicType;
 import edu.mit.compilers.ir.type.IRType;
@@ -153,6 +145,10 @@ public abstract class IRVisitor<T> {
 	}
 	
 	public T visit(IRMethodCallStmt ir) {
+		return visit((IRStatement) ir);
+	}
+
+	public T visit(IRPlusAssignStmt ir) {
 		return visit((IRStatement) ir);
 	}
 	
