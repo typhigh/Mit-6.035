@@ -19,6 +19,7 @@ public class IRTernaryExpr extends IRExpression {
 		this.condition = condition;
 		this.first = first;
 		this.second = second;
+		setLine(condition.getLine());
 	}
 
 	public IRExpression getCondition() {

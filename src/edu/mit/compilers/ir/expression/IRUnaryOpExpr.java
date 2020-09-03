@@ -14,6 +14,7 @@ public class IRUnaryOpExpr extends IRExpression {
 		super("IRUnaryOpExpr");
 		this.operator = operator;
 		this.right = right;
+		setLine(right.getLine());
 	}
 
 	public String getOperator() {

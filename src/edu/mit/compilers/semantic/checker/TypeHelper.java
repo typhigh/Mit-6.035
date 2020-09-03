@@ -94,7 +94,7 @@ public class TypeHelper {
             return false;
         }
 
-        if (type.equals(expected)) {
+        if (!type.equals(expected)) {
             String info = "<expression> should have type " + expected.toString() + " but not " + type.toString();
             error.set(info, ruleId, expr.getLine());
             return false;

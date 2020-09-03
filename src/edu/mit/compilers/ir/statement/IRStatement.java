@@ -7,6 +7,5 @@ public abstract class IRStatement extends IR {
 	public IRStatement(String name) {
 		super(name);
 	}
-	
-	
+
 }

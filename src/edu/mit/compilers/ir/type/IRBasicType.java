@@ -17,8 +17,9 @@ public class IRBasicType extends IRType {
 	public static final IRBasicType StringType = new IRBasicType("string", 0);
 	
 	protected IRBasicType(String typeName, int size) {
-		super("IRBasicType", size);
+		super("IRBasicType");
 		this.typeName = typeName;
+		setSize(size);
 	}
 
 	public String getTypeName() {

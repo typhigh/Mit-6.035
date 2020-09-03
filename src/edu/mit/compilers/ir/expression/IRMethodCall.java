@@ -16,6 +16,7 @@ public class IRMethodCall extends IRExpression {
 		super("IRMethodCall");
 		this.variable = variable;
 		this.argList = argList;
+		setLine(variable.getLine());
 		assert(argList != null);
 	}
 

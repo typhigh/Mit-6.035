@@ -16,7 +16,7 @@ public class IRArrayType extends IRType {
 	private IRIntLiteral len;
 	
 	public IRArrayType(IRBasicType type, IRIntLiteral len) {
-		super("IRArrayType", len.getValue() * type.getSize());
+		super("IRArrayType");
 		this.type = type;
 		this.len = len;
 		this.setLine(type.getLine());

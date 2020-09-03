@@ -14,6 +14,7 @@ public class IRLenExpr extends IRExpression {
 	public IRLenExpr(IRVariable variable) {
 		super("IRLenExpr");
 		this.variable = variable;
+		setLine(variable.getLine());
 	}
 
 

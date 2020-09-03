@@ -6,7 +6,8 @@ import edu.mit.compilers.ir.common.IRVisitor;
 public class IRStringLiteral extends IRLiteral<String> {
 
 	public IRStringLiteral(Token token) {
-		super("IRStringLiteral", token.getText(), token);
+		super("IRStringLiteral", token);
+		setValue(getLiteralValue());
 	}
 
 	@Override

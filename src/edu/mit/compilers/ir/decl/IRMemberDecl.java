@@ -12,6 +12,7 @@ public abstract class IRMemberDecl extends IR {
 		super(tag);
 		this.variable = variable;
 		setLine(variable.getLine());
+		setColumn(variable.getColumn());
 	}
 
 	public IRVariable getVariable() {

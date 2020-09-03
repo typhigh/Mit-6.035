@@ -26,17 +26,20 @@ public class SemanticChecker {
 
         rulesDoneBefore.clear();
         rulesDoneBefore.add(new SetParentHepler());
+        rulesDoneBefore.add(new SetCoveredMethodHelper());
 
         rulesDoneBefore.add(new DeclareRule());
         rulesDoneBefore.add(new MainMethodRule());
         rulesDoneBefore.add(new PushBlockRule());
-
+        rulesDoneBefore.add(new LiteralValueRule());
 
         rulesDoneAfter.clear();
         rulesDoneAfter.add(new ArgumentRule());
         rulesDoneAfter.add(new TypeRule());
         rulesDoneAfter.add(new PopBlockRule());
         rulesDoneAfter.add(new MethodCallRule());
+        rulesDoneAfter.add(new ArrayLenRule());
+        rulesDoneAfter.add(new ReturnStmtRule());
 
         for (SemanticRule rule : rulesDoneBefore) {
             rule.setEnv(env);

@@ -12,6 +12,8 @@ import edu.mit.compilers.ir.type.IRType;
 import edu.mit.compilers.utils.OperatorUtils;
 
 /*
+
+
  * 10. An <id> used as a <location> must name a declared local/global variable or formal parameter.
  * 11. The identifier in a method statement must be a declared method or import.
  * 12. For all locations of the form <id>[<expr>]
@@ -67,9 +69,19 @@ public class TypeRule extends SemanticRule {
             return error;
         }
 
-        if (OperatorUtils.isEq(op) || OperatorUtils.isRel(op)) {
+        if (OperatorUtils.isEq(op)) {
             TypeHelper.checkIfTypeEqual(getEnv(), error, 17, left, right);
             ir.setType(IRBasicType.BoolType);
+            return error;
+        }
+
+        if (OperatorUtils.isRel(op)) {
+            ir.setType(IRBasicType.BoolType);
+            TypeHelper.checkExpressionType(getEnv(), error, 16, left, IRBasicType.IntType);
+            if (error.hasError()) {
+                return error;
+            }
+            TypeHelper.checkExpressionType(getEnv(), error, 16, right, IRBasicType.IntType);
             return error;
         }
 
@@ -104,6 +116,7 @@ public class TypeRule extends SemanticRule {
 
         if (ir.isArrayLocation()) {
             ir.setType(((IRArrayType) type).getBasicType());
+            TypeHelper.checkExpressionType(getEnv(), error, 12, ir.getLocation(), IRBasicType.IntType);
         } else {
             ir.setType((IRBasicType) type);
         }
@@ -220,7 +233,9 @@ public class TypeRule extends SemanticRule {
         if (error.hasError()) {
             return error;
         }
-        TypeHelper.checkExpressionType(getEnv(), error, 20, ir.getValue(), IRBasicType.IntType);
+        if (!ir.isSelfAssign()) {
+            TypeHelper.checkExpressionType(getEnv(), error, 20, ir.getValue(), IRBasicType.IntType);
+        }
         return error;
     }
 

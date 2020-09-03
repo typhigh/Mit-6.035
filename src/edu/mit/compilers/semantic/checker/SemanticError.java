@@ -3,7 +3,7 @@ package edu.mit.compilers.semantic.checker;
 public class SemanticError {
 	private String error = "";
 	private int line = 0;
-	private int column = -1;
+	private int column = 0;
 	private int ruleId = 0;
 
 	public static SemanticError NoError = new SemanticError();
@@ -11,11 +11,11 @@ public class SemanticError {
 	public SemanticError() {}
 
 	public void set(String error, int ruleId) {
-		set(error, ruleId, -1, -1);
+		set(error, ruleId, 0, 0);
 	}
 
 	public void set(String error, int ruleId, int line) {
-		set(error, ruleId, line, -1);
+		set(error, ruleId, line, 0);
 	}
 
 	public void set(String error, int ruleId, int line, int column) {
@@ -31,6 +31,8 @@ public class SemanticError {
 
 	@Override
 	public String toString() {
-		return "Line " + line + " Rule " + ruleId + " : " + error;
+		String lineInfo = line != 0 ? "Line " + line : "";
+		String columnInfo = column != 0 ? " Column " + column : "";
+		return lineInfo + columnInfo + " Rule " + ruleId + " : " + error;
 	}
 }

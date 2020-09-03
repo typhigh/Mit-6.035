@@ -16,6 +16,7 @@ public class IRBinaryOpExpr extends IRExpression {
 		this.left = left;
 		this.operator = operator;
 		this.right = right;
+		setLine(left.getLine());
 	}
 
 	public IRExpression getLeft() {

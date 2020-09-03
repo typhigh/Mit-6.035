@@ -17,13 +17,11 @@ public class IRLocation extends IRExpression {
 		this.variable = variable;
 		this.isArrayLocation = location == null ? false : true;
 		this.location = location;
+		setLine(variable.getLine());
 	}
 	
 	public IRLocation(IRVariable variable) {
-		super("IRLocation");
-		this.variable = variable;
-		this.isArrayLocation = false;
-		this.location = null;
+		this(variable, null);
 	}
 	
 	public IRVariable getVariable() {

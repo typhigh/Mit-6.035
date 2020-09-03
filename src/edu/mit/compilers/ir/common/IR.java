@@ -1,5 +1,7 @@
 package edu.mit.compilers.ir.common;
 
+import edu.mit.compilers.ir.decl.IRMethodDecl;
+
 import java.util.ArrayList;
 
 public abstract class IR {
@@ -10,14 +12,17 @@ public abstract class IR {
 	private static int currentID = 0;
 	
 	// Location information
-	private int line;
-	private int column;
+	private int line = 0;
+	private int column = 0;
 	
 	// Empty children
 	private final static ArrayList<IR> emptyChildren = new ArrayList<>();
 	
-	// Parent (in ir-tree)
+	// Parent (in ir-tree) filler by semantic checker
 	private IR parent = null;
+
+	// Which method cover this ir filled by semantic checker
+	private IRMethodDecl coveredByWhichMethod = null;
 	
 	public IR(String tag) {
 		this.tag = tag;
@@ -46,6 +51,14 @@ public abstract class IR {
 
 	public void setColumn(int column) {
 		this.column = column;
+	}
+
+	public IRMethodDecl getCoveredByWhichMethod() {
+		return coveredByWhichMethod;
+	}
+
+	public void setCoveredByWhichMethod(IRMethodDecl coveredByWhichMethod) {
+		this.coveredByWhichMethod = coveredByWhichMethod;
 	}
 
 	/*
