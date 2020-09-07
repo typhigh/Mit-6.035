@@ -4,18 +4,18 @@ import edu.mit.compilers.ir.common.IR;
 
 public abstract class IRType extends IR {
 	
-	// The size (bytes) filled by semantic checker
-	private int size;
-	
+	// The size (bytes) in ArrayType filled by ArrayLenRule
+	private long size;
+
 	public IRType(String name) {
 		super(name);
 	}
 
-	public void setSize(int size) {
+	public void setSize(long size) {
 		this.size = size;
 	}
 
-	public int getSize() {
+	public long getSize() {
 		return size;
 	}
 	

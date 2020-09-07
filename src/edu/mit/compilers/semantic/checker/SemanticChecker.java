@@ -16,7 +16,7 @@ public class SemanticChecker {
     private ArrayList<SemanticError> errors = new ArrayList<>();
 
     /*
-        Must invoked before check
+     *   Must invoked before check
      */
     public void init(String file) {
         assert file != null;
@@ -28,6 +28,7 @@ public class SemanticChecker {
         rulesDoneBefore.add(new SetParentHepler());
         rulesDoneBefore.add(new SetCoveredMethodHelper());
 
+        rulesDoneBefore.add(new BreakContinueRule());
         rulesDoneBefore.add(new DeclareRule());
         rulesDoneBefore.add(new MainMethodRule());
         rulesDoneBefore.add(new PushBlockRule());

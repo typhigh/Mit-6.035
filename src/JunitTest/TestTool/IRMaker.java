@@ -61,4 +61,8 @@ public class IRMaker {
 	public static IRMethodDecl makeMainMethod(IRBlock block) {
 		return makeIRMethodDecl("void", "main", null, block);
 	}
+
+	public static IRIntLiteral makeIRIntLiteral(String value) {
+		return new IRIntLiteral(makeToken(value));
+	}
 }

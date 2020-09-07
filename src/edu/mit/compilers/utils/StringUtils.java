@@ -2,12 +2,12 @@ package edu.mit.compilers.utils;
 
 public class StringUtils {
 	
-	public static Integer parseHexInt(String value) {
+	public static Long parseHexInt(String value) {
 //		System.out.print(value);
 		if (value.contains("0x") || value.contains("0X")) {
 			value = value.substring(2);
 		}
-		int ret = 0;
+		long ret = 0;
 		for (int i = 0; i < value.length(); ++i) {
 			char now = value.charAt(i);
 			int plus;

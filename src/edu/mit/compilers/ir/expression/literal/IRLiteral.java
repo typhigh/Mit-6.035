@@ -8,7 +8,9 @@ import java.util.ArrayList;
 
 public abstract class IRLiteral<T> extends IRExpression {
 
-	protected final String literalValue;
+	protected String literalValue;
+
+	// filled by LiteralValuerule
 	protected T value;
 	
 	public IRLiteral(String tag, Token token) {
@@ -20,6 +22,10 @@ public abstract class IRLiteral<T> extends IRExpression {
 
 	public String getLiteralValue() {
 		return literalValue;
+	}
+
+	public void setLiteralValue(String literalValue) {
+		this.literalValue = literalValue;
 	}
 
 	public T getValue() {

@@ -17,7 +17,7 @@ public class ArrayLenRule extends SemanticRule {
     public SemanticError visit(IRArrayType ir) {
         SemanticError error;
         IRIntLiteral len = ir.getLen();
-        int value = len.getValue();
+        Long value = len.getValue();
         if (value <= 0) {
             error = new SemanticError();
             String info = "the <len> " + value + " in array declaration must be greater than 0";

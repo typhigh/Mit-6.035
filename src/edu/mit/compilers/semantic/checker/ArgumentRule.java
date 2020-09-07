@@ -21,6 +21,12 @@ public class ArgumentRule extends SemanticRule {
     public SemanticError visit(IRArgumentList ir) {
         SemanticError error = new SemanticError();
         IRMemberDecl declaredFrom = ((IRMethodCall) ir.getParent()).getVariable().getDeclaredFrom();
+
+        if (declaredFrom == null) {
+            // do nothing
+            return SemanticError.NoError;
+        }
+
         if (declaredFrom.getTag().equals("IRImportDecl")) {
             return SemanticError.NoError;
         }
@@ -28,12 +34,14 @@ public class ArgumentRule extends SemanticRule {
         for (int i = 0; i < ir.getArgList().size(); ++i) {
             IRExpression arg = ir.getArgList().get(i);
             IRType type = arg.getType();
+            if (type == null) {
+                // do nothing
+                return SemanticError.NoError;
+            }
+
             if (type.equals(IRBasicType.StringType) || type.isArrayType()) {
-                error.set(
-                        "the " + i + "th <argument> type is not support(string, array) in non-import methods",
-                        7,
-                        arg.getLine()
-                );
+                String info = "the " + i + "th <argument> type is not support(string, array) in non-import methods";
+                error.set(info, 7, arg.getLine());
                 return error;
             }
         }

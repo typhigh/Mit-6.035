@@ -1,6 +1,7 @@
 package edu.mit.compilers.semantic.checker;
 
 import edu.mit.compilers.ir.common.IRBlock;
+import edu.mit.compilers.ir.common.IRParameterList;
 import edu.mit.compilers.ir.decl.IRMethodDecl;
 
 public class PushBlockRule extends SemanticRule {
@@ -19,10 +20,11 @@ public class PushBlockRule extends SemanticRule {
     }
 
     @Override
-    public SemanticError visit(IRMethodDecl ir) {
+    public SemanticError visit(IRParameterList ir) {
+        // use IRParameterList to make sure (push method decl) before now
         getEnv().pushBlock();
         // avoid pushing block repeatedly
-        ir.getBlock().setNewScope(false);
+        ((IRMethodDecl) ir.getParent()).getBlock().setNewScope(false);
         return SemanticError.NoError;
     }
 }

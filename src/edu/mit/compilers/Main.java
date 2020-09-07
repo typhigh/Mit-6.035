@@ -117,6 +117,11 @@ class Main {
 					check.reportErrors();
 					System.exit(1);
 				}
+
+				if (CLI.debug) {
+					String irInfo = ir.showTree();
+					System.out.println(irInfo);
+				}
 			}
 		} catch (Exception e) {
 			// print the error:

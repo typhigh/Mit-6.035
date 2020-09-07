@@ -7,10 +7,7 @@ import edu.mit.compilers.ir.decl.IRFieldDecl;
 import edu.mit.compilers.ir.decl.IRImportDecl;
 import edu.mit.compilers.ir.decl.IRMethodDecl;
 import edu.mit.compilers.ir.expression.*;
-import edu.mit.compilers.ir.expression.literal.IRBoolLiteral;
-import edu.mit.compilers.ir.expression.literal.IRCharLiteral;
-import edu.mit.compilers.ir.expression.literal.IRIntLiteral;
-import edu.mit.compilers.ir.expression.literal.IRStringLiteral;
+import edu.mit.compilers.ir.expression.literal.*;
 import edu.mit.compilers.ir.statement.*;
 import edu.mit.compilers.ir.type.IRArrayType;
 import edu.mit.compilers.ir.type.IRBasicType;
@@ -223,7 +220,7 @@ public class CSTParser {
 			IRExpression right = parseIRExpression(node.getLastChild());
 			for (int i = node.getChildrenSize()-2; i >= 0; --i) {
 				String operator = parseOperator(node.getChild(i));
-				right = new IRUnaryOpExpr(operator, right);
+				right = CombineUnayAndRValue(operator, right);
 			}
 			ret = right;
 			break;
@@ -241,6 +238,21 @@ public class CSTParser {
 		
 		assert(ret != null);
 		return ret;
+	}
+
+	private static IRExpression CombineUnayAndRValue(String op, IRExpression rValue) {
+		if (op.equals("-") && rValue.getTag().equals("IRIntLiteral")) {
+			String literalValue = ((IRIntLiteral) rValue).getLiteralValue();
+			assert literalValue.length() > 0;
+			if (literalValue.charAt(0) != '-') {
+				// push op "-" to int
+				((IRIntLiteral) rValue).setLiteralValue("-" + literalValue);
+				return rValue;
+			}
+		}
+
+		// just trivially make unary expression
+		return new IRUnaryOpExpr(op, rValue);
 	}
 
 	private static String parseOperator(CSTNode node) {

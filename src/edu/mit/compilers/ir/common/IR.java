@@ -18,7 +18,7 @@ public abstract class IR {
 	// Empty children
 	private final static ArrayList<IR> emptyChildren = new ArrayList<>();
 	
-	// Parent (in ir-tree) filler by semantic checker
+	// Parent (in ir-tree) filler by SetParentHelper
 	private IR parent = null;
 
 	// Which method cover this ir filled by semantic checker
