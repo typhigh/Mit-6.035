@@ -1,6 +1,7 @@
 package edu.mit.compilers.ir.expression;
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.type.IRBasicType;
+import edu.mit.compilers.utils.StringInfo;
 
 public abstract class IRExpression extends IR {
 
@@ -16,5 +17,10 @@ public abstract class IRExpression extends IR {
 
 	public IRBasicType getType() {
 		return type;
+	}
+
+	@Override
+	public StringInfo getInfoForShow(String prefix) {
+		return super.getInfoForShow(prefix).addInfo("TypeName: " + (type == null ? "null" : type.toString()));
 	}
 }

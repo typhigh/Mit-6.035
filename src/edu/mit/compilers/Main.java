@@ -113,14 +113,15 @@ class Main {
 				SemanticChecker check = new SemanticChecker();
 				check.init("test.sh");
 				ArrayList<SemanticError> errors = check.check(ir);
-				if (!errors.isEmpty()) {
-					check.reportErrors();
-					System.exit(1);
-				}
 
 				if (CLI.debug) {
 					String irInfo = ir.showTree();
 					System.out.println(irInfo);
+				}
+
+				if (!errors.isEmpty()) {
+					check.reportErrors();
+					System.exit(1);
 				}
 			}
 		} catch (Exception e) {

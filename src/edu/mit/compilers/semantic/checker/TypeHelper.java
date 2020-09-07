@@ -9,6 +9,8 @@ import edu.mit.compilers.ir.type.IRBasicType;
 import edu.mit.compilers.ir.type.IRType;
 import edu.mit.compilers.semantic.EnvStack;
 
+import java.util.ArrayList;
+
 public class TypeHelper {
 
     /*
@@ -95,6 +97,23 @@ public class TypeHelper {
         }
 
         if (!type.equals(expected)) {
+            String info = "<expression> should have type " + expected.toString() + " but not " + type.toString();
+            error.set(info, ruleId, expr.getLine());
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean checkExpressionType(EnvStack env, SemanticError error, int ruleId,
+                                              IRExpression expr, ArrayList<IRType> expected) {
+        assert expected != null;
+        IRType type = expr.getType();
+        if (type == null) {
+            // do nothing
+            return false;
+        }
+
+        if (!expected.contains(type)) {
             String info = "<expression> should have type " + expected.toString() + " but not " + type.toString();
             error.set(info, ruleId, expr.getLine());
             return false;

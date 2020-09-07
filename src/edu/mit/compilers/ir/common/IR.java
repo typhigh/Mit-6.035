@@ -1,6 +1,7 @@
 package edu.mit.compilers.ir.common;
 
 import edu.mit.compilers.ir.decl.IRMethodDecl;
+import edu.mit.compilers.utils.StringInfo;
 
 import java.util.ArrayList;
 
@@ -74,19 +75,22 @@ public abstract class IR {
 	 * The implement of showTree with prefix
 	 */
 	public void showTreeImpl(String prefix, StringBuilder result) {
-		result.append(getInfoForShow(prefix));
+		result.append(getInfoForShow(prefix).toString());
 		ArrayList<IR> children = getChildren();
 		assert(children != null);
 		for (IR child : children) {
-			child.showTreeImpl(prefix + " ", result);
+			child.showTreeImpl(prefix + "  ", result);
 		}
 	}
 	
 	/*
 	 * The info of the node
 	 */
-	public String getInfoForShow(String prefix) {
-		return prefix + " DebugID: " + getDebugID() + " Tag: " + getTag() + '\n';
+	public StringInfo getInfoForShow(String prefix) {
+		StringInfo info = new StringInfo(prefix);
+		info.addInfo("DebugID: " + getDebugID());
+		info.addInfo("Tag: " + getTag());
+		return info;
 	}
 
 	public IR getParent() {

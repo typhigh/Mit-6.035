@@ -48,6 +48,7 @@ public class TokenUtils {
 				type == DecafParserTokenTypes.RCURLY || 
 				type == DecafParserTokenTypes.RPAREN || 
 				type == DecafParserTokenTypes.SEMI ||
+				type == DecafParserTokenTypes.QUESTION ||
 				type == DecafParserTokenTypes.TK_break || 
 				type == DecafParserTokenTypes.TK_continue || 
 				type == DecafParserTokenTypes.TK_else ||

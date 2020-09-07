@@ -2,6 +2,7 @@ package edu.mit.compilers.ir.common;
 
 import antlr.Token;
 import edu.mit.compilers.ir.decl.IRMemberDecl;
+import edu.mit.compilers.utils.StringInfo;
 
 import java.util.ArrayList;
 
@@ -45,11 +46,12 @@ public class IRVariable extends IR {
 	}
 
 	@Override
-	public String getInfoForShow(String prefix) {
-		return prefix +
-				" DebugID: " + getDebugID() +
-				" Tag: " + getTag() +
-				" Name: " + getName() + '\n';
+	public StringInfo getInfoForShow(String prefix) {
+		StringInfo ret = super.getInfoForShow(prefix).addInfo("Name: " + getName());
+		if (getDeclaredFrom() != null) {
+			ret.addInfo("DeclaredID: " + getDeclaredFrom().getDebugID());
+		}
+		return ret;
 	}
 
 	@Override

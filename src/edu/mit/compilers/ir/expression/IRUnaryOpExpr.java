@@ -2,6 +2,7 @@ package edu.mit.compilers.ir.expression;
 
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRVisitor;
+import edu.mit.compilers.utils.StringInfo;
 
 import java.util.ArrayList;
 
@@ -37,10 +38,7 @@ public class IRUnaryOpExpr extends IRExpression {
 		return ret;
 	}
 	
-	public String getInfoForShow(String prefix) {
-		return prefix + 
-				" DebugID: " + getDebugID() + 
-				" Tag: " + getTag() + 
-				" Op: " + getOperator() + '\n';
+	public StringInfo getInfoForShow(String prefix) {
+		return super.getInfoForShow(prefix).addInfo("Op: " + getOperator());
 	}
 }

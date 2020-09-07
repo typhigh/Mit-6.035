@@ -11,6 +11,8 @@ import edu.mit.compilers.ir.type.IRBasicType;
 import edu.mit.compilers.ir.type.IRType;
 import edu.mit.compilers.utils.OperatorUtils;
 
+import java.util.ArrayList;
+
 /*
 
 
@@ -72,6 +74,17 @@ public class TypeRule extends SemanticRule {
         if (OperatorUtils.isEq(op)) {
             TypeHelper.checkIfTypeEqual(getEnv(), error, 17, left, right);
             ir.setType(IRBasicType.BoolType);
+            if (error.hasError()) {
+                return error;
+            }
+            ArrayList<IRType> expected = new ArrayList<>();
+            expected.add(IRBasicType.IntType);
+            expected.add(IRBasicType.BoolType);
+            TypeHelper.checkExpressionType(getEnv(), error, 17, left, expected);
+            if (error.hasError()) {
+                return error;
+            }
+            TypeHelper.checkExpressionType(getEnv(), error, 17, right, expected);
             return error;
         }
 

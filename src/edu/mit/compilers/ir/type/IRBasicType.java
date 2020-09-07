@@ -2,6 +2,7 @@ package edu.mit.compilers.ir.type;
 
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRVisitor;
+import edu.mit.compilers.utils.StringInfo;
 
 import java.util.ArrayList;
 
@@ -56,11 +57,8 @@ public class IRBasicType extends IRType {
 		return getEmptyChildren();
 	}
 	
-	public String getInfoForShow(String prefix) {
-		return prefix + 
-				" DebugID: " + getDebugID() + 
-				" Tag: " + getTag() + 
-				" TypeName: " + getTypeName() + '\n';
+	public StringInfo getInfoForShow(String prefix) {
+		return super.getInfoForShow(prefix).addInfo("TypeName: " + getTypeName());
 	}
 
 }

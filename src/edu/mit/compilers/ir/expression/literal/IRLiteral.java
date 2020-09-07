@@ -3,6 +3,7 @@ package edu.mit.compilers.ir.expression.literal;
 import antlr.Token;
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.expression.IRExpression;
+import edu.mit.compilers.utils.StringInfo;
 
 import java.util.ArrayList;
 
@@ -41,10 +42,7 @@ public abstract class IRLiteral<T> extends IRExpression {
 	}
 
 	@Override
-	public String getInfoForShow(String prefix) {
-		return prefix +
-				" DebugID: " + getDebugID() +
-				" Tag: " + getTag() +
-				" LiteralValue: " + getLiteralValue() + '\n';
+	public StringInfo getInfoForShow(String prefix) {
+		return super.getInfoForShow(prefix).addInfo("LiteralValue: " + getLiteralValue());
 	}
 }
