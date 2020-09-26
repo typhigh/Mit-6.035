@@ -34,4 +34,15 @@ public class IRArgumentList extends IR {
 		return visitor.visit(this);
 	}
 
+	@Override
+	public IRArgumentList clone() throws CloneNotSupportedException {
+		IRArgumentList clone = (IRArgumentList) super.clone();
+		clone.argList = new ArrayList<>();
+		for (IRExpression expr : argList) {
+			clone.argList.add(expr.clone());
+		}
+
+		return clone;
+	}
+
 }

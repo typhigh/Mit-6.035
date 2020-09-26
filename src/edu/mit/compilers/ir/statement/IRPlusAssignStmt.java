@@ -60,4 +60,16 @@ public class IRPlusAssignStmt extends IRStatement {
     public StringInfo getInfoForShow(String prefix) {
         return super.getInfoForShow(prefix).addInfo("Op: " + getOperator());
     }
+
+    @Override
+    public IRPlusAssignStmt clone() throws CloneNotSupportedException {
+        IRPlusAssignStmt clone = (IRPlusAssignStmt) super.clone();
+        if (location != null) {
+            clone.location = location.clone();
+        }
+        if (value != null) {
+            clone.value = value.clone();
+        }
+        return clone;
+    }
 }

@@ -13,4 +13,9 @@ public class IRCharLiteral extends IRLiteral<Character> {
 	public <T> T accept(IRVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
+
+	@Override
+	public IRCharLiteral clone() throws CloneNotSupportedException {
+		return (IRCharLiteral) super.clone();
+	}
 }

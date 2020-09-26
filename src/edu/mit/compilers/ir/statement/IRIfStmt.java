@@ -44,4 +44,18 @@ public class IRIfStmt extends IRStatement{
 		return ret;
 	}
 
+	@Override
+	public IRIfStmt clone() throws CloneNotSupportedException {
+		IRIfStmt clone = (IRIfStmt) super.clone();
+		if (condition != null) {
+			clone.condition = condition.clone();
+		}
+		if (ifBlock != null) {
+			clone.ifBlock = ifBlock.clone();
+		}
+		if (elseBlock != null) {
+			clone.elseBlock = elseBlock == null ? null : elseBlock.clone();
+		}
+		return clone;
+	}
 }

@@ -13,4 +13,9 @@ public class IRBoolLiteral extends IRLiteral<Boolean> {
 	public <T> T accept(IRVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
+
+	@Override
+	public IRBoolLiteral clone() throws CloneNotSupportedException {
+		return (IRBoolLiteral) super.clone();
+	}
 }

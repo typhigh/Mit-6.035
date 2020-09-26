@@ -51,4 +51,20 @@ public class IRMethodDecl extends IRMemberDecl{
 	public <T> T accept(IRVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
+
+	@Override
+	public IRMethodDecl clone() throws CloneNotSupportedException {
+		IRMethodDecl clone = (IRMethodDecl) super.clone();
+		if (type != null) {
+			clone.type = type.clone();
+		}
+		if (block != null) {
+			clone.block = block.clone();
+		}
+
+		if (paraList != null) {
+			clone.paraList = paraList.clone();
+		}
+		return clone;
+	}
 }

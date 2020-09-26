@@ -30,4 +30,13 @@ public class IRFieldDecl extends IRMemberDecl {
 	public <T> T accept(IRVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
+
+	@Override
+	public IRFieldDecl clone() throws CloneNotSupportedException {
+		IRFieldDecl clone = (IRFieldDecl) super.clone();
+		if (type != null) {
+			clone.type = type.clone();
+		}
+		return clone;
+	}
 }

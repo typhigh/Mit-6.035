@@ -3,6 +3,7 @@ package edu.mit.compilers.ir.common;
 import edu.mit.compilers.ir.decl.IRFieldDecl;
 import edu.mit.compilers.ir.decl.IRImportDecl;
 import edu.mit.compilers.ir.decl.IRMethodDecl;
+import edu.mit.compilers.utils.IRCloneHelper;
 
 import java.util.ArrayList;
 
@@ -17,18 +18,24 @@ public class IRProgram extends IR {
 	}
 	
 	public void addIRImportDecl(IRImportDecl decl) {
+		decl.setGlobal(true);
 		importDecls.add(decl);
 	}
 	
 	public void addMethodDecl(IRMethodDecl decl) {
+		decl.setGlobal(true);
 		methodDecls.add(decl);
 	}
 
 	public void addIRFieldDecl(IRFieldDecl decl) {
+		decl.setGlobal(true);
 		fieldDecls.add(decl);
 	}
 
 	public void addIRFieldDecls(ArrayList<IRFieldDecl> decls) {
+		for (IRFieldDecl decl : decls) {
+			decl.setGlobal(true);
+		}
 		fieldDecls.addAll(decls);
 	}
 	
@@ -52,7 +59,16 @@ public class IRProgram extends IR {
 		ret.addAll(methodDecls);
 		return ret;
 	}
-	
+
+	@Override
+	public IRProgram clone() throws CloneNotSupportedException {
+		IRProgram clone = (IRProgram) super.clone();
+		clone.importDecls = IRCloneHelper.getArrayClone(importDecls);
+		clone.fieldDecls = IRCloneHelper.getArrayClone(fieldDecls);
+		clone.methodDecls = IRCloneHelper.getArrayClone(methodDecls);
+		return clone;
+	}
+
 	@Override
 	public <T> T accept(IRVisitor<T> visitor) {
 		return visitor.visit(this);

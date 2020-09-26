@@ -37,4 +37,16 @@ public class IRWhileStmt extends IRStatement {
 		ret.add(block);
 		return ret;
 	}
+
+	@Override
+	public IRWhileStmt clone() throws CloneNotSupportedException {
+		IRWhileStmt clone = (IRWhileStmt) super.clone();
+		if (condition != null) {
+			clone.condition = condition.clone();
+		}
+		if (block != null) {
+			clone.block = block.clone();
+		}
+		return clone;
+	}
 }

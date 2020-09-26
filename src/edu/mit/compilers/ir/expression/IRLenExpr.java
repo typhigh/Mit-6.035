@@ -34,4 +34,13 @@ public class IRLenExpr extends IRExpression {
 		ret.add(variable);
 		return ret;
 	}
+
+	@Override
+	public IRExpression clone() throws CloneNotSupportedException{
+		IRLenExpr clone = (IRLenExpr) super.clone();
+		if (variable != null) {
+			clone.variable = variable.clone();
+		}
+		return clone;
+	}
 }

@@ -2,11 +2,11 @@ package edu.mit.compilers.ir.decl;
 
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRVariable;
+import edu.mit.compilers.utils.StringInfo;
 
-public abstract class IRMemberDecl extends IR {
-	private IRVariable variable; 
-
-	/****** Helper info filled by SemanticChecker*******/
+public class IRMemberDecl extends IR {
+	private IRVariable variable;
+	private boolean global = false;
 
 	public IRMemberDecl(String tag, IRVariable variable) {
 		super(tag);
@@ -17,5 +17,23 @@ public abstract class IRMemberDecl extends IR {
 
 	public IRVariable getVariable() {
 		return variable;
+	}
+
+	public void setGlobal(boolean global) {
+		this.global = global;
+	}
+
+	@Override
+	public StringInfo getInfoForShow(String prefix) {
+		return super.getInfoForShow(prefix).addInfo("Global: " + global);
+	}
+
+	@Override
+	public IRMemberDecl clone() throws CloneNotSupportedException {
+		IRMemberDecl clone = (IRMemberDecl) super.clone();
+		if (variable != null) {
+			clone.variable = variable.clone();
+		}
+		return clone;
 	}
 }

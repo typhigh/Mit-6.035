@@ -45,8 +45,21 @@ public class IRBinaryOpExpr extends IRExpression {
 		ret.add(right);
 		return ret;
 	}
-	
+
+	@Override
 	public StringInfo getInfoForShow(String prefix) {
 		return super.getInfoForShow(prefix).addInfo("Op: " + getOperator());
+	}
+
+	@Override
+	public IRBinaryOpExpr clone() throws CloneNotSupportedException {
+		IRBinaryOpExpr clone = (IRBinaryOpExpr) super.clone();
+		if (left != null) {
+			clone.left = left.clone();
+		}
+		if (right != null) {
+			clone.right = right.clone();
+		}
+		return clone;
 	}
 }

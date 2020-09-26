@@ -47,4 +47,19 @@ public class IRTernaryExpr extends IRExpression {
 		ret.add(second);
 		return ret;
 	}
+
+	@Override
+	public IRTernaryExpr clone() throws CloneNotSupportedException {
+		IRTernaryExpr clone = (IRTernaryExpr) super.clone();
+		if (condition != null) {
+			clone.condition = condition.clone();
+		}
+		if (first != null) {
+			clone.first = first.clone();
+		}
+		if (second != null) {
+			clone.second = second.clone();
+		}
+		return clone;
+	}
 }

@@ -1,6 +1,7 @@
 package edu.mit.compilers.ir.common;
 
 import edu.mit.compilers.ir.decl.IRFieldDecl;
+import edu.mit.compilers.utils.IRCloneHelper;
 
 import java.util.ArrayList;
 
@@ -37,4 +38,10 @@ public class IRParameterList extends IR {
 		return visitor.visit(this);
 	}
 
+	@Override
+	public IRParameterList clone() throws CloneNotSupportedException{
+		IRParameterList clone = (IRParameterList) super.clone();
+		clone.paraList = IRCloneHelper.getArrayClone(paraList);
+		return clone;
+	}
 }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class IRBasicType extends IRType {
 
-	private final String typeName;
+	private String typeName;
 
 	//Type instance
 	public static final IRBasicType IntType = new IRBasicType("int", 4);
@@ -56,9 +56,15 @@ public class IRBasicType extends IRType {
 	public ArrayList<IR> getChildren() {
 		return getEmptyChildren();
 	}
-	
+
+	@Override
 	public StringInfo getInfoForShow(String prefix) {
 		return super.getInfoForShow(prefix).addInfo("TypeName: " + getTypeName());
 	}
 
+	@Override
+	public IRBasicType clone() throws CloneNotSupportedException {
+		// instance no need to clone
+		return this;
+	}
 }

@@ -22,5 +22,10 @@ public class IRImportDecl extends IRMemberDecl {
 	@Override
 	public <T> T accept(IRVisitor<T> visitor) {
 		return visitor.visit(this);
-	}	
+	}
+
+	@Override
+	public IRImportDecl clone() throws CloneNotSupportedException {
+		return (IRImportDecl) super.clone();
+	}
 }

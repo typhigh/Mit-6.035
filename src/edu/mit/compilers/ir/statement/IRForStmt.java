@@ -41,4 +41,21 @@ public class IRForStmt extends IRStatement {
 		return ret;
 	}
 
+	@Override
+	public IRForStmt clone() throws CloneNotSupportedException {
+		IRForStmt clone = (IRForStmt) super.clone();
+		if (initializer != null) {
+			clone.initializer = initializer.clone();
+		}
+		if (condition != null) {
+			clone.condition = condition.clone();
+		}
+		if (step != null) {
+			clone.step = step.clone();
+		}
+		if (block != null) {
+			clone.block = block.clone();
+		}
+		return clone;
+	}
 }

@@ -37,8 +37,18 @@ public class IRUnaryOpExpr extends IRExpression {
 		ret.add(right);
 		return ret;
 	}
-	
+
+	@Override
 	public StringInfo getInfoForShow(String prefix) {
 		return super.getInfoForShow(prefix).addInfo("Op: " + getOperator());
+	}
+
+	@Override
+	public IRUnaryOpExpr clone() throws CloneNotSupportedException {
+		IRUnaryOpExpr clone = (IRUnaryOpExpr) super.clone();
+		if (right != null) {
+			clone.right = right.clone();
+		}
+		return clone;
 	}
 }

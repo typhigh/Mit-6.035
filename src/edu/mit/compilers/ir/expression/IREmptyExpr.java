@@ -20,4 +20,9 @@ public class IREmptyExpr extends IRExpression {
 	public ArrayList<IR> getChildren() {
 		return getEmptyChildren();
 	}
+
+	@Override
+	public IREmptyExpr clone() throws CloneNotSupportedException {
+		return (IREmptyExpr) super.clone();
+	}
 }

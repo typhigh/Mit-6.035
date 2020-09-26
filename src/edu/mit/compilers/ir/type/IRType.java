@@ -2,7 +2,7 @@ package edu.mit.compilers.ir.type;
 
 import edu.mit.compilers.ir.common.IR;
 
-public abstract class IRType extends IR {
+public class IRType extends IR {
 	
 	// The size (bytes) in ArrayType filled by ArrayLenRule
 	private long size;
@@ -23,7 +23,16 @@ public abstract class IRType extends IR {
 		return !isBasicType();
 	}
 	
-	public abstract boolean isBasicType();
+	public boolean isBasicType() {
+		throw new RuntimeException("IRType not support isArrayType/isBasicType");
+	}
 	
-	public abstract String toString();
+	public String toString() {
+		throw new RuntimeException("IRType not support toString");
+	}
+
+	@Override
+	public IRType clone() throws CloneNotSupportedException {
+		return (IRType) super.clone();
+	}
 }

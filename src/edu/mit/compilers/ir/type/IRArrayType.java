@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class IRArrayType extends IRType {
 	
 	// Internal type 
-	private final IRBasicType type;
+	private IRBasicType type;
 	private IRIntLiteral len;
 	
 	public IRArrayType(IRBasicType type, IRIntLiteral len) {
@@ -52,5 +52,14 @@ public class IRArrayType extends IRType {
 		ret.add(type);
 		ret.add(len);
 		return ret;
+	}
+
+	@Override
+	public IRArrayType clone() throws CloneNotSupportedException {
+		IRArrayType clone = (IRArrayType) super.clone();
+		if (len != null) {
+			clone.len = len.clone();
+		}
+		return clone;
 	}
 }

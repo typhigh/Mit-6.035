@@ -44,4 +44,16 @@ public class IRAssignStmt extends IRStatement {
 		ret.add(value);
 		return ret;
 	}
+
+	@Override
+	public IRAssignStmt clone() throws CloneNotSupportedException {
+		IRAssignStmt clone = (IRAssignStmt) super.clone();
+		if (location != null) {
+			location = location.clone();
+		}
+		if (value != null) {
+			clone.value = value.clone();
+		}
+		return clone;
+	}
 }

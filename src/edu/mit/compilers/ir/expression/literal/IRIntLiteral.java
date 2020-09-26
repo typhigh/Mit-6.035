@@ -13,4 +13,9 @@ public class IRIntLiteral extends IRLiteral<Long> {
 	public <T> T accept(IRVisitor<T> visitor) {
 		return visitor.visit(this);
 	}
+
+	@Override
+	public IRIntLiteral clone() throws CloneNotSupportedException {
+		return (IRIntLiteral) super.clone();
+	}
 }

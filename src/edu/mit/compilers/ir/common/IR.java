@@ -1,15 +1,16 @@
 package edu.mit.compilers.ir.common;
 
 import edu.mit.compilers.ir.decl.IRMethodDecl;
+import edu.mit.compilers.utils.IRCloneHelper;
 import edu.mit.compilers.utils.StringInfo;
 
 import java.util.ArrayList;
 
-public abstract class IR {
-	private final String tag;
+public class IR implements Cloneable {
+	private String tag;
 	
 	// Debug id
-	private final int debugID;
+	private int debugID;
 	private static int currentID = 0;
 	
 	// Location information
@@ -24,7 +25,9 @@ public abstract class IR {
 
 	// Which method cover this ir filled by semantic checker
 	private IRMethodDecl coveredByWhichMethod = null;
-	
+
+	private IR() {}
+
 	public IR(String tag) {
 		this.tag = tag;
 		this.debugID = currentID++;
@@ -100,17 +103,34 @@ public abstract class IR {
 	public void setParent(IR parent) {
 		this.parent = parent;
 	}
-	
+
 	/*
 	 * Return children of IR 
 	 */
-	public abstract ArrayList<IR> getChildren();
+	public ArrayList<IR> getChildren() {
+		throw new RuntimeException("IR not support getChildren");
+	}
 	
 	/*
-	 * accept function for visitor 
+	 * Accept function for visitor
 	 */
-	public abstract<T> T accept(IRVisitor<T> visitor);
-	
+	public<T> T accept(IRVisitor<T> visitor) {
+		throw new RuntimeException("IR not support accept");
+	}
+
+
+	/*
+	 * Clone function
+	 */
+
+	public IR clone() throws CloneNotSupportedException {
+		IR clone = (IR) super.clone();
+		IRCloneHelper.put(this, clone);
+		clone.parent = IRCloneHelper.getClone(parent);
+		clone.coveredByWhichMethod = (IRMethodDecl) IRCloneHelper.getClone(coveredByWhichMethod);
+		return clone;
+	}
+
 	public static ArrayList<IR> getEmptyChildren() {
 		return emptyChildren;
 	}

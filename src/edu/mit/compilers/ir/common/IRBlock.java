@@ -2,6 +2,7 @@ package edu.mit.compilers.ir.common;
 
 import edu.mit.compilers.ir.decl.IRFieldDecl;
 import edu.mit.compilers.ir.statement.IRStatement;
+import edu.mit.compilers.utils.IRCloneHelper;
 
 import java.util.ArrayList;
 
@@ -55,5 +56,13 @@ public class IRBlock extends IR {
 		ret.addAll(fieldDecls);
 		ret.addAll(statements);
 		return ret;
+	}
+
+	@Override
+	public IRBlock clone() throws CloneNotSupportedException {
+		IRBlock clone = (IRBlock) super.clone();
+		clone.fieldDecls = IRCloneHelper.getArrayClone(fieldDecls);
+		clone.statements = IRCloneHelper.getArrayClone(statements);
+		return clone;
 	}
 }

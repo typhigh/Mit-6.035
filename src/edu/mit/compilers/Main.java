@@ -98,15 +98,13 @@ class Main {
 				// After pruned
 				tree.PrunTree();
 				if (CLI.debug) {
-					String info = tree.showTree();
-					System.out.println(info);
+					System.out.println(tree.showTree());
 				}
 
 				// Get IR-tree
 				IR ir = CSTParser.parseIRProgram(tree);
 				if (CLI.debug){
-					String irInfo = ir.showTree();
-					System.out.println(irInfo);
+					System.out.println(ir.showTree());
 				}
 
 				// Semantic check
@@ -115,8 +113,8 @@ class Main {
 				ArrayList<SemanticError> errors = check.check(ir);
 
 				if (CLI.debug) {
-					String irInfo = ir.showTree();
-					System.out.println(irInfo);
+					System.out.println(ir.showTree());
+					System.out.println(ir.clone().showTree());
 				}
 
 				if (!errors.isEmpty()) {

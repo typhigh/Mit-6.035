@@ -2,6 +2,7 @@ package edu.mit.compilers.ir.common;
 
 import antlr.Token;
 import edu.mit.compilers.ir.decl.IRMemberDecl;
+import edu.mit.compilers.utils.IRCloneHelper;
 import edu.mit.compilers.utils.StringInfo;
 
 import java.util.ArrayList;
@@ -35,6 +36,10 @@ public class IRVariable extends IR {
 		this.declaredFrom = declaredFrom;
 	}
 
+	public boolean hasSameName(IRVariable variable) {
+		return getName().equals(variable.getName());
+	}
+
 	@Override
 	public ArrayList<IR> getChildren() {
 		return getEmptyChildren();
@@ -59,7 +64,10 @@ public class IRVariable extends IR {
 		return getName();
 	}
 
-	public boolean hasSameName(IRVariable variable) {
-		return getName().equals(variable.getName());
-    }
+	@Override
+	public IRVariable clone() throws CloneNotSupportedException {
+		IRVariable clone = (IRVariable) super.clone();
+		clone.declaredFrom = (IRMemberDecl) IRCloneHelper.getClone(declaredFrom);
+		return clone;
+	}
 }

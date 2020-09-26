@@ -40,4 +40,16 @@ public class IRMethodCall extends IRExpression {
 		ret.add(argList);
 		return ret;
 	}
+
+	@Override
+	public IRMethodCall clone() throws CloneNotSupportedException {
+		IRMethodCall clone = (IRMethodCall) super.clone();
+		if (variable != null) {
+			clone.variable = variable.clone();
+		}
+		if (argList != null) {
+			clone.argList = argList.clone();
+		}
+		return clone;
+	}
 }

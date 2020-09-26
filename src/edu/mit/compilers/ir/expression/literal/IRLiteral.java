@@ -7,7 +7,7 @@ import edu.mit.compilers.utils.StringInfo;
 
 import java.util.ArrayList;
 
-public abstract class IRLiteral<T> extends IRExpression {
+public class IRLiteral<T> extends IRExpression {
 
 	protected String literalValue;
 
@@ -37,6 +37,7 @@ public abstract class IRLiteral<T> extends IRExpression {
 		this.value = value;
 	}
 
+	@Override
 	public ArrayList<IR> getChildren() {
 		return getEmptyChildren();
 	}
@@ -44,5 +45,10 @@ public abstract class IRLiteral<T> extends IRExpression {
 	@Override
 	public StringInfo getInfoForShow(String prefix) {
 		return super.getInfoForShow(prefix).addInfo("LiteralValue: " + getLiteralValue());
+	}
+
+	@Override
+	public IRLiteral<T> clone() throws CloneNotSupportedException {
+		return (IRLiteral<T>) super.clone();
 	}
 }

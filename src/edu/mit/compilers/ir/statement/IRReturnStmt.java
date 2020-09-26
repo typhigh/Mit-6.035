@@ -31,4 +31,12 @@ public class IRReturnStmt extends IRStatement {
 		return ret;
 	}
 
+	@Override
+	public IRReturnStmt clone() throws CloneNotSupportedException {
+		IRReturnStmt clone = (IRReturnStmt) super.clone();
+		if (expr != null) {
+			clone.expr = expr.clone();
+		}
+		return clone;
+	}
 }

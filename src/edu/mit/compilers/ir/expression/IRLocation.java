@@ -50,4 +50,16 @@ public class IRLocation extends IRExpression {
 		}
 		return ret;
 	}
+
+	@Override
+	public IRLocation clone() throws CloneNotSupportedException {
+		IRLocation clone = (IRLocation) super.clone();
+		if (variable != null) {
+			clone.variable = variable.clone();
+		}
+		if (location != null) {
+			clone.location = location.clone();
+		}
+		return clone;
+	}
 }
