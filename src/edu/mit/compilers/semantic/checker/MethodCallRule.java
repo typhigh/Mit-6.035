@@ -2,6 +2,8 @@ package edu.mit.compilers.semantic.checker;
 
 import edu.mit.compilers.ir.common.IRArgumentList;
 import edu.mit.compilers.ir.common.IRParameterList;
+import edu.mit.compilers.ir.decl.IRFieldDecl;
+import edu.mit.compilers.ir.decl.IRImportDecl;
 import edu.mit.compilers.ir.decl.IRMemberDecl;
 import edu.mit.compilers.ir.decl.IRMethodDecl;
 import edu.mit.compilers.ir.expression.IRMethodCall;
@@ -23,8 +25,8 @@ public class MethodCallRule extends SemanticRule {
         SemanticError error = new SemanticError();
         IRMemberDecl declaredFrom = ir.getVariable().getDeclaredFrom();
         if (declaredFrom == null
-                || declaredFrom.getTag().equals("IRImportDecl")
-                || declaredFrom.getTag().equals("IRFieldDecl")) {
+                || declaredFrom instanceof IRImportDecl
+                || declaredFrom instanceof IRFieldDecl) {
             // do nothing (not its duty)
             return SemanticError.NoError;
         }

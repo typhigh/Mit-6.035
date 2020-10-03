@@ -12,7 +12,7 @@ public class SetCoveredMethodHelper extends SemanticRule {
 
     @Override
     public SemanticError visit(IR ir) {
-        if (ir.getTag().equals("IRMethodDecl")) {
+        if (ir instanceof IRMethodDecl) {
             ir.setCoveredByWhichMethod((IRMethodDecl) ir);
         }
 

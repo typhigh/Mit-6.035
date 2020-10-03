@@ -8,6 +8,7 @@ import edu.mit.compilers.grammar.DecafParserTokenTypes;
 import edu.mit.compilers.grammar.DecafScanner;
 import edu.mit.compilers.grammar.DecafScannerTokenTypes;
 import edu.mit.compilers.ir.common.IR;
+import edu.mit.compilers.semantic.Renamer;
 import edu.mit.compilers.semantic.checker.SemanticChecker;
 import edu.mit.compilers.semantic.checker.SemanticError;
 import edu.mit.compilers.tools.CLI;
@@ -76,7 +77,7 @@ class Main {
 						// scanner.consume();
 					}
 				}
-			} else if (CLI.target == Action.PARSE || CLI.target == Action.DEFAULT) {
+			} else if (CLI.target == Action.PARSE) {
 				DecafScanner scanner = new DecafScanner(new DataInputStream(inputStream));
 				DecafParser parser = new DecafParser(scanner);
 				parser.setTrace(CLI.debug);
@@ -84,7 +85,7 @@ class Main {
 				if (parser.getError()) {
 					System.exit(1);
 				}
-			} else if (CLI.target == Action.INTER) {
+			} else if (CLI.target == Action.INTER || CLI.target == Action.ASSEMBLY || CLI.target == Action.DEFAULT) {
 				DecafScanner scanner = new DecafScanner(new DataInputStream(inputStream));
 				DecafParser parser = new DecafParser(scanner);
 				parser.setTrace(CLI.debug);
@@ -114,12 +115,17 @@ class Main {
 
 				if (CLI.debug) {
 					System.out.println(ir.showTree());
-					System.out.println(ir.clone().showTree());
 				}
 
 				if (!errors.isEmpty()) {
 					check.reportErrors();
 					System.exit(1);
+				}
+
+				Renamer renamer = new Renamer();
+				IR renameIR = renamer.Rename(ir.clone());
+				if (CLI.debug && CLI.target != Action.INTER) {
+					System.out.println(renameIR.showTree());
 				}
 			}
 		} catch (Exception e) {

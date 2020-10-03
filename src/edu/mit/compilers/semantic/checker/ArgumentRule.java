@@ -1,6 +1,7 @@
 package edu.mit.compilers.semantic.checker;
 
 import edu.mit.compilers.ir.common.IRArgumentList;
+import edu.mit.compilers.ir.decl.IRImportDecl;
 import edu.mit.compilers.ir.decl.IRMemberDecl;
 import edu.mit.compilers.ir.expression.IRExpression;
 import edu.mit.compilers.ir.expression.IRMethodCall;
@@ -27,7 +28,7 @@ public class ArgumentRule extends SemanticRule {
             return SemanticError.NoError;
         }
 
-        if (declaredFrom.getTag().equals("IRImportDecl")) {
+        if (declaredFrom instanceof IRImportDecl) {
             return SemanticError.NoError;
         }
 

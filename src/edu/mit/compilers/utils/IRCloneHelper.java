@@ -15,12 +15,16 @@ public class IRCloneHelper {
         }
 
         IR ret = cloneTable.get(ir);
+        // System.out.println("OLD:" + ir + " NEW:" + ret);
         assert ret != null;
         return ret;
     }
 
     public static void put(IR old, IR clone) {
         assert old != null && clone != null;
+
+        // Debug
+        // System.out.println("old:" + old + " " + "clone:" + clone);
         cloneTable.put(old, clone);
     }
 

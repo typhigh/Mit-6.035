@@ -24,6 +24,10 @@ public class IRVariable extends IR {
 		this(token.getText(),token.getLine(), token.getColumn());
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -54,14 +58,9 @@ public class IRVariable extends IR {
 	public StringInfo getInfoForShow(String prefix) {
 		StringInfo ret = super.getInfoForShow(prefix).addInfo("Name: " + getName());
 		if (getDeclaredFrom() != null) {
-			ret.addInfo("DeclaredID: " + getDeclaredFrom().getDebugID());
+			ret.addInfo("DeclaredID: " + getDeclaredFrom().getDebugID() + "_" + getDeclaredFrom());
 		}
 		return ret;
-	}
-
-	@Override
-	public String toString() {
-		return getName();
 	}
 
 	@Override

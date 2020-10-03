@@ -49,7 +49,7 @@ public class IRAssignStmt extends IRStatement {
 	public IRAssignStmt clone() throws CloneNotSupportedException {
 		IRAssignStmt clone = (IRAssignStmt) super.clone();
 		if (location != null) {
-			location = location.clone();
+			clone.location = location.clone();
 		}
 		if (value != null) {
 			clone.value = value.clone();

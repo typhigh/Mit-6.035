@@ -2,6 +2,7 @@ package edu.mit.compilers.semantic.checker;
 
 import edu.mit.compilers.ir.common.IRVariable;
 import edu.mit.compilers.ir.decl.IRFieldDecl;
+import edu.mit.compilers.ir.decl.IRImportDecl;
 import edu.mit.compilers.ir.decl.IRMemberDecl;
 import edu.mit.compilers.ir.decl.IRMethodDecl;
 import edu.mit.compilers.ir.expression.IRExpression;
@@ -25,7 +26,7 @@ public class TypeHelper {
             return null;
         }
 
-        if (!decl.getTag().equals("IRMethodDecl") && !decl.getTag().equals("IRImportDecl")) {
+        if (!(decl instanceof IRMethodDecl) && !(decl instanceof IRImportDecl)) {
             String info = "<id> " + variable.toString() +
                     " must be an method (or import) variable but it is " + decl.getTag();
             error.set(info, ruleId, variable.getLine(), variable.getColumn());
@@ -52,7 +53,7 @@ public class TypeHelper {
             return null;
         }
 
-        if (!decl.getTag().equals("IRFieldDecl")) {
+        if (!(decl instanceof IRFieldDecl)) {
             String info = "<id> " + variable.toString() + " must be an variable but this is " + decl.getTag();
             error.set(info, ruleId, variable.getLine(), variable.getColumn());
             return null;
