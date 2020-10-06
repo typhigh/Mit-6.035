@@ -30,7 +30,7 @@ public class Renamer {
         }
     }
 
-    private class RenameVisitor extends IRVisitor<Boolean> {
+    private class RenameVisitor extends IRVisitor<Void> {
         private final ArrayList<String> names;
 
         public RenameVisitor(Renamer renamer) {
@@ -38,42 +38,42 @@ public class Renamer {
         }
 
         @Override
-        public Boolean visit(IR ir) {
-            return false;
+        public Void visit(IR ir) {
+            return null;
         }
 
         @Override
-        public Boolean visit(IRVariable ir) {
+        public Void visit(IRVariable ir) {
             IR declaredFrom = ir.getDeclaredFrom();
             assert declaredFrom instanceof IRMemberDecl;
             System.out.println(((IRMemberDecl) declaredFrom).getVariable().getName());
             ir.setName(((IRMemberDecl) declaredFrom).getVariable().getName());
-            return true;
+            return null;
         }
 
         /*
          * visit method decl and rename its name
          */
         @Override
-        public Boolean visit(IRMethodDecl ir) {
+        public Void visit(IRMethodDecl ir) {
             IRVariable variable = ir.getVariable();
             variable.setName("Method" + nameId + "_" + variable.getName());
             PutNewName(variable.getName());
 
             // params will be renamed at visit(IRFieldDecl)
-            return true;
+            return null;
         }
 
         /*
          * visit field decl and rename its name
          */
         @Override
-        public Boolean visit(IRFieldDecl ir) {
+        public Void visit(IRFieldDecl ir) {
             // We see parameter as local field
             IRVariable variable = ir.getVariable();
             variable.setName("Variable" + nameId + "_" + variable.getName());
             PutNewName(variable.getName());
-            return true;
+            return null;
         }
 
         /*
@@ -81,13 +81,13 @@ public class Renamer {
          */
 
         @Override
-        public Boolean visit(IRImportDecl ir) {
+        public Void visit(IRImportDecl ir) {
             IRVariable variable = ir.getVariable();
             variable.setName("Import" + "_" + variable.getName());
-            return true;
+            return null;
         }
 
-        private void PutNewName(String name) {
+        private vo id PutNewName(String name) {
             names.add(name);
             nameId++;
         }
