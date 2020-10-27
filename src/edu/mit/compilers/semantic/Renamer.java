@@ -58,7 +58,7 @@ public class Renamer {
         public Void visit(IRMethodDecl ir) {
             IRVariable variable = ir.getVariable();
             variable.setName("Method" + nameId + "_" + variable.getName());
-            PutNewName(variable.getName());
+            putNewName(variable.getName());
 
             // params will be renamed at visit(IRFieldDecl)
             return null;
@@ -72,7 +72,7 @@ public class Renamer {
             // We see parameter as local field
             IRVariable variable = ir.getVariable();
             variable.setName("Variable" + nameId + "_" + variable.getName());
-            PutNewName(variable.getName());
+            putNewName(variable.getName());
             return null;
         }
 
@@ -87,7 +87,7 @@ public class Renamer {
             return null;
         }
 
-        private vo id PutNewName(String name) {
+        private void putNewName(String name) {
             names.add(name);
             nameId++;
         }

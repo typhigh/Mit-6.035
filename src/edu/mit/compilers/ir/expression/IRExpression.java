@@ -8,8 +8,19 @@ public class IRExpression extends IR {
 	// filled by TypeRule
 	private IRBasicType type = null;
 
+	// filled by lower code convertor
+	private String nameInLowerCode;
+
 	public IRExpression(String name) {
 		super(name);
+	}
+
+	public void setNameInLowerCode(String nameInLowerCode) {
+		this.nameInLowerCode = nameInLowerCode;
+	}
+
+	public String getNameInLowerCode() {
+		return nameInLowerCode;
 	}
 
 	public void setType(IRBasicType type) {

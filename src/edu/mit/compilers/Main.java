@@ -122,11 +122,19 @@ class Main {
 					System.exit(1);
 				}
 
+				// Rename
 				Renamer renamer = new Renamer();
 				IR renameIR = renamer.Rename(ir.clone());
 				if (CLI.debug && CLI.target != Action.INTER) {
 					System.out.println(renameIR.showTree());
 				}
+
+				if (CLI.target == Action.INTER) {
+					return ;
+				}
+
+				// Generate three address code
+
 			}
 		} catch (Exception e) {
 			// print the error:

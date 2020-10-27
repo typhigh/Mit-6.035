@@ -1,6 +1,7 @@
 package edu.mit.compilers.ir.common;
 
 import edu.mit.compilers.ir.decl.IRMethodDecl;
+import edu.mit.compilers.lowcode.ThreeAddressCodeList;
 import edu.mit.compilers.utils.IRCloneHelper;
 import edu.mit.compilers.utils.StringInfo;
 
@@ -25,6 +26,9 @@ public class IR implements Cloneable {
 
 	// Which method cover this ir filled by semantic checker
 	private IRMethodDecl coveredByWhichMethod = null;
+
+	// The compiled three-address-code-list, filled by LowerCodeConvertor
+	private ThreeAddressCodeList lowerCodes;
 
 	private IR() {}
 
@@ -63,6 +67,14 @@ public class IR implements Cloneable {
 
 	public void setCoveredByWhichMethod(IRMethodDecl coveredByWhichMethod) {
 		this.coveredByWhichMethod = coveredByWhichMethod;
+	}
+
+	public ThreeAddressCodeList getLowerCodes() {
+		return lowerCodes;
+	}
+
+	public void setLowerCodes(ThreeAddressCodeList lowerCodes) {
+		this.lowerCodes = lowerCodes;
 	}
 
 	/*
