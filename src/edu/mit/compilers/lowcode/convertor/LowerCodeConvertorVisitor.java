@@ -6,10 +6,14 @@ import edu.mit.compilers.lowcode.ThreeAddressCodeList;
 
 public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
 
+    // TODO: avoid visit unused ir
+    // default visit func
     @Override
     public ThreeAddressCodeList visit(IR ir) {
-        return null;
+        ThreeAddressCodeList ret = new ThreeAddressCodeList();
+        for (IR child : ir.getChildren()) {
+            ret.append(visit(child));
+        }
+        return ret;
     }
-
-
 }

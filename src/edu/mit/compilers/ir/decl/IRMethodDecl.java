@@ -58,13 +58,15 @@ public class IRMethodDecl extends IRMemberDecl{
 		if (type != null) {
 			clone.type = type.clone();
 		}
-		if (block != null) {
-			clone.block = block.clone();
-		}
 
 		if (paraList != null) {
 			clone.paraList = paraList.clone();
 		}
+
+		if (block != null) {
+			clone.block = block.clone();
+		}
+
 		return clone;
 	}
 }

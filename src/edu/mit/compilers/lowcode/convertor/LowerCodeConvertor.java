@@ -7,6 +7,10 @@ public class LowerCodeConvertor {
     private final SymbolTableSetter symbolTableSetter;
     private final LowerCodeConvertorVisitor visitor;
 
+    public SymbolTable getSymbolTable() {
+        return symbolTable;
+    }
+
     public LowerCodeConvertor() {
         this.symbolTableSetter = new SymbolTableSetter(symbolTable);
         this.visitor = new LowerCodeConvertorVisitor();
@@ -14,14 +18,18 @@ public class LowerCodeConvertor {
 
     public void ConvertToLowCode(IR tree) {
         assert tree.getParent() == null;
+        SetSymbolTable(tree);
         ConvertToLowCodeImpl(tree);
     }
 
-    private void ConvertToLowCodeImpl(IR ir) {
+    private void SetSymbolTable(IR ir) {
         symbolTableSetter.visit(ir);
         for (IR child : ir.getChildren()) {
-            ConvertToLowCodeImpl(child);
+            symbolTableSetter.visit(ir);
         }
-        visitor.visit(ir);
+    }
+
+    private void ConvertToLowCodeImpl(IR ir) {
+        ir.accept(visitor);
     }
 }
