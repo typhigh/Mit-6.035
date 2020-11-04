@@ -6,8 +6,8 @@ package edu.mit.compilers.utils;
  */
 public class SimpleLinkedList<T> {
     // [begin, end] all the elements
-    ListNode<T> begin;
-    ListNode<T> end;
+    private ListNode<T> begin;
+    private ListNode<T> end;
     private int size;
 
     public SimpleLinkedList() {
@@ -28,6 +28,10 @@ public class SimpleLinkedList<T> {
             end.setNext(addNode);
         }
         ++size;
+    }
+
+    public T front() {
+        return begin.item;
     }
 
     public int getSize() {

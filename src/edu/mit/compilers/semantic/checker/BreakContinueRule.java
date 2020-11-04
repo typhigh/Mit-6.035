@@ -42,6 +42,7 @@ public class BreakContinueRule extends SemanticRule {
     }
 
     private IRStatement findLoopStmt(IR ir) {
+        // TODO: tow slow
         IR cur = ir;
         while (cur != null && !cur.getTag().equals("IRForStmt") && !cur.getTag().equals("IRWhile")) {
             cur = cur.getParent();

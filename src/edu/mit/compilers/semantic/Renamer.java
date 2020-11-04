@@ -46,7 +46,7 @@ public class Renamer {
         public Void visit(IRVariable ir) {
             IR declaredFrom = ir.getDeclaredFrom();
             assert declaredFrom instanceof IRMemberDecl;
-            System.out.println(((IRMemberDecl) declaredFrom).getVariable().getName());
+            // System.out.println(((IRMemberDecl) declaredFrom).getVariable().getName());
             ir.setName(((IRMemberDecl) declaredFrom).getVariable().getName());
             return null;
         }

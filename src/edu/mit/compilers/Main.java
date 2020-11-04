@@ -8,6 +8,9 @@ import edu.mit.compilers.grammar.DecafParserTokenTypes;
 import edu.mit.compilers.grammar.DecafScanner;
 import edu.mit.compilers.grammar.DecafScannerTokenTypes;
 import edu.mit.compilers.ir.common.IR;
+import edu.mit.compilers.lowcode.ThreeAddressCodeList;
+import edu.mit.compilers.lowcode.convertor.LowerCodeConvertor;
+import edu.mit.compilers.lowcode.convertor.SymbolTable;
 import edu.mit.compilers.semantic.Renamer;
 import edu.mit.compilers.semantic.checker.SemanticChecker;
 import edu.mit.compilers.semantic.checker.SemanticError;
@@ -109,37 +112,52 @@ class Main {
 				}
 
 				// Semantic check
-				SemanticChecker check = new SemanticChecker();
-				check.init("test.sh");
-				ArrayList<SemanticError> errors = check.check(ir);
-
-				if (CLI.debug) {
-					System.out.println(ir.showTree());
-				}
-
-				if (!errors.isEmpty()) {
-					check.reportErrors();
-					System.exit(1);
+				SemanticProcess(ir, CLI.debug);
+				if (CLI.target == Action.INTER) {
+					return;
 				}
 
 				// Rename
 				Renamer renamer = new Renamer();
-				IR renameIR = renamer.Rename(ir.clone());
-				if (CLI.debug && CLI.target != Action.INTER) {
-					System.out.println(renameIR.showTree());
-				}
+				ir = renamer.Rename(ir.clone());
+				System.out.println(ir.showTree());
 
-				if (CLI.target == Action.INTER) {
-					return ;
-				}
-
-				// Generate three address code
-
+				// Assembly
+				AssemblyProcess(ir, CLI.debug, false);
 			}
 		} catch (Exception e) {
 			// print the error:
 			System.err.println(CLI.infile + " " + e);
 			e.printStackTrace(System.err);
 		}
+	}
+
+	private static void SemanticProcess(IR tree, boolean debug) {
+		SemanticChecker check = new SemanticChecker();
+		check.init("test.sh");
+		ArrayList<SemanticError> errors = check.check(tree);
+
+		if (debug) {
+			System.out.println(tree.showTree());
+		}
+
+		if (!errors.isEmpty()) {
+			check.reportErrors();
+			System.exit(1);
+		}
+	}
+
+	private static void AssemblyProcess(IR tree, boolean debug, boolean optimized) {
+		// generate three address code
+		LowerCodeConvertor convertor = new LowerCodeConvertor();
+		convertor.ConvertToLowCode(tree);
+		ThreeAddressCodeList codes = convertor.getResult();
+		SymbolTable symbolTable = convertor.getSymbolTable();
+
+		if (debug) {
+
+		}
+		// generate assembly code
+
 	}
 }

@@ -1,15 +1,16 @@
 package edu.mit.compilers.lowcode.convertor;
 
 import edu.mit.compilers.ir.common.IR;
+import edu.mit.compilers.ir.common.IRVisitor;
+import edu.mit.compilers.lowcode.ThreeAddressCodeList;
+
+import java.util.ArrayList;
 
 public class LowerCodeConvertor {
     private final SymbolTable symbolTable = new SymbolTable();
     private final SymbolTableSetter symbolTableSetter;
     private final LowerCodeConvertorVisitor visitor;
-
-    public SymbolTable getSymbolTable() {
-        return symbolTable;
-    }
+    private ThreeAddressCodeList result;
 
     public LowerCodeConvertor() {
         this.symbolTableSetter = new SymbolTableSetter(symbolTable);
@@ -18,15 +19,23 @@ public class LowerCodeConvertor {
 
     public void ConvertToLowCode(IR tree) {
         assert tree.getParent() == null;
-        SetSymbolTable(tree);
+
+        // previous process before convertion
+        ArrayList<IRVisitor<Void>> processors = new ArrayList<>();
+        processors.add(new SymbolTableSetter(symbolTable));
+        processors.add(new NextStmtSetter());
+        PreProcessor preProcessor = new PreProcessor(processors);
+        preProcessor.process(tree);
         ConvertToLowCodeImpl(tree);
+        result = tree.getLowerCodes();
     }
 
-    private void SetSymbolTable(IR ir) {
-        symbolTableSetter.visit(ir);
-        for (IR child : ir.getChildren()) {
-            symbolTableSetter.visit(ir);
-        }
+    public SymbolTable getSymbolTable() {
+        return symbolTable;
+    }
+
+    public ThreeAddressCodeList getResult() {
+        return result;
     }
 
     private void ConvertToLowCodeImpl(IR ir) {
