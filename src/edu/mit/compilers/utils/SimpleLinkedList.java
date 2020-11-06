@@ -4,7 +4,8 @@ package edu.mit.compilers.utils;
  * single-dir linked list
  * provide toArrayList func / begin-end iterator
  */
-public class SimpleLinkedList<T> {
+public class
+SimpleLinkedList<T> {
     // [begin, end] all the elements
     private ListNode<T> begin;
     private ListNode<T> end;
@@ -18,6 +19,12 @@ public class SimpleLinkedList<T> {
     public SimpleLinkedList(T element) {
         begin = end = new ListNode<>(element);
         size = 1;
+    }
+
+    public void init(SimpleLinkedList<T> other) {
+        this.begin = other.begin;
+        this.end = other.end;
+        this.size = other.size;
     }
 
     public void add(T element) {

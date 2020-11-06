@@ -2,6 +2,7 @@ package edu.mit.compilers.ir.common;
 
 import edu.mit.compilers.ir.decl.IRMethodDecl;
 import edu.mit.compilers.lowcode.ThreeAddressCodeList;
+import edu.mit.compilers.lowcode.convertor.LowerCodeConvertorVisitor;
 import edu.mit.compilers.utils.IRCloneHelper;
 import edu.mit.compilers.utils.StringInfo;
 
@@ -28,7 +29,7 @@ public class IR implements Cloneable {
 	private IRMethodDecl coveredByWhichMethod = null;
 
 	// The compiled three-address-code-list, filled by LowerCodeConvertor
-	private ThreeAddressCodeList lowerCodes;
+	private ThreeAddressCodeList lowerCodes = new ThreeAddressCodeList();
 
 	private IR() {}
 
@@ -73,28 +74,24 @@ public class IR implements Cloneable {
 		return lowerCodes;
 	}
 
-	public void setLowerCodes(ThreeAddressCodeList lowerCodes) {
-		this.lowerCodes = lowerCodes;
-	}
-
 	/*
 	 * Show the tree
 	 */
-	public String showTree() {
+	public String show() {
 		StringBuilder result = new StringBuilder();
-		showTreeImpl("", result);
+		showImpl("", result);
 		return result.toString();
 	}
 	
 	/*
 	 * The implement of showTree with prefix
 	 */
-	public void showTreeImpl(String prefix, StringBuilder result) {
+	public void showImpl(String prefix, StringBuilder result) {
 		result.append(getInfoForShow(prefix).toString());
 		ArrayList<IR> children = getChildren();
 		assert(children != null);
 		for (IR child : children) {
-			child.showTreeImpl(prefix + "  ", result);
+			child.showImpl(prefix + "  ", result);
 		}
 	}
 	
@@ -106,7 +103,9 @@ public class IR implements Cloneable {
 		info.addInfo("DebugID: " + getDebugID());
 		info.addInfo("Tag: " + getTag());
 //		info.addInfo("DebugAddress: " + this);
+		System.out.print(info.toString());
 		return info;
+
 	}
 
 	public IR getParent() {
@@ -121,16 +120,24 @@ public class IR implements Cloneable {
 	 * Return children of IR 
 	 */
 	public ArrayList<IR> getChildren() {
-		throw new RuntimeException("IR not support getChildren");
+		throw new RuntimeException("IR id: " + debugID + " type: " + getTag() + " not support getChildren");
 	}
 	
 	/*
 	 * Accept function for visitor
 	 */
 	public<T> T accept(IRVisitor<T> visitor) {
-		throw new RuntimeException("IR not support accept");
+		throw new RuntimeException("IR id: " + debugID + " type: " + getTag() + " not support accept");
 	}
 
+	/*
+	 * accept convertor visitor
+	 */
+	public ThreeAddressCodeList accept(LowerCodeConvertorVisitor visitor) {
+		ThreeAddressCodeList ret = visitor.visit(this);
+		lowerCodes.init(ret);
+		return ret;
+	}
 
 	/*
 	 * Clone function

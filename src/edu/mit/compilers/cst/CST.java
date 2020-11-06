@@ -29,7 +29,7 @@ public class CST {
 	/*
 	 * Show the CST
 	 */
-	public String showTree() {
+	public String show() {
 		StringBuilder ret = new StringBuilder();
 		assert(root.getParent() == null);
 		assert(root.getChildren() != null);
@@ -37,7 +37,7 @@ public class CST {
 //		System.out.println(root.getChildren().size());
 
 		assert(root.getChildren().size() == 1);
-		showTreeWithPrefix(root.getChildren().get(0), "", ret);
+		showWithPrefix(root.getChildren().get(0), "", ret);
 		return ret.toString();
 	}
 
@@ -51,7 +51,7 @@ public class CST {
 	/*
 	 * Implement the show func
 	 */
-	private void showTreeWithPrefix(CSTNode node, String prefix, StringBuilder result) {
+	private void showWithPrefix(CSTNode node, String prefix, StringBuilder result) {
 		result.append(prefix).append(node.toString()).append("\n");
 		ArrayList<CSTNode> children = node.getChildren();
 		if (children == null || children.isEmpty()) {
@@ -60,7 +60,7 @@ public class CST {
 		
 		// show the children
 		for (CSTNode child : children) {
-			showTreeWithPrefix(child, prefix + "  ", result);
+			showWithPrefix(child, prefix + "  ", result);
 		}
 	}
 	

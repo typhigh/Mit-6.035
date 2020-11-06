@@ -9,7 +9,9 @@ import edu.mit.compilers.ir.expression.IRExpression;
 import edu.mit.compilers.ir.expression.IRLocation;
 import edu.mit.compilers.ir.statement.IRAssignStmt;
 import edu.mit.compilers.ir.statement.IRBreakStmt;
+import edu.mit.compilers.ir.statement.IRStatement;
 import edu.mit.compilers.lowcode.AssignSingleOperand;
+import edu.mit.compilers.lowcode.GotoCode;
 import edu.mit.compilers.lowcode.PopParamCode;
 import edu.mit.compilers.lowcode.ThreeAddressCodeList;
 
@@ -60,13 +62,13 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
         boolean isArray = left.isArrayLocation();
         if (isArray) {
             IRExpression location = left.getLocation();
-            ret.append(visit(location));
+            ret.append(location.accept(this));
             locationVariable = location.getNameInLowerCode();
         }
 
         // t2 = value
         IRExpression value = ir.getValue();
-        ret.append(visit(value));
+        ret.append(value.accept(this));
         String rightVariable = value.getNameInLowerCode();
 
         ret.add(new AssignSingleOperand(leftVariable, locationVariable, rightVariable, null));
@@ -75,9 +77,14 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
 
     @Override
     public ThreeAddressCodeList visit(IRBreakStmt ir) {
-        return super.visit(ir);
+        IRStatement nextStmt = ir.getLoopStmt().getNextStmt();
+        assert nextStmt != null;
 
+        GotoCode code = new GotoCode(nextStmt);
+        return new ThreeAddressCodeList(code);
     }
+
+
 
 
 }

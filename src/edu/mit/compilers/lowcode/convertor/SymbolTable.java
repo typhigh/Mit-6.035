@@ -13,4 +13,12 @@ public class SymbolTable {
         ++size;
         assert table.size() == size;
     }
+
+    public String getNamesOfSymbol() {
+        StringBuilder builder = new StringBuilder();
+        for (String name : table.keySet()) {
+            builder.append(name + '\n');
+        }
+        return builder.toString();
+    }
 }

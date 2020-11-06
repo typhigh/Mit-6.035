@@ -102,13 +102,13 @@ class Main {
 				// After pruned
 				tree.PrunTree();
 				if (CLI.debug) {
-					System.out.println(tree.showTree());
+					System.out.println(tree.show());
 				}
 
 				// Get IR-tree
 				IR ir = CSTParser.parseIRProgram(tree);
 				if (CLI.debug){
-					System.out.println(ir.showTree());
+					System.out.println(ir.show());
 				}
 
 				// Semantic check
@@ -120,7 +120,7 @@ class Main {
 				// Rename
 				Renamer renamer = new Renamer();
 				ir = renamer.Rename(ir.clone());
-				System.out.println(ir.showTree());
+				System.out.println(ir.show());
 
 				// Assembly
 				AssemblyProcess(ir, CLI.debug, false);
@@ -138,7 +138,7 @@ class Main {
 		ArrayList<SemanticError> errors = check.check(tree);
 
 		if (debug) {
-			System.out.println(tree.showTree());
+			System.out.println(tree.show());
 		}
 
 		if (!errors.isEmpty()) {
@@ -155,7 +155,8 @@ class Main {
 		SymbolTable symbolTable = convertor.getSymbolTable();
 
 		if (debug) {
-
+			System.out.println(symbolTable.getNamesOfSymbol());
+			System.out.println(codes.show());
 		}
 		// generate assembly code
 

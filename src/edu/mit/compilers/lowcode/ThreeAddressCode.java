@@ -1,7 +1,10 @@
 package edu.mit.compilers.lowcode;
 
+import edu.mit.compilers.utils.StringUtils;
+
 public abstract class ThreeAddressCode {
 
+    public final static int PREFIX_LIMIT = 20;
     private String label;
     private ThreeAddressCode gotoCode;
 
@@ -27,6 +30,8 @@ public abstract class ThreeAddressCode {
         if (label != null) {
             prefix += label + ": ";
         }
+        assert prefix.length() <= PREFIX_LIMIT : "prefix must be less than" + PREFIX_LIMIT;
+        prefix += StringUtils.repeat(new String(""), PREFIX_LIMIT - prefix.length());
         ret.append(getStringFroShow(prefix));
     }
 }

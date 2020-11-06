@@ -24,4 +24,13 @@ public class StringUtils {
 		}
 		return ret;
 	}
+
+	public static String repeat(String value, int count) {
+		// use value.repeate(count) more better but my java not supports it
+		StringBuilder ret = new StringBuilder();
+		for (int i = 0; i < count; ++i) {
+			ret.append(value);
+		}
+		return ret.toString();
+	}
 }
