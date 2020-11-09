@@ -1,4 +1,4 @@
-package edu.mit.compilers.lowcode;
+package edu.mit.compilers.lowercode;
 
 import edu.mit.compilers.ir.statement.IRStatement;
 
@@ -33,9 +33,6 @@ public class GotoCode extends ThreeAddressCode {
         this.isIfTrue = isIfTrue;
         this.isConditional = condition != null;
         assert gotoStmt != null;
-        if (gotoStmt.getLowerCodes() != null && !gotoStmt.getLowerCodes().isEmpty()) {
-            fillGotoLabel();
-        }
     }
 
     // if condition goto label
@@ -57,7 +54,7 @@ public class GotoCode extends ThreeAddressCode {
             return;
         }
 
-        assert !gotoStmt.getLowerCodes().isEmpty();
+        assert !gotoStmt.getLowerCodes().isNull();
         gotoLabel = gotoStmt.getLowerCodes().front().getLabel();
     }
 

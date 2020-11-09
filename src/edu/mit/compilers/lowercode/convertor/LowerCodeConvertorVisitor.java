@@ -1,4 +1,4 @@
-package edu.mit.compilers.lowcode.convertor;
+package edu.mit.compilers.lowercode.convertor;
 
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRParameterList;
@@ -7,13 +7,8 @@ import edu.mit.compilers.ir.decl.IRFieldDecl;
 import edu.mit.compilers.ir.decl.IRMethodDecl;
 import edu.mit.compilers.ir.expression.IRExpression;
 import edu.mit.compilers.ir.expression.IRLocation;
-import edu.mit.compilers.ir.statement.IRAssignStmt;
-import edu.mit.compilers.ir.statement.IRBreakStmt;
-import edu.mit.compilers.ir.statement.IRStatement;
-import edu.mit.compilers.lowcode.AssignSingleOperand;
-import edu.mit.compilers.lowcode.GotoCode;
-import edu.mit.compilers.lowcode.PopParamCode;
-import edu.mit.compilers.lowcode.ThreeAddressCodeList;
+import edu.mit.compilers.ir.statement.*;
+import edu.mit.compilers.lowercode.*;
 
 public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
 
@@ -21,7 +16,7 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
     // default visit func
     @Override
     public ThreeAddressCodeList visit(IR ir) {
-        ThreeAddressCodeList ret = new ThreeAddressCodeList();
+        ThreeAddressCodeList ret = ir.getLowerCodes();
         for (IR child : ir.getChildren()) {
             ret.append(visit(child));
         }
@@ -31,15 +26,15 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
     @Override
     public ThreeAddressCodeList visit(IRMethodDecl ir) {
         ThreeAddressCodeList ret = visit((IR) ir);
-        ret.front().setLabel(ir.getVariable().getName());
+        ret.setNeedLabelTrue();
         return ret;
     }
 
     @Override
     public ThreeAddressCodeList visit(IRParameterList ir) {
-        ThreeAddressCodeList ret = new ThreeAddressCodeList();
+        ThreeAddressCodeList ret = ir.getLowerCodes();
         for (IRFieldDecl param : ir.getParaList()) {
-            ret.add(new PopParamCode(param.getVariable().getName()));
+            ret.append(new PopParamCode(param.getVariable().getName()));
         }
         return ret;
     }
@@ -53,7 +48,8 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
      */
     @Override
     public ThreeAddressCodeList visit(IRAssignStmt ir) {
-        ThreeAddressCodeList ret = new ThreeAddressCodeList();
+        ThreeAddressCodeList ret = ir.getLowerCodes();
+        assert ret.isNull();
         IRLocation left = ir.getLocation();
         String leftVariable = left.getVariable().getName();
         String locationVariable = null;
@@ -71,20 +67,31 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
         ret.append(value.accept(this));
         String rightVariable = value.getNameInLowerCode();
 
-        ret.add(new AssignSingleOperand(leftVariable, locationVariable, rightVariable, null));
+        ret.append(new AssignSingleOperand(leftVariable, locationVariable, rightVariable, null));
         return ret;
     }
 
     @Override
     public ThreeAddressCodeList visit(IRBreakStmt ir) {
-        IRStatement nextStmt = ir.getLoopStmt().getNextStmt();
-        assert nextStmt != null;
+        ThreeAddressCodeList ret = ir.getLowerCodes();
+        IRStatement gotoStmt = ir.getLoopStmt().getNextStmt();
+        assert gotoStmt != null;
 
-        GotoCode code = new GotoCode(nextStmt);
-        return new ThreeAddressCodeList(code);
+        GotoCode code = new GotoCode(gotoStmt);
+        return ret.append(code);
     }
 
+    @Override
+    public ThreeAddressCodeList visit(IRContinueStmt ir) {
+        ThreeAddressCodeList ret = ir.getLowerCodes();
+        IRStatement loopStmt = ir.getLoopStmt();
+        IRStatement gotoStmt = null;
+        if (loopStmt instanceof IRForStmt) {
 
-
-
+        } else {
+            assert loopStmt instanceof IRWhileStmt;
+        }
+        assert false;
+        return null;
+    }
 }

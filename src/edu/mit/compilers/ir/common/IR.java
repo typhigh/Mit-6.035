@@ -1,8 +1,7 @@
 package edu.mit.compilers.ir.common;
 
 import edu.mit.compilers.ir.decl.IRMethodDecl;
-import edu.mit.compilers.lowcode.ThreeAddressCodeList;
-import edu.mit.compilers.lowcode.convertor.LowerCodeConvertorVisitor;
+import edu.mit.compilers.lowercode.ThreeAddressCodeList;
 import edu.mit.compilers.utils.IRCloneHelper;
 import edu.mit.compilers.utils.StringInfo;
 
@@ -128,15 +127,6 @@ public class IR implements Cloneable {
 	 */
 	public<T> T accept(IRVisitor<T> visitor) {
 		throw new RuntimeException("IR id: " + debugID + " type: " + getTag() + " not support accept");
-	}
-
-	/*
-	 * accept convertor visitor
-	 */
-	public ThreeAddressCodeList accept(LowerCodeConvertorVisitor visitor) {
-		ThreeAddressCodeList ret = visitor.visit(this);
-		lowerCodes.init(ret);
-		return ret;
 	}
 
 	/*

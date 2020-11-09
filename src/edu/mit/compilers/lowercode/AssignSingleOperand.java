@@ -1,4 +1,4 @@
-package edu.mit.compilers.lowcode;
+package edu.mit.compilers.lowercode;
 
 public class AssignSingleOperand extends ThreeAddressCode {
     private boolean isUnaryOp;

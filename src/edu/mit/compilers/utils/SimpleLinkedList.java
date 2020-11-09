@@ -21,7 +21,7 @@ SimpleLinkedList<T> {
         size = 1;
     }
 
-    public void init(SimpleLinkedList<T> other) {
+    public SimpleLinkedList(SimpleLinkedList<T> other) {
         this.begin = other.begin;
         this.end = other.end;
         this.size = other.size;

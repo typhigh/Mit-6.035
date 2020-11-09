@@ -1,4 +1,4 @@
-package edu.mit.compilers.lowcode.convertor;
+package edu.mit.compilers.lowercode.convertor;
 
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRVisitor;
