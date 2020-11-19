@@ -8,6 +8,11 @@ import edu.mit.compilers.utils.StringInfo;
 
 import java.util.ArrayList;
 
+/*
+ * two usage:
+ * 1. a++, a--
+ * 2. a += xxx, a -= xxx
+ */
 public class IRPlusAssignStmt extends IRStatement {
 
     private IRLocation location;
@@ -52,7 +57,7 @@ public class IRPlusAssignStmt extends IRStatement {
     }
 
     @Override
-    public <T> T accept(IRVisitor<T> visitor) {
+    public <T> T accept(IRVisitor<T> visitor) throws CloneNotSupportedException {
         return visitor.visit(this);
     }
 

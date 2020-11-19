@@ -9,13 +9,13 @@ import java.util.ArrayList;
 public class IRContinueStmt extends IRStatement {
 
 	// filled by BreakContinueRule
-	private IRStatement loopStmt;
+	private IRLoopStmt loopStmt;
 
-	public IRStatement getLoopStmt() {
+	public IRLoopStmt getLoopStmt() {
 		return loopStmt;
 	}
 
-	public void setLoopStmt(IRStatement loopStmt) {
+	public void setLoopStmt(IRLoopStmt loopStmt) {
 		this.loopStmt = loopStmt;
 	}
 
@@ -36,7 +36,7 @@ public class IRContinueStmt extends IRStatement {
 	@Override
 	public IRContinueStmt clone() throws CloneNotSupportedException {
 		IRContinueStmt clone = (IRContinueStmt) super.clone();
-		clone.loopStmt = (IRStatement) IRCloneHelper.getClone(loopStmt);
+		clone.loopStmt = (IRLoopStmt) IRCloneHelper.getClone(loopStmt);
 		return clone;
 	}
 }

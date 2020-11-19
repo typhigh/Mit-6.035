@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class SemanticCheckerTest {
 
     @Test
-    void testSimpleCase() {
+    void testSimpleCase() throws CloneNotSupportedException {
         /*
             import x;
             int a;

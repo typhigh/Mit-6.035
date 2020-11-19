@@ -7,54 +7,51 @@ import edu.mit.compilers.ir.expression.IRExpression;
 
 import java.util.ArrayList;
 
-public class IRForStmt extends IRStatement {
+public class IRForStmt extends IRLoopStmt {
 	
 	private IRAssignStmt initializer;
-	private IRExpression condition;
 	private IRPlusAssignStmt step;
-	private IRBlock block;
 
 	public IRForStmt(IRAssignStmt initializer, IRExpression condition, IRPlusAssignStmt step, IRBlock block) {
-		super("IRForStmt");
+		super("IRForStmt", condition, block);
 		this.initializer = initializer;
-		this.condition = condition;
 		this.step = step;
-		this.block = block;
 	}
 
-	public IRExpression getCondition() {
-		return condition;
+	public IRAssignStmt getInitializer() {
+		return initializer;
+	}
+
+	public IRPlusAssignStmt getStep() {
+		return step;
 	}
 
 	@Override
-	public <T> T accept(IRVisitor<T> visitor) {
+	public <T> T accept(IRVisitor<T> visitor) throws CloneNotSupportedException {
 		return visitor.visit(this);
 	}
 
 	@Override
 	public ArrayList<IR> getChildren() {
 		ArrayList<IR> ret = new ArrayList<>();
-		ret.add(initializer);
-		ret.add(condition);
-		ret.add(step);
-		ret.add(block);
+		ret.add(getInitializer());
+		ret.add(getCondition());
+		ret.add(getStep());
+		ret.add(getBlock());
 		return ret;
 	}
 
 	@Override
 	public IRForStmt clone() throws CloneNotSupportedException {
 		IRForStmt clone = (IRForStmt) super.clone();
+
+		// IRForStmt clone condition, block, initializer, step
+		// because initializer don't contain field declare so it is right
 		if (initializer != null) {
 			clone.initializer = initializer.clone();
 		}
-		if (condition != null) {
-			clone.condition = condition.clone();
-		}
 		if (step != null) {
 			clone.step = step.clone();
-		}
-		if (block != null) {
-			clone.block = block.clone();
 		}
 		return clone;
 	}

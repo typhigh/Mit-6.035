@@ -7,46 +7,27 @@ import edu.mit.compilers.ir.expression.IRExpression;
 
 import java.util.ArrayList;
 
-public class IRWhileStmt extends IRStatement {
+public class IRWhileStmt extends IRLoopStmt {
 
-	private IRExpression condition;
-	private IRBlock block;
 	public IRWhileStmt(IRExpression condition, IRBlock block) {
-		super("IRWhileStmt");
-		this.condition = condition;
-		this.block = block;
-	}
-
-	public IRExpression getCondition() {
-		return condition;
-	}
-
-	public IRBlock getBlock() {
-		return block;
+		super("IRWhileStmt", condition, block);
 	}
 
 	@Override
-	public <T> T accept(IRVisitor<T> visitor) {
+	public <T> T accept(IRVisitor<T> visitor) throws CloneNotSupportedException {
 		return visitor.visit(this);
 	}
 
 	@Override
 	public ArrayList<IR> getChildren() {
 		ArrayList<IR> ret = new ArrayList<>();
-		ret.add(condition);
-		ret.add(block);
+		ret.add(getCondition());
+		ret.add(getBlock());
 		return ret;
 	}
 
 	@Override
 	public IRWhileStmt clone() throws CloneNotSupportedException {
-		IRWhileStmt clone = (IRWhileStmt) super.clone();
-		if (condition != null) {
-			clone.condition = condition.clone();
-		}
-		if (block != null) {
-			clone.block = block.clone();
-		}
-		return clone;
+		return (IRWhileStmt) super.clone();
 	}
 }

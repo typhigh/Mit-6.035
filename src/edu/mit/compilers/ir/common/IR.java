@@ -125,7 +125,7 @@ public class IR implements Cloneable {
 	/*
 	 * Accept function for visitor
 	 */
-	public<T> T accept(IRVisitor<T> visitor) {
+	public<T> T accept(IRVisitor<T> visitor) throws CloneNotSupportedException {
 		throw new RuntimeException("IR id: " + debugID + " type: " + getTag() + " not support accept");
 	}
 
@@ -138,6 +138,8 @@ public class IR implements Cloneable {
 		IRCloneHelper.put(this, clone);
 		clone.parent = IRCloneHelper.getClone(parent);
 		clone.coveredByWhichMethod = (IRMethodDecl) IRCloneHelper.getClone(coveredByWhichMethod);
+		assert lowerCodes.isNull() : "not support not-null lower codes clone";
+		clone.lowerCodes = new ThreeAddressCodeList();
 		return clone;
 	}
 

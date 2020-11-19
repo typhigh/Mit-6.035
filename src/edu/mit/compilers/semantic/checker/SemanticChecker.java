@@ -62,12 +62,12 @@ public class SemanticChecker {
         }
     }
 
-    public ArrayList<SemanticError> check(IR root) {
+    public ArrayList<SemanticError> check(IR root) throws CloneNotSupportedException {
         checkImpl(root);
         return errors;
     }
 
-    private void checkImpl(IR node) {
+    private void checkImpl(IR node) throws CloneNotSupportedException {
         // Top-down check
         ArrayList<IR> children = node.getChildren();
         for (SemanticRule rule : rulesDoneBefore) {

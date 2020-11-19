@@ -132,7 +132,7 @@ class Main {
 		}
 	}
 
-	private static void SemanticProcess(IR tree, boolean debug) {
+	private static void SemanticProcess(IR tree, boolean debug) throws CloneNotSupportedException {
 		SemanticChecker check = new SemanticChecker();
 		check.init("test.sh");
 		ArrayList<SemanticError> errors = check.check(tree);
@@ -147,7 +147,7 @@ class Main {
 		}
 	}
 
-	private static void AssemblyProcess(IR tree, boolean debug, boolean optimized) {
+	private static void AssemblyProcess(IR tree, boolean debug, boolean optimized) throws CloneNotSupportedException {
 		// generate three address code
 		LowerCodeConvertor convertor = new LowerCodeConvertor();
 		convertor.ConvertToLowCode(tree);

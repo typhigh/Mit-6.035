@@ -1,8 +1,7 @@
 package edu.mit.compilers.lowercode;
 
-public class AssignTwoOperand extends ThreeAddressCode {
+public class AssignTwoOperandCode extends AssignCode {
 
-    private String left;
     private String right1;
     private String right2;
     private String binaryOp;
@@ -10,15 +9,15 @@ public class AssignTwoOperand extends ThreeAddressCode {
     @Override
     protected String getStringFroShow(String prefix) {
         return prefix
-                + left
+                + getName()
                 + " = "
                 + right1
                 + " " + binaryOp + " "
                 + right2;
     }
 
-    public AssignTwoOperand(String left, String right1, String right2, String binaryOp) {
-        this.left = left;
+    public AssignTwoOperandCode(String left, String right1, String right2, String binaryOp) {
+        super(left);
         this.right1 = right1;
         this.right2 = right2;
         this.binaryOp = binaryOp;

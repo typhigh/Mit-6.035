@@ -3,7 +3,7 @@ package edu.mit.compilers.lowercode;
 import edu.mit.compilers.utils.SimpleLinkedList;
 
 /*
- * single-dir linked list
+ * single-dir linked list, implemented like slice
  * provide toArrayList func / begin-end iterator
  */
 public class ThreeAddressCodeList {
@@ -16,7 +16,7 @@ public class ThreeAddressCodeList {
     private boolean isNull = true;
 
     // tells if list (or the code of this list) need label
-    // used as a lazy flag
+    // used as a lazy flag from sublist to list, from list to code
     private boolean needLabel = false;
 
     public ThreeAddressCodeList() {}
@@ -28,23 +28,37 @@ public class ThreeAddressCodeList {
 
     public ThreeAddressCodeList(ThreeAddressCodeList other) {
         this.codes = new SimpleLinkedList<>(other.codes);
-
+        this.isNull = other.isNull;
+        this.needLabel = other.needLabel;
     }
 
     public ThreeAddressCodeList append(ThreeAddressCode other) {
+        if (isNull()) {
+            return init(other);
+        }
+
         codes.add(other);
         isNull = false;
+        checkAndPushNeedLabel();
         return this;
     }
 
     public ThreeAddressCodeList append(ThreeAddressCodeList other) {
-        assert !other.isNull();
+        if (isNull()) {
+            return init(other);
+        }
+
+        if (other.isNull()) {
+            return this;
+        }
+
         codes.append(other.codes);
         isNull = false;
+        checkAndPushNeedLabel();
         return this;
     }
 
-    public ThreeAddressCodeList concate(ThreeAddressCodeList other) {
+    public ThreeAddressCodeList concat(ThreeAddressCodeList other) {
         ThreeAddressCodeList newCodes = new ThreeAddressCodeList(this);
         return newCodes.append(other);
     }
@@ -53,10 +67,14 @@ public class ThreeAddressCodeList {
         return codes.front();
     }
 
+    public SimpleLinkedList<ThreeAddressCode>.Iterator iterator() {
+        return codes.iterator();
+    }
+
     // show the content in string-format
     public String show() {
         StringBuilder builder = new StringBuilder();
-        for (SimpleLinkedList<ThreeAddressCode>.Iterator iter = codes.iterator(); iter.hasNext(); ) {
+        for (SimpleLinkedList<ThreeAddressCode>.Iterator iter = iterator(); iter.hasNext(); ) {
             ThreeAddressCode code = iter.next();
             code.getStringForShow("", builder);
         }
@@ -67,11 +85,19 @@ public class ThreeAddressCodeList {
         return isNull;
     }
 
-    public void init(ThreeAddressCodeList other) {
+    public ThreeAddressCodeList init(ThreeAddressCode other) {
+        codes = new SimpleLinkedList<>(other);
+        isNull = false;
+        checkAndPushNeedLabel();
+        return this;
+    }
+
+    public ThreeAddressCodeList init(ThreeAddressCodeList other) {
         codes = new SimpleLinkedList<>(other.codes);
         this.isNull = other.isNull;
         this.needLabel |= other.needLabel;
         checkAndPushNeedLabel();
+        return this;
     }
 
     public void setNeedLabelTrue() {

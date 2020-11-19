@@ -2,26 +2,33 @@ package edu.mit.compilers.lowercode.convertor;
 
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRVisitor;
+import edu.mit.compilers.ir.statement.IRAssignStmt;
+import edu.mit.compilers.ir.statement.IRPlusAssignStmt;
 import edu.mit.compilers.lowercode.ThreeAddressCodeList;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class LowerCodeConvertor {
     private final SymbolTable symbolTable = new SymbolTable();
+
+    // replacer map : plus assign -> assign (a++ -> a = a + 1)
+    private final HashMap<IRPlusAssignStmt, IRAssignStmt> replacer = new HashMap<>();
     private final SymbolTableSetter symbolTableSetter;
     private final LowerCodeConvertorVisitor visitor;
     private ThreeAddressCodeList result;
 
     public LowerCodeConvertor() {
         this.symbolTableSetter = new SymbolTableSetter(symbolTable);
-        this.visitor = new LowerCodeConvertorVisitor();
+        this.visitor = new LowerCodeConvertorVisitor(replacer);
     }
 
-    public void ConvertToLowCode(IR tree) {
+    public void ConvertToLowCode(IR tree) throws CloneNotSupportedException {
         assert tree.getParent() == null;
 
         // previous process before convertion
         ArrayList<IRVisitor<Void>> processors = new ArrayList<>();
+        processors.add(new IRPlusAssignStmtReplacer(replacer));
         processors.add(new SymbolTableSetter(symbolTable));
         processors.add(new NextStmtSetter());
         PreProcessor preProcessor = new PreProcessor(processors);
@@ -38,7 +45,7 @@ public class LowerCodeConvertor {
         return result;
     }
 
-    private void ConvertToLowCodeImpl(IR ir) {
+    private void ConvertToLowCodeImpl(IR ir) throws CloneNotSupportedException {
         ir.accept(visitor);
     }
 }

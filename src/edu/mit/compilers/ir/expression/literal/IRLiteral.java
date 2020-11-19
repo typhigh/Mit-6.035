@@ -3,38 +3,39 @@ package edu.mit.compilers.ir.expression.literal;
 import antlr.Token;
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.expression.IRExpression;
+import edu.mit.compilers.utils.Literal;
 import edu.mit.compilers.utils.StringInfo;
 
 import java.util.ArrayList;
 
 public class IRLiteral<T> extends IRExpression {
 
-	protected String literalValue;
-
-	// filled by LiteralValuerule
-	protected T value;
-	
+	private Literal<T> literal;
 	public IRLiteral(String tag, Token token) {
 		super(tag);
-		this.literalValue = token.getText();
+		this.literal = new Literal(token.getText());
 		this.setLine(token.getLine());
 		this.setColumn(token.getColumn());
 	}
 
+	public Literal<T> getLiteral() {
+		return literal;
+	}
+
 	public String getLiteralValue() {
-		return literalValue;
+		return literal.getLiteralValue();
 	}
 
 	public void setLiteralValue(String literalValue) {
-		this.literalValue = literalValue;
+		literal.setLiteralValue(literalValue);
 	}
 
 	public T getValue() {
-		return value;
+		return literal.getValue();
 	}
 
 	public void setValue(T value) {
-		this.value = value;
+		literal.setValue(value);
 	}
 
 	@Override

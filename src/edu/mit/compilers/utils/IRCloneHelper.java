@@ -16,7 +16,10 @@ public class IRCloneHelper {
 
         IR ret = cloneTable.get(ir);
         // System.out.println("OLD:" + ir + " NEW:" + ret);
-        assert ret != null;
+        if (ret == null) {
+            // if not found, return itself
+            return ir;
+        }
         return ret;
     }
 

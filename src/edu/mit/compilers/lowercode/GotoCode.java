@@ -1,16 +1,14 @@
 package edu.mit.compilers.lowercode;
 
-import edu.mit.compilers.ir.statement.IRStatement;
-
 public class GotoCode extends ThreeAddressCode {
     private boolean isConditional;
     private boolean isIfTrue;
     private String condition;
 
     // first visit, goto stmt
-    private IRStatement gotoStmt;
+    private ThreeAddressCodeList gotoStmtCodes;
 
-    // second visit, gotoSTmt -> gotoLabel
+    // second visit, gotoStmt -> gotoLabel
     private String gotoLabel;
 
     @Override
@@ -27,26 +25,27 @@ public class GotoCode extends ThreeAddressCode {
 
     // if/ifFalse condition goto label
     // when isIfTrue is false, mean ifFalse condition goto label <=> if !condition goto label
-    public GotoCode(IRStatement gotoStmt, String condition, boolean isIfTrue) {
-        this.gotoStmt = gotoStmt;
+    public GotoCode(ThreeAddressCodeList gotoStmtCodes, String condition, boolean isIfTrue) {
+        this.gotoStmtCodes = gotoStmtCodes;
         this.condition = condition;
         this.isIfTrue = isIfTrue;
         this.isConditional = condition != null;
-        assert gotoStmt != null;
+        assert gotoStmtCodes != null;
+        gotoStmtCodes.setNeedLabelTrue();
     }
 
     // if condition goto label
-    public GotoCode(IRStatement gotoStmt, String condition) {
-        this(gotoStmt, condition, true);
+    public GotoCode(ThreeAddressCodeList gotoStmtCodes, String condition) {
+        this(gotoStmtCodes, condition, true);
     }
 
     // goto label
-    public GotoCode(IRStatement gotoStmt) {
-        this(gotoStmt, null);
+    public GotoCode(ThreeAddressCodeList gotoStmtCodes) {
+        this(gotoStmtCodes, null);
     }
 
-    public void setGotoStmt(IRStatement gotoStmt) {
-        this.gotoStmt = gotoStmt;
+    public void setGotoStmtCodes(ThreeAddressCodeList gotoStmtCodes) {
+        this.gotoStmtCodes = gotoStmtCodes;
     }
 
     public void fillGotoLabel() {
@@ -54,8 +53,8 @@ public class GotoCode extends ThreeAddressCode {
             return;
         }
 
-        assert !gotoStmt.getLowerCodes().isNull();
-        gotoLabel = gotoStmt.getLowerCodes().front().getLabel();
+        assert !gotoStmtCodes.isNull();
+        gotoLabel = gotoStmtCodes.front().getLabel();
     }
 
 }

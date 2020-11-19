@@ -13,11 +13,11 @@ public class PreProcessor {
         this.processors = processors;
     }
 
-    public void process(IR tree) {
+    public void process(IR tree) throws CloneNotSupportedException {
         processImpl(tree);
     }
 
-    private void processImpl(IR ir) {
+    private void processImpl(IR ir) throws CloneNotSupportedException {
         for (IRVisitor<Void> processor : processors) {
             ir.accept(processor);
         }

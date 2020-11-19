@@ -28,8 +28,16 @@ public class IRIfStmt extends IRStatement{
 		return condition;
 	}
 
+	public IRBlock getIfBlock() {
+		return ifBlock;
+	}
+
+	public IRBlock getElseBlock() {
+		return elseBlock;
+	}
+
 	@Override
-	public <T> T accept(IRVisitor<T> visitor) {
+	public <T> T accept(IRVisitor<T> visitor) throws CloneNotSupportedException {
 		return visitor.visit(this);
 	}
 

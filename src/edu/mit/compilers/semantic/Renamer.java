@@ -16,13 +16,13 @@ public class Renamer {
     private static int nameId = 0;
 
     // Maybe called more than once
-    public IR Rename(IR ir) {
+    public IR Rename(IR ir) throws CloneNotSupportedException {
         RenameVisitor visitor = new RenameVisitor(this);
         RenameImpl(ir, visitor);
         return ir;
     }
 
-    private void RenameImpl(IR ir, RenameVisitor visitor) {
+    private void RenameImpl(IR ir, RenameVisitor visitor) throws CloneNotSupportedException {
         // top first and down second
         ir.accept(visitor);
         for (IR child : ir.getChildren()) {

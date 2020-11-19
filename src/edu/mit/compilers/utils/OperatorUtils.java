@@ -35,4 +35,14 @@ public class OperatorUtils {
 	public static boolean isCond(String operator) {
 		return operator.equals("&&") || operator.equals("||");
 	}
+
+	public static String convertPlusOpToBinaryOp(String operator) {
+		switch (operator) {
+			case "+="	: return "+";
+			case "-=" 	: return "-";
+			default		: {
+				throw new RuntimeException(operator + " is not plus operator");
+			}
+		}
+	}
 }

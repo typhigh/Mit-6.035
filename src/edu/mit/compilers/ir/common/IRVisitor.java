@@ -12,10 +12,7 @@ import edu.mit.compilers.ir.expression.IRLocation;
 import edu.mit.compilers.ir.expression.IRMethodCall;
 import edu.mit.compilers.ir.expression.IRTernaryExpr;
 import edu.mit.compilers.ir.expression.IRUnaryOpExpr;
-import edu.mit.compilers.ir.expression.literal.IRBoolLiteral;
-import edu.mit.compilers.ir.expression.literal.IRCharLiteral;
-import edu.mit.compilers.ir.expression.literal.IRIntLiteral;
-import edu.mit.compilers.ir.expression.literal.IRStringLiteral;
+import edu.mit.compilers.ir.expression.literal.*;
 import edu.mit.compilers.ir.statement.*;
 import edu.mit.compilers.ir.type.IRArrayType;
 import edu.mit.compilers.ir.type.IRBasicType;
@@ -30,11 +27,11 @@ public abstract class IRVisitor<T> {
 
 	/*common*/
 	/**********************************/
-	public T visit(IRArgumentList ir) {
+	public T visit(IRArgumentList ir) throws CloneNotSupportedException {
 		return visit((IR) ir);
 	}
 
-	public T visit(IRBlock ir) {
+	public T visit(IRBlock ir) throws CloneNotSupportedException {
 		return visit((IR) ir);
 	}
 
@@ -42,7 +39,7 @@ public abstract class IRVisitor<T> {
 		return visit((IR) ir);
 	}
 
-	public T visit(IRProgram ir) {
+	public T visit(IRProgram ir) throws CloneNotSupportedException {
 		return visit((IR) ir);
 	}
 
@@ -64,7 +61,7 @@ public abstract class IRVisitor<T> {
 		return visit((IRMemberDecl) ir);
 	}
 	
-	public T visit(IRMethodDecl ir) {
+	public T visit(IRMethodDecl ir) throws CloneNotSupportedException {
 		return visit((IRMemberDecl) ir);
 	}
 	
@@ -74,7 +71,7 @@ public abstract class IRVisitor<T> {
 		return visit((IR) ir);
 	}
 
-	public T visit(IRBinaryOpExpr ir) {
+	public T visit(IRBinaryOpExpr ir) throws CloneNotSupportedException {
 		return visit((IRExpression) ir);
 	}
 	
@@ -101,21 +98,24 @@ public abstract class IRVisitor<T> {
 	public T visit(IRUnaryOpExpr ir) { 
 		return visit((IRExpression) ir);
 	}
-	
-	public T visit(IRBoolLiteral ir) {
+
+	public T visit(IRLiteral ir) {
 		return visit((IRExpression) ir);
+	}
+	public T visit(IRBoolLiteral ir) {
+		return visit((IRLiteral) ir);
 	}
 	
 	public T visit(IRCharLiteral ir) {
-		return visit((IRExpression) ir);
+		return visit((IRLiteral) ir);
 	}
 	
 	public T visit(IRIntLiteral ir) {
-		return visit((IRExpression) ir);
+		return visit((IRLiteral) ir);
 	}
 	
 	public T visit(IRStringLiteral ir) {
-		return visit((IRExpression) ir);
+		return visit((IRLiteral) ir);
 	}
 	
 	/*statement*/
@@ -124,7 +124,7 @@ public abstract class IRVisitor<T> {
 		return visit((IR) ir);
 	}
 
-	public T visit(IRAssignStmt ir) {
+	public T visit(IRAssignStmt ir) throws CloneNotSupportedException {
 		return visit((IRStatement) ir);
 	}
 	
@@ -136,11 +136,11 @@ public abstract class IRVisitor<T> {
 		return visit((IRStatement) ir);
 	}
 	
-	public T visit(IRForStmt ir) {
+	public T visit(IRForStmt ir) throws CloneNotSupportedException {
 		return visit((IRStatement) ir);
 	}
 	
-	public T visit(IRIfStmt ir) {
+	public T visit(IRIfStmt ir) throws CloneNotSupportedException {
 		return visit((IRStatement) ir);
 	}
 	
@@ -148,15 +148,15 @@ public abstract class IRVisitor<T> {
 		return visit((IRStatement) ir);
 	}
 
-	public T visit(IRPlusAssignStmt ir) {
+	public T visit(IRPlusAssignStmt ir) throws CloneNotSupportedException {
 		return visit((IRStatement) ir);
 	}
 	
-	public T visit(IRReturnStmt ir) {
+	public T visit(IRReturnStmt ir) throws CloneNotSupportedException {
 		return visit((IRStatement) ir);
 	}
 	
-	public T visit(IRWhileStmt ir) {
+	public T visit(IRWhileStmt ir) throws CloneNotSupportedException {
 		return visit((IRStatement) ir);
 	}
 
