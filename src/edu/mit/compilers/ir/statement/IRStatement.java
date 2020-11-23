@@ -1,17 +1,19 @@
 package edu.mit.compilers.ir.statement;
 
 import edu.mit.compilers.ir.common.IR;
+import edu.mit.compilers.lowercode.ThreeAddressCodeList;
 
 public class IRStatement extends IR {
 
-	private IRStatement nextStmt = null;
+	// filled by nextCodesSetter (in lower code convertor)
+	private ThreeAddressCodeList nextStmtCodes;
 
-	public IRStatement getNextStmt() {
-		return nextStmt;
+	public ThreeAddressCodeList getNextStmtCodes() {
+		return nextStmtCodes;
 	}
 
-	public void setNextStmt(IRStatement nextStmt) {
-		this.nextStmt = nextStmt;
+	public void setNextStmtCodes(ThreeAddressCodeList nextStmtCodes) {
+		this.nextStmtCodes = nextStmtCodes;
 	}
 
 	public IRStatement(String name) {

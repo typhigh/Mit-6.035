@@ -139,10 +139,7 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
     @Override
     public ThreeAddressCodeList visit(IRBreakStmt ir) {
         ThreeAddressCodeList ret = ir.getLowerCodes();
-        IRStatement gotoStmt = ir.getLoopStmt().getNextStmt();
-        assert gotoStmt != null;
-
-        GotoCode code = new GotoCode(gotoStmt.getLowerCodes());
+        GotoCode code = new GotoCode(ir.getLoopStmt().getNextStmtCodes());
         return ret.append(code);
     }
 
@@ -191,7 +188,7 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
         IRBlock elseBlock = ir.getElseBlock();
         boolean needElseBlock = elseBlock != null;
         ThreeAddressCodeList ifFalseNextStmtCodeList = needElseBlock ?
-                elseBlock.getLowerCodes() : ir.getNextStmt().getLowerCodes();
+                elseBlock.getLowerCodes() : ir.getNextStmtCodes();
         ret.init(convertConditionAndBlock(ir.getCondition(), block, false,
                 null, ifFalseNextStmtCodeList));
         if (needElseBlock) {
@@ -279,7 +276,7 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
     private ThreeAddressCodeList convertLoopStmt(IRLoopStmt loopStmt,
                                                  IRStatement stepStmt) throws CloneNotSupportedException {
         return convertConditionAndBlock(loopStmt.getCondition(), loopStmt.getBlock(),
-                true, stepStmt, loopStmt.getNextStmt().getLowerCodes());
+                true, stepStmt, loopStmt.getNextStmtCodes());
     }
 
     private ThreeAddressCodeList convertConditionAndBlock(IRExpression condition,
@@ -347,6 +344,7 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
         ThreeAddressCode ifCondDo = new AssignLiteralCode(expr.getNameInLowerCode(), new Literal<Boolean>(label));
 
         // TODO: end code
+
         return null;
     }
 

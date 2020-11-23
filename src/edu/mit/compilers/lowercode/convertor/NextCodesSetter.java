@@ -4,40 +4,49 @@ import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRBlock;
 import edu.mit.compilers.ir.common.IRVisitor;
 import edu.mit.compilers.ir.decl.IRMethodDecl;
+import edu.mit.compilers.ir.statement.IRAssignStmt;
 import edu.mit.compilers.ir.statement.IRStatement;
+import edu.mit.compilers.lowercode.ThreeAddressCodeList;
 
 import java.util.ArrayList;
 
-// set next stmt for every stmt
-public class NextStmtSetter extends IRVisitor<Void> {
+// set next stmt for every stmt and expersion
+public class NextCodesSetter extends IRVisitor<Void> {
 
     @Override
     public Void visit(IR ir) {
         return null;
     }
 
+    /*
+     * visit block and set statements' next codes
+     */
     @Override
     public Void visit(IRBlock ir) {
-        IRStatement blockNextStmt = null;
+        ThreeAddressCodeList blockNextCodes;
         IR parent = ir.getParent();
         if (parent instanceof IRStatement) {
             // for stmt or while stmt
-            blockNextStmt = ((IRStatement) parent).getNextStmt();
-        } else if (parent instanceof IRMethodDecl) {
-            blockNextStmt = ((IRMethodDecl) parent).getEmptyEndLabel();
+            blockNextCodes = ((IRStatement) parent).getNextStmtCodes();
         } else {
-            assert false;
+            assert parent instanceof IRMethodDecl;
+            blockNextCodes = ((IRMethodDecl) parent).getEmptyEndLabel().getLowerCodes();
         }
 
         ArrayList<IRStatement> stmts = ir.getStatements();
         for (int i = 0; i < stmts.size(); ++i) {
             IRStatement stmt = stmts.get(i);
             if (i + 1 < stmts.size()) {
-                stmt.setNextStmt(stmts.get(i+1));
+                stmt.setNextStmtCodes(stmts.get(i+1).getLowerCodes());
             } else {
-                stmt.setNextStmt(blockNextStmt);
+                stmt.setNextStmtCodes(blockNextCodes);
             }
         }
+        return null;
+    }
+
+    @Override
+    public Void visit(IRAssignStmt ir) throws CloneNotSupportedException {
         return null;
     }
 }

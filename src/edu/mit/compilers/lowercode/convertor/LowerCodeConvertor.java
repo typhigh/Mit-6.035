@@ -30,7 +30,7 @@ public class LowerCodeConvertor {
         ArrayList<IRVisitor<Void>> processors = new ArrayList<>();
         processors.add(new IRPlusAssignStmtReplacer(replacer));
         processors.add(new SymbolTableSetter(symbolTable));
-        processors.add(new NextStmtSetter());
+        processors.add(new NextCodesSetter());
         PreProcessor preProcessor = new PreProcessor(processors);
         preProcessor.process(tree);
         ConvertToLowCodeImpl(tree);
