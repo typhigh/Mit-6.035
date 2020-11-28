@@ -83,19 +83,19 @@ public abstract class IRVisitor<T> {
 		return visit((IRExpression) ir);
 	}
 	
-	public T visit(IRLocation ir) {
+	public T visit(IRLocation ir) throws CloneNotSupportedException {
 		return visit((IRExpression) ir);
 	}
 	
-	public T visit(IRMethodCall ir) {
+	public T visit(IRMethodCall ir) throws CloneNotSupportedException {
 		return visit((IRExpression) ir);
 	}
 	
-	public T visit(IRTernaryExpr ir) {
+	public T visit(IRTernaryExpr ir) throws CloneNotSupportedException {
 		return visit((IRExpression) ir);
 	}
 	
-	public T visit(IRUnaryOpExpr ir) { 
+	public T visit(IRUnaryOpExpr ir) throws CloneNotSupportedException {
 		return visit((IRExpression) ir);
 	}
 
@@ -144,7 +144,7 @@ public abstract class IRVisitor<T> {
 		return visit((IRStatement) ir);
 	}
 	
-	public T visit(IRMethodCallStmt ir) {
+	public T visit(IRMethodCallStmt ir) throws CloneNotSupportedException {
 		return visit((IRStatement) ir);
 	}
 

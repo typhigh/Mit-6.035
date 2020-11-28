@@ -4,7 +4,8 @@ import edu.mit.compilers.ir.common.IRBlock;
 import edu.mit.compilers.ir.expression.IRExpression;
 import edu.mit.compilers.lowercode.ThreeAddressCodeList;
 
-public class IRLoopStmt extends IRStatement {
+public class
+IRLoopStmt extends IRStatement {
 
     private IRExpression condition;
     private IRBlock block;

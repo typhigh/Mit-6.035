@@ -39,6 +39,7 @@ public class IRCloneHelper {
 
         ArrayList<T> clone = new ArrayList<>();
         for (T node : list) {
+            // assert node instanceof Cloneable;
             clone.add((T) node.clone());
         }
         return clone;

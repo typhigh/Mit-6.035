@@ -3,9 +3,7 @@ package edu.mit.compilers.lowercode.convertor;
 import edu.mit.compilers.ir.common.*;
 import edu.mit.compilers.ir.decl.IRFieldDecl;
 import edu.mit.compilers.ir.decl.IRMethodDecl;
-import edu.mit.compilers.ir.expression.IRBinaryOpExpr;
-import edu.mit.compilers.ir.expression.IRExpression;
-import edu.mit.compilers.ir.expression.IRLocation;
+import edu.mit.compilers.ir.expression.*;
 import edu.mit.compilers.ir.expression.literal.IRLiteral;
 import edu.mit.compilers.ir.statement.*;
 import edu.mit.compilers.lowercode.*;
@@ -15,6 +13,10 @@ import edu.mit.compilers.utils.OperatorUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/*
+ * convert every stmt / expression to three address codes
+ * note : visit just right-value expression
+ */
 public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
 
     private final HashMap<IRPlusAssignStmt, IRAssignStmt> replacer;
@@ -22,7 +24,6 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
         this.replacer = replacer;
     }
 
-    // TODO: avoid visit unused ir
     // default visit func
     @Override
     public ThreeAddressCodeList visit(IR ir) {
@@ -129,6 +130,7 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
         ret.append(value.accept(this));
         String rightVariable = value.getNameInLowerCode();
 
+        // left[t1] = t2
         ret.append(new AssignSingleOperandCode(leftVariable, locationVariable, rightVariable, null));
         return ret;
     }
@@ -139,7 +141,7 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
     @Override
     public ThreeAddressCodeList visit(IRBreakStmt ir) {
         ThreeAddressCodeList ret = ir.getLowerCodes();
-        GotoCode code = new GotoCode(ir.getLoopStmt().getNextStmtCodes());
+        GotoCode code = new GotoCode(ir.getLoopStmt().getNextCodes());
         return ret.append(code);
     }
 
@@ -188,7 +190,7 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
         IRBlock elseBlock = ir.getElseBlock();
         boolean needElseBlock = elseBlock != null;
         ThreeAddressCodeList ifFalseNextStmtCodeList = needElseBlock ?
-                elseBlock.getLowerCodes() : ir.getNextStmtCodes();
+                elseBlock.getLowerCodes() : ir.getNextCodes();
         ret.init(convertConditionAndBlock(ir.getCondition(), block, false,
                 null, ifFalseNextStmtCodeList));
         if (needElseBlock) {
@@ -197,12 +199,14 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
         return ret;
     }
 
+    /*
+     * push args ...
+     * call method
+     */
     @Override
-    public ThreeAddressCodeList visit(IRMethodCallStmt ir) {
+    public ThreeAddressCodeList visit(IRMethodCallStmt ir) throws CloneNotSupportedException {
         ThreeAddressCodeList ret = ir.getLowerCodes();
-        // TODO: without t = call_xxx , instead call_xxx
-        ret.init(ir.getMethodCall().accept(this));
-        return ret;
+        return ret.init(convertMethodCall(ir.getMethodCall(), false));
     }
 
     @Override
@@ -245,7 +249,7 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
     @Override
     public ThreeAddressCodeList visit(IRLiteral ir) {
         ThreeAddressCodeList ret = ir.getLowerCodes();
-        return ret.init(new AssignSingleOperandCode(ir.getNameInLowerCode(), ir.getLiteralValue()));
+        return ret.init(new AssignLiteralCode(ir.getNameInLowerCode(), ir.getLiteral()));
     }
 
     /* for not-cond binary-op expression:
@@ -273,10 +277,107 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
         return ret;
     }
 
+    /*
+     * t = sizeof(expr)
+     * sizeof(expr) can be converted into literal
+     */
+    @Override
+    public ThreeAddressCodeList visit(IRLenExpr ir) {
+        ThreeAddressCodeList ret = ir.getLowerCodes();
+        long len = ((IRFieldDecl) ir.getVariable().getDeclaredFrom()).getType().getSize();
+        ret.append(new AssignLiteralCode(ir.getNameInLowerCode(), new Literal<Long>(len)));
+        return ret;
+    }
+
+    /*
+     * len = xxx
+     * t = a[len]
+     */
+    @Override
+    public ThreeAddressCodeList visit(IRLocation ir) throws CloneNotSupportedException {
+        ThreeAddressCodeList ret = ir.getLowerCodes();
+        ThreeAddressCode assign;
+        String variable = ir.getVariable().getName();
+        if (ir.isArrayLocation()) {
+            IRExpression len = ir.getLocation();
+            ret.append(len.accept(this));
+            assign = new AssignSingleOperandCode(ir.getNameInLowerCode(), len.getNameInLowerCode(), variable);
+        } else {
+            assign = new AssignSingleOperandCode(ir.getNameInLowerCode(), variable);
+        }
+        ret.append(assign);
+        return ret;
+    }
+
+    /*
+     * push args ...
+     * t = call method
+     */
+    @Override
+    public ThreeAddressCodeList visit(IRMethodCall ir) throws CloneNotSupportedException {
+        ThreeAddressCodeList ret = ir.getLowerCodes();
+        return ret.init(convertMethodCall(ir, true));
+    }
+
+    /*
+     * t1 = xxx
+     * ifFalse t1 goto COND
+     * t2 = value1...
+     * t = t2
+     * goto END
+     * COND: t3 = value2
+     *       t = t3
+     * END
+     */
+    @Override
+    public ThreeAddressCodeList visit(IRTernaryExpr ir) throws CloneNotSupportedException {
+        ThreeAddressCodeList ret = ir.getLowerCodes();
+        ThreeAddressCodeList ifCond = new ThreeAddressCodeList();
+        ThreeAddressCodeList ifCondNot = new ThreeAddressCodeList();
+        ThreeAddressCodeList end = new ThreeAddressCodeList(new EmptyCode());
+        IRExpression condition = ir.getCondition();
+        IRExpression value1 = ir.getFirst();
+        IRExpression value2 = ir.getSecond();
+        // t1 = xxx
+        ret.append(condition.accept(this));
+
+        // ifFalse t1 goto COND
+        ret.append(new GotoCode(ifCond, condition.getNameInLowerCode(), false));
+
+        // if Cond not
+        ifCondNot.append(value1.accept(this));
+        ifCondNot.append(new AssignSingleOperandCode(ir.getNameInLowerCode(), value1.getNameInLowerCode()));
+        ifCondNot.append(new GotoCode(end));
+        ret.append(ifCondNot);
+
+        // if Cond
+        ifCond.append(value2.accept(this));
+        ifCond.append(new AssignSingleOperandCode(ir.getNameInLowerCode(), value2.getNameInLowerCode()));
+        ret.append(ifCond);
+
+        // end
+        return ret.append(end);
+    }
+
+    /*
+     * t1 = xxx
+     * t = -t1
+     */
+    @Override
+    public ThreeAddressCodeList visit(IRUnaryOpExpr ir) throws CloneNotSupportedException {
+        ThreeAddressCodeList ret = ir.getLowerCodes();
+        IRExpression expr = ir.getRight();
+        ret.append(expr.accept(this));
+        ret.append(new AssignSingleOperandCode(ir.getNameInLowerCode(), null,
+                expr.getNameInLowerCode(), ir.getOperator()));
+        return ret;
+    }
+
+
     private ThreeAddressCodeList convertLoopStmt(IRLoopStmt loopStmt,
                                                  IRStatement stepStmt) throws CloneNotSupportedException {
         return convertConditionAndBlock(loopStmt.getCondition(), loopStmt.getBlock(),
-                true, stepStmt, loopStmt.getNextStmtCodes());
+                true, stepStmt, loopStmt.getNextCodes());
     }
 
     private ThreeAddressCodeList convertConditionAndBlock(IRExpression condition,
@@ -313,39 +414,71 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
     private ThreeAddressCodeList convertCondExpression(IRBinaryOpExpr expr) throws CloneNotSupportedException {
         /* operator == "&&"
          * t1 = xxx
-         * ifFalse goto FALSE
+         * ifFalse goto COND
          * t2 = xxx
          * t = t1 && t2
          * goto END
-         * FALSE: t = false
+         * COND: t = false
          * END
          *
          * operator == "||"
          * t1 = xxx
-         * ifTrue goto True
+         * ifTrue goto COND
          * t2 = xxx
          * t = t1 || t2
          * goto END
-         * TRUE: t = true
+         * COND: t = true
          * END
          */
         IRExpression left = expr.getLeft();
         IRExpression right = expr.getRight();
         String operator = expr.getOperator();
         assert OperatorUtils.isCond(operator);
+
         ThreeAddressCodeList ret = new ThreeAddressCodeList();
+        ThreeAddressCodeList ifCond = new ThreeAddressCodeList();
+        ThreeAddressCodeList ifCondNot = new ThreeAddressCodeList();
+        ThreeAddressCodeList end = new ThreeAddressCodeList(new EmptyCode());
 
         // t1 = xxx
         ret.append(left.accept(this));
 
-        // FALSE(TRUE) : ... END
-        boolean isAndCond = operator.equals("&&");
-        String label = isAndCond ? "false" : "true";
-        ThreeAddressCode ifCondDo = new AssignLiteralCode(expr.getNameInLowerCode(), new Literal<Boolean>(label));
+        // ifCond t1 goto COND
+        ret.append(new GotoCode(ifCond, left.getNameInLowerCode(), operator.equals("||")));
 
-        // TODO: end code
+        // ifCondNot
+        ifCondNot.append(right.accept(this));
+        ifCondNot.append(new AssignTwoOperandCode(expr.getNameInLowerCode(), left.getNameInLowerCode(),
+                right.getNameInLowerCode(), operator));
+        ifCondNot.append(new GotoCode(end));
+        ret.append(ifCondNot);
 
-        return null;
+        // ifCond
+        ifCond.append(new AssignLiteralCode(expr.getNameInLowerCode(), new Literal<Boolean>(operator.equals("||"))));
+        ret.append(ifCond);
+
+        // end
+        ret.append(end);
+        return ret;
     }
 
+    /*
+     * push args ...
+     * (t = ) call method
+     */
+    private ThreeAddressCodeList convertMethodCall(IRMethodCall methodCall, boolean hasValue)
+            throws CloneNotSupportedException {
+        ThreeAddressCodeList ret = new ThreeAddressCodeList();
+        ret.append(methodCall.getArgList().accept(this));
+
+        // call method
+        ThreeAddressCode methodCallCode;
+        String methodName = methodCall.getVariable().getName();
+        if (hasValue) {
+            methodCallCode = new MethodCallCode(methodCall.getNameInLowerCode(), methodName);
+        } else {
+            methodCallCode = new MethodCallCode(methodName);
+        }
+        return ret.append(methodCallCode);
+    }
 }

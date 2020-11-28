@@ -4,7 +4,6 @@ import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRBlock;
 import edu.mit.compilers.ir.common.IRVisitor;
 import edu.mit.compilers.ir.decl.IRMethodDecl;
-import edu.mit.compilers.ir.statement.IRAssignStmt;
 import edu.mit.compilers.ir.statement.IRStatement;
 import edu.mit.compilers.lowercode.ThreeAddressCodeList;
 
@@ -23,30 +22,27 @@ public class NextCodesSetter extends IRVisitor<Void> {
      */
     @Override
     public Void visit(IRBlock ir) {
-        ThreeAddressCodeList blockNextCodes;
+        ThreeAddressCodeList blockNextCodes = null;
         IR parent = ir.getParent();
+
+        // for stmt / while stmt
         if (parent instanceof IRStatement) {
-            // for stmt or while stmt
-            blockNextCodes = ((IRStatement) parent).getNextStmtCodes();
+            blockNextCodes = ((IRStatement) parent).getNextCodes();
         } else {
             assert parent instanceof IRMethodDecl;
-            blockNextCodes = ((IRMethodDecl) parent).getEmptyEndLabel().getLowerCodes();
+            // do nothing
         }
 
         ArrayList<IRStatement> stmts = ir.getStatements();
-        for (int i = 0; i < stmts.size(); ++i) {
+        int count = stmts.size();
+        for (int i = 0; i < count; ++i) {
             IRStatement stmt = stmts.get(i);
-            if (i + 1 < stmts.size()) {
-                stmt.setNextStmtCodes(stmts.get(i+1).getLowerCodes());
+            if (i + 1 == count) {
+                stmt.setNextCodes(blockNextCodes);
             } else {
-                stmt.setNextStmtCodes(blockNextCodes);
+                stmt.setNextCodes(stmts.get(i+1).getLowerCodes());
             }
         }
-        return null;
-    }
-
-    @Override
-    public Void visit(IRAssignStmt ir) throws CloneNotSupportedException {
         return null;
     }
 }

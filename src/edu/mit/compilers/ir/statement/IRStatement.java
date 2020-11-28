@@ -6,14 +6,14 @@ import edu.mit.compilers.lowercode.ThreeAddressCodeList;
 public class IRStatement extends IR {
 
 	// filled by nextCodesSetter (in lower code convertor)
-	private ThreeAddressCodeList nextStmtCodes;
+	private ThreeAddressCodeList nextCodes;
 
-	public ThreeAddressCodeList getNextStmtCodes() {
-		return nextStmtCodes;
+	public ThreeAddressCodeList getNextCodes() {
+		return nextCodes;
 	}
 
-	public void setNextStmtCodes(ThreeAddressCodeList nextStmtCodes) {
-		this.nextStmtCodes = nextStmtCodes;
+	public void setNextCodes(ThreeAddressCodeList nextStmtCodes) {
+		this.nextCodes = nextStmtCodes;
 	}
 
 	public IRStatement(String name) {

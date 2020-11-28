@@ -37,7 +37,7 @@ public class IRLocation extends IRExpression {
 	}
 	
 	@Override
-	public <T> T accept(IRVisitor<T> visitor) {
+	public <T> T accept(IRVisitor<T> visitor) throws CloneNotSupportedException {
 		return visitor.visit(this);
 	}
 

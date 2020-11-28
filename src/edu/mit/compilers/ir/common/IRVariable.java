@@ -13,13 +13,17 @@ public class IRVariable extends IR {
 	// Helper info filled by semantic checker
 	private IRMemberDecl declaredFrom = null;
 
-	public IRVariable(String name, int line, int column) {
+	public IRVariable(String name) {
 		super("IRVariable");
 		this.name = name;
+	}
+
+	public IRVariable(String name, int line, int column) {
+		this(name);
 		setLine(line);
 		setColumn(column);
 	}
-	
+
 	public IRVariable (Token token) {
 		this(token.getText(),token.getLine(), token.getColumn());
 	}

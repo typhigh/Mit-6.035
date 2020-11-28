@@ -26,7 +26,7 @@ public class LowerCodeConvertor {
     public void ConvertToLowCode(IR tree) throws CloneNotSupportedException {
         assert tree.getParent() == null;
 
-        // previous process before convertion
+        // previous process before conversion
         ArrayList<IRVisitor<Void>> processors = new ArrayList<>();
         processors.add(new IRPlusAssignStmtReplacer(replacer));
         processors.add(new SymbolTableSetter(symbolTable));

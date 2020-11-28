@@ -1,7 +1,6 @@
 package edu.mit.compilers.ir.expression;
 import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.type.IRBasicType;
-import edu.mit.compilers.lowercode.ThreeAddressCodeList;
 import edu.mit.compilers.utils.StringInfo;
 
 public class IRExpression extends IR {
@@ -11,9 +10,6 @@ public class IRExpression extends IR {
 
 	// filled by lower code convertor
 	private String nameInLowerCode;
-
-	// filled by nextCodesSetter (in lower code convertor)
-	private ThreeAddressCodeList nextCodes;
 
 	public IRExpression(String name) {
 		super(name);
