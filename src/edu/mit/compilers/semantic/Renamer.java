@@ -16,7 +16,7 @@ public class Renamer {
     private static int nameId = 0;
 
     // Maybe called more than once
-    public IR Rename(IR ir) throws CloneNotSupportedException {
+    public IR rename(IR ir) throws CloneNotSupportedException {
         RenameVisitor visitor = new RenameVisitor(this);
         RenameImpl(ir, visitor);
         return ir;

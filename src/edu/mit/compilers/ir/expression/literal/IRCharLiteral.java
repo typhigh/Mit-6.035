@@ -9,6 +9,9 @@ public class IRCharLiteral extends IRLiteral<Character> {
 		super("IRCharLiteral", token);
 	}
 
+	public IRCharLiteral(String literalValue) {
+		super("IRCharLiteral", literalValue);
+	}
 	@Override
 	public <T> T accept(IRVisitor<T> visitor) {
 		return visitor.visit(this);

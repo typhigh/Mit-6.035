@@ -18,6 +18,11 @@ public class SemanticChecker {
     /*
      *   Must invoked before check
      */
+
+    public void init() {
+        init("");
+    }
+
     public void init(String file) {
         assert file != null;
         env = new SimpleEnvStack();

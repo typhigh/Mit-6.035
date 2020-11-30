@@ -5,6 +5,11 @@ import edu.mit.compilers.ir.common.IRVisitor;
 
 public class IRStringLiteral extends IRLiteral<String> {
 
+	public IRStringLiteral(String literalValue) {
+		super("IRStringLiteral", literalValue);
+		setValue(getLiteralValue());
+	}
+
 	public IRStringLiteral(Token token) {
 		super("IRStringLiteral", token);
 		setValue(getLiteralValue());

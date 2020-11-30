@@ -2,6 +2,7 @@ package edu.mit.compilers.lowercode.convertor;
 
 import edu.mit.compilers.ir.decl.IRMemberDecl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SymbolTable {
@@ -12,6 +13,14 @@ public class SymbolTable {
         table.put(symbol, decl);
         ++size;
         assert table.size() == size;
+    }
+
+    public ArrayList<String> getNamesArray() {
+        ArrayList<String> ret = new ArrayList<>();
+        for (String name : table.keySet()) {
+            ret.add(name);
+        }
+        return ret;
     }
 
     public String getNamesOfSymbol() {

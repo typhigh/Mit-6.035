@@ -23,7 +23,7 @@ public class LowerCodeConvertor {
         this.visitor = new LowerCodeConvertorVisitor(replacer);
     }
 
-    public void ConvertToLowCode(IR tree) throws CloneNotSupportedException {
+    public void convertToLowCode(IR tree) throws CloneNotSupportedException {
         assert tree.getParent() == null;
 
         // previous process before conversion

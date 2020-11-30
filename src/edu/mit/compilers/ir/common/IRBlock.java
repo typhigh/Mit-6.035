@@ -39,7 +39,10 @@ public class IRBlock extends IR {
 	public ArrayList<IRStatement> getStatements() {
 		return statements;
 	}
-	
+
+	public void addStatements(ArrayList<IRStatement> statements) {
+		this.statements.addAll(statements);
+	}
 	public void addStatement(IRStatement statement) {
 		statements.add(statement);
 	}	

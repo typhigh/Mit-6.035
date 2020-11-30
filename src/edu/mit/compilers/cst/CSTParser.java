@@ -298,7 +298,7 @@ public class CSTParser {
 			return new IRIntLiteral(node.getToken());
 		}
 		
-		if (node.getToken().getType() == DecafParserTokenTypes.CHAR){
+		if (node.getToken().getType() == DecafParserTokenTypes.CHAR) {
 			return new IRCharLiteral(node.getToken());
 		}
 		

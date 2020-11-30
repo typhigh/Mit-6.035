@@ -4,7 +4,11 @@ import antlr.Token;
 import edu.mit.compilers.ir.common.IRVisitor;
 
 public class IRIntLiteral extends IRLiteral<Long> {
-	
+
+	public IRIntLiteral(String literalValue) {
+		super("IRIntLiteral", literalValue);
+	}
+
 	public IRIntLiteral(Token token) {
 		super("IRIntLiteral", token);
 	}

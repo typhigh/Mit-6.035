@@ -5,6 +5,10 @@ import edu.mit.compilers.ir.common.IRVisitor;
 
 public class IRBoolLiteral extends IRLiteral<Boolean> {
 
+	public IRBoolLiteral(String literalValue) {
+		super("IRBoolLiteral", literalValue);
+	}
+
 	public IRBoolLiteral(Token token) {
 		super("IRBoolLiteral", token);
 	}

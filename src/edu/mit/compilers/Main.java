@@ -2,25 +2,17 @@ package edu.mit.compilers;
 
 import antlr.Token;
 import edu.mit.compilers.cst.CST;
-import edu.mit.compilers.cst.CSTParser;
 import edu.mit.compilers.grammar.DecafParser;
 import edu.mit.compilers.grammar.DecafParserTokenTypes;
 import edu.mit.compilers.grammar.DecafScanner;
 import edu.mit.compilers.grammar.DecafScannerTokenTypes;
-import edu.mit.compilers.ir.common.IR;
-import edu.mit.compilers.lowercode.ThreeAddressCodeList;
-import edu.mit.compilers.lowercode.convertor.LowerCodeConvertor;
-import edu.mit.compilers.lowercode.convertor.SymbolTable;
-import edu.mit.compilers.semantic.Renamer;
-import edu.mit.compilers.semantic.checker.SemanticChecker;
-import edu.mit.compilers.semantic.checker.SemanticError;
 import edu.mit.compilers.tools.CLI;
 import edu.mit.compilers.tools.CLI.Action;
+import edu.mit.compilers.utils.MainController;
 
 import java.io.DataInputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
 
 
 class Main {
@@ -99,66 +91,33 @@ class Main {
 
 				CST tree = parser.getCST();
 
-				// After pruned
-				tree.PrunTree();
-				if (CLI.debug) {
-					System.out.println(tree.show());
-				}
+				MainController controller = new MainController(CLI.debug);
+				controller.setCstTree(tree);
 
-				// Get IR-tree
-				IR ir = CSTParser.parseIRProgram(tree);
-				if (CLI.debug){
-					System.out.println(ir.show());
-				}
+				// get IR
+				MainController.State state = controller.nextStep();
+				assert state == MainController.State.INTERED;
 
-				// Semantic check
-				SemanticProcess(ir, CLI.debug);
-				if (CLI.target == Action.INTER) {
+				// check semantic
+				state = controller.nextStep();
+				assert state == MainController.State.SEMANTIC_CHECKED;
+
+				if (CLI.target == Action.ASSEMBLY || CLI.target == Action.DEFAULT) {
+					// remane
+					state = controller.nextStep();
+					assert state == MainController.State.RENAMED;
+
+					state = controller.nextStep();
+					assert state == MainController.State.LOWERCODE_GENED;
+
+					// TODO :
 					return;
 				}
-
-				// Rename
-				Renamer renamer = new Renamer();
-				ir = renamer.Rename(ir.clone());
-				System.out.println(ir.show());
-
-				// Assembly
-				AssemblyProcess(ir, CLI.debug, false);
 			}
 		} catch (Exception e) {
 			// print the error:
 			System.err.println(CLI.infile + " " + e);
 			e.printStackTrace(System.err);
 		}
-	}
-
-	private static void SemanticProcess(IR tree, boolean debug) throws CloneNotSupportedException {
-		SemanticChecker check = new SemanticChecker();
-		check.init("test.sh");
-		ArrayList<SemanticError> errors = check.check(tree);
-
-		if (debug) {
-			System.out.println(tree.show());
-		}
-
-		if (!errors.isEmpty()) {
-			check.reportErrors();
-			System.exit(1);
-		}
-	}
-
-	private static void AssemblyProcess(IR tree, boolean debug, boolean optimized) throws CloneNotSupportedException {
-		// generate three address code
-		LowerCodeConvertor convertor = new LowerCodeConvertor();
-		convertor.ConvertToLowCode(tree);
-		ThreeAddressCodeList codes = convertor.getResult();
-		SymbolTable symbolTable = convertor.getSymbolTable();
-
-		if (debug) {
-			System.out.println(symbolTable.getNamesOfSymbol());
-			System.out.println(codes.show());
-		}
-		// generate assembly code
-
 	}
 }

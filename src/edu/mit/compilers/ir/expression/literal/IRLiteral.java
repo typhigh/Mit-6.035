@@ -12,10 +12,14 @@ public class IRLiteral<T> extends IRExpression {
 
 	private Literal<T> literal;
 	public IRLiteral(String tag, Token token) {
-		super(tag);
-		this.literal = new Literal(token.getText());
+		this(tag, token.getText());
 		this.setLine(token.getLine());
 		this.setColumn(token.getColumn());
+	}
+
+	public IRLiteral(String tag, String literalValue) {
+		super(tag);
+		this.literal = new Literal<>(literalValue);
 	}
 
 	public Literal<T> getLiteral() {
