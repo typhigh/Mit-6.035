@@ -34,7 +34,7 @@ public abstract class ThreeAddressCode {
             prefix += label + ": ";
         }
         assert prefix.length() <= PREFIX_LIMIT : "prefix must be less than" + PREFIX_LIMIT;
-        prefix += StringUtils.repeat(new String(""), PREFIX_LIMIT - prefix.length());
+        prefix += StringUtils.repeat(new String(" "), PREFIX_LIMIT - prefix.length());
         ret.append(getStringFroShow(prefix));
     }
 

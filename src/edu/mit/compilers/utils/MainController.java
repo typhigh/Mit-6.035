@@ -169,7 +169,7 @@ public class MainController {
         Renamer renamer = new Renamer();
         program = (IRProgram) renamer.rename(program.clone());
         if (debug) {
-            program.show();
+            System.out.println(program.show());
         }
         return setProgramRenamed(program);
     }

@@ -21,7 +21,13 @@ public class IRProgram extends IR {
 		decl.setGlobal(true);
 		importDecls.add(decl);
 	}
-	
+
+	public void addMethodDecls(ArrayList<IRMethodDecl> decls) {
+		for (IRMethodDecl decl : decls) {
+			addMethodDecl(decl);
+		}
+	}
+
 	public void addMethodDecl(IRMethodDecl decl) {
 		decl.setGlobal(true);
 		methodDecls.add(decl);

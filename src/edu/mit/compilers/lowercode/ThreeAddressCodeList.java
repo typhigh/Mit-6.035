@@ -77,6 +77,7 @@ public class ThreeAddressCodeList {
         for (SimpleLinkedList<ThreeAddressCode>.Iterator iter = iterator(); iter.hasNext(); ) {
             ThreeAddressCode code = iter.next();
             code.getStringForShow("", builder);
+            builder.append("\n");
         }
         return builder.toString();
     }

@@ -102,7 +102,7 @@ public class IR implements Cloneable {
 		info.addInfo("DebugID: " + getDebugID());
 		info.addInfo("Tag: " + getTag());
 //		info.addInfo("DebugAddress: " + this);
-		System.out.print(info.toString());
+//		System.out.print(info.toString());
 		return info;
 
 	}

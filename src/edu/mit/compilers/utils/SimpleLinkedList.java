@@ -33,6 +33,7 @@ SimpleLinkedList<T> {
             begin = end = addNode;
         } else {
             end.setNext(addNode);
+            end = end.next;
         }
         ++size;
     }
@@ -67,12 +68,14 @@ SimpleLinkedList<T> {
         }
 
         if (begin == null) {
-            begin = end = other.begin;
+            assert size == 0;
+            begin = other.begin;
         } else {
             end.setNext(other.begin);
         }
+        end = other.end;
         size += other.size;
-        other.clear();
+        // other.clear();
         return this;
     }
 

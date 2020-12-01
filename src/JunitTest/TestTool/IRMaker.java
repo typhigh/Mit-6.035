@@ -7,11 +7,15 @@ import edu.mit.compilers.ir.common.IRVariable;
 import edu.mit.compilers.ir.decl.IRFieldDecl;
 import edu.mit.compilers.ir.decl.IRImportDecl;
 import edu.mit.compilers.ir.decl.IRMethodDecl;
+import edu.mit.compilers.ir.expression.IRBinaryOpExpr;
+import edu.mit.compilers.ir.expression.literal.IRBoolLiteral;
 import edu.mit.compilers.ir.expression.literal.IRIntLiteral;
+import edu.mit.compilers.ir.expression.literal.IRLiteral;
 import edu.mit.compilers.ir.statement.IRStatement;
 import edu.mit.compilers.ir.type.IRArrayType;
 import edu.mit.compilers.ir.type.IRBasicType;
 import edu.mit.compilers.ir.type.IRType;
+import edu.mit.compilers.utils.OperatorUtils;
 
 import java.util.ArrayList;
 
@@ -75,16 +79,64 @@ public class IRMaker {
 		return ret;
 	}
 
+	public static IRBoolLiteral makeIRBoolLiteral(String value) {
+		return new IRBoolLiteral(value);
+	}
+
+	public static IRMethodDecl makeVoidMethod(ArrayList<IRFieldDecl> fields,
+											  ArrayList<IRStatement> stmts,
+											  String name) {
+		IRBlock block = new IRBlock();
+		if (fields != null) {
+			block.addFieldDecls(fields);
+		}
+		if (stmts != null) {
+			block.addStatements(stmts);
+		}
+		return new IRMethodDecl(
+				new IRVariable(name),
+				IRBasicType.VoidType,
+				new IRParameterList(new ArrayList<>()),
+				block);
+	}
+
+
+	public static IRProgram makeSimpleIRProgram(ArrayList<IRFieldDecl> fields,
+												ArrayList<IRStatement> stmts) {
+		return makeSimpleIRProgram(fields, stmts, null);
+	}
+
 	/*
 	 * just main func, all variable is local
 	 */
-	public static IRProgram makeSimpleIRProgram(ArrayList<IRFieldDecl> fields, ArrayList<IRStatement> stmts) {
+	public static IRProgram makeSimpleIRProgram(ArrayList<IRFieldDecl> fields,
+												ArrayList<IRStatement> stmts,
+												ArrayList<IRMethodDecl> methods) {
 		IRProgram ret = new IRProgram();
-		IRBlock block = new IRBlock();
-		block.addFieldDecls(fields);
-		block.addStatements(stmts);
-		ret.addMethodDecl(new IRMethodDecl(new IRVariable("main"), IRBasicType.VoidType,
-				new IRParameterList(new ArrayList<>()), block));
+		if (methods != null) {
+			ret.addMethodDecls(methods);
+		}
+		IRMethodDecl method = makeVoidMethod(fields, stmts, "main");
+		ret.addMethodDecl(method);
 		return ret;
+	}
+
+
+	/*
+	 * make a binary expression with literal
+	 */
+	public static IRBinaryOpExpr makeBinaryOpExprWithLiteral(String left, String op, String right) {
+		assert OperatorUtils.isBinary(op);
+		IRLiteral first;
+		IRLiteral second;
+		boolean isBoolLiteral = left.equals("true") || left.equals("false");
+		if (isBoolLiteral) {
+			first = new IRBoolLiteral(left);
+			second = new IRBoolLiteral(right);
+		} else {
+			first = new IRIntLiteral(left);
+			second = new IRIntLiteral(right);
+		}
+		return new IRBinaryOpExpr(first, op, second);
 	}
 }
