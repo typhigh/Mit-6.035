@@ -399,7 +399,7 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
         assert condition != null;
         assert nextStmtCodeList != null;
 
-        // nextStmtCodeList can't be empty, ler it has empty code
+        // nextStmtCodeList can't be empty, let it has empty code
         if (nextStmtCodeList.isNull()) {
             nextStmtCodeList.init(new EmptyCode());
         }

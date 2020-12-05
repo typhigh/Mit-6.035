@@ -42,7 +42,7 @@ public class LowerCodeConvertor {
 
         // fill label
         new CodeLabelSetter().process(result);
-        new EmptyCodeFolder().process(result);
+        result = new EmptyCodeFolder().process(result);
     }
 
     public SymbolTable getSymbolTable() {

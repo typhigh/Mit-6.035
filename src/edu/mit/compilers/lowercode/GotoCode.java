@@ -48,6 +48,14 @@ public class GotoCode extends ThreeAddressCode {
         this.gotoStmtCodes = gotoStmtCodes;
     }
 
+    public String getGotoLabel() {
+        return gotoLabel;
+    }
+
+    public void setGotoLabel(String gotoLabel) {
+        this.gotoLabel = gotoLabel;
+    }
+
     public void fillGotoLabel() {
         if (gotoLabel != null) {
             return;

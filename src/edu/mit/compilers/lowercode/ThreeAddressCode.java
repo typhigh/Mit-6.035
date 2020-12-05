@@ -6,7 +6,6 @@ public abstract class ThreeAddressCode {
 
     public final static int PREFIX_LIMIT = 20;
     private String label;
-    private ThreeAddressCode gotoCode;
 
     // if need set label
     private boolean isNeedLabel = false;
@@ -19,9 +18,10 @@ public abstract class ThreeAddressCode {
         this.label = label;
     }
 
-    public ThreeAddressCode getGotoCode() {
-        return gotoCode;
+    public boolean hasLabel() {
+        return label != null;
     }
+
 
     protected abstract String getStringFroShow(String prefix);
 
