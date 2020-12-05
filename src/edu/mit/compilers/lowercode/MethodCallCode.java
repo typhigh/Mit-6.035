@@ -17,6 +17,9 @@ public class MethodCallCode extends ThreeAddressCode {
 
     @Override
     protected String getStringFroShow(String prefix) {
-        return null;
+        if (assign) {
+            prefix += variable + " = ";
+        }
+        return prefix + "call-method " + methodName;
     }
 }

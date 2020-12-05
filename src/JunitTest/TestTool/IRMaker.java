@@ -41,13 +41,19 @@ public class IRMaker {
 		return makeIRFieldDecl(typeName, false, 0, variableName);
 	}
 	
-	public static IRFieldDecl makeIRFieldDecl(String typeName, boolean isArray, int len, String variableName) {
+	public static IRFieldDecl makeIRFieldDecl(String typeName,
+											  boolean isArray,
+											  int len,
+											  String variableName) {
 		IRType type = makeIRType(typeName, isArray, len);
 		IRVariable variable = makeIRVariable(variableName);
 		return new IRFieldDecl(type, variable);
 	}
 
-	public static IRMethodDecl makeIRMethodDecl(String typeName, String variableName, IRParameterList list, IRBlock block) {
+	public static IRMethodDecl makeIRMethodDecl(String typeName,
+												String variableName,
+												IRParameterList list,
+												IRBlock block) {
 		IRType type = makeIRType(typeName, false, 0);
 		IRVariable variable = makeIRVariable(variableName);
 		if (list == null) {

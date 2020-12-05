@@ -30,7 +30,7 @@ public class NextCodesSetter extends IRVisitor<Void> {
             blockNextCodes = ((IRStatement) parent).getNextCodes();
         } else {
             assert parent instanceof IRMethodDecl;
-            // do nothing
+            // do nothing, the last statement's next stmt code is null
         }
 
         ArrayList<IRStatement> stmts = ir.getStatements();

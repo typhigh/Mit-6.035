@@ -10,8 +10,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class LowerCodeConvertor {
-    private final SymbolTable symbolTable = new SymbolTable();
 
+    private final ThreeAddressCodesInfo info = new ThreeAddressCodesInfo();
+
+    private final SymbolTable symbolTable = info.symbolTable;
     // replacer map : plus assign -> assign (a++ -> a = a + 1)
     private final HashMap<IRPlusAssignStmt, IRAssignStmt> replacer = new HashMap<>();
     private final SymbolTableSetter symbolTableSetter;
@@ -31,14 +33,24 @@ public class LowerCodeConvertor {
         processors.add(new IRPlusAssignStmtReplacer(replacer));
         processors.add(new SymbolTableSetter(symbolTable));
         processors.add(new NextCodesSetter());
-        PreProcessor preProcessor = new PreProcessor(processors);
-        preProcessor.process(tree);
+        PreProcessors preProcessors = new PreProcessors(processors);
+        preProcessors.process(tree);
+
+        // convert
         ConvertToLowCodeImpl(tree);
         result = tree.getLowerCodes();
+
+        // fill label
+        new CodeLabelSetter().process(result);
+        new EmptyCodeFolder().process(result);
     }
 
     public SymbolTable getSymbolTable() {
         return symbolTable;
+    }
+
+    public ThreeAddressCodesInfo getInfo() {
+        return info;
     }
 
     public ThreeAddressCodeList getResult() {

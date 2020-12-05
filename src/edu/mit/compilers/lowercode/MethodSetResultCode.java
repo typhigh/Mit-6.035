@@ -10,6 +10,6 @@ public class MethodSetResultCode extends ThreeAddressCode {
 
     @Override
     protected String getStringFroShow(String prefix) {
-        return prefix + "set-result: " + variable;
+        return prefix + "set-result " + variable;
     }
 }

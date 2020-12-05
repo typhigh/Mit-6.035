@@ -2,14 +2,16 @@ package edu.mit.compilers.lowercode;
 
 import edu.mit.compilers.utils.SimpleLinkedList;
 
+import java.util.Iterator;
+
 /*
  * single-dir linked list, implemented like slice
  * provide toArrayList func / begin-end iterator
  */
-public class ThreeAddressCodeList {
+public class ThreeAddressCodeList implements Iterable<ThreeAddressCode> {
 
     // the list of codes
-    SimpleLinkedList<ThreeAddressCode> codes = new SimpleLinkedList<>();
+    private SimpleLinkedList<ThreeAddressCode> codes = new SimpleLinkedList<>();
 
     // tells if the lists is null (not fill)
     // empty may be not null
@@ -49,6 +51,8 @@ public class ThreeAddressCodeList {
         }
 
         if (other.isNull()) {
+            needLabel |= other.needLabel;
+            checkAndPushNeedLabel();
             return this;
         }
 
@@ -67,15 +71,11 @@ public class ThreeAddressCodeList {
         return codes.front();
     }
 
-    public SimpleLinkedList<ThreeAddressCode>.Iterator iterator() {
-        return codes.iterator();
-    }
 
     // show the content in string-format
     public String show() {
         StringBuilder builder = new StringBuilder();
-        for (SimpleLinkedList<ThreeAddressCode>.Iterator iter = iterator(); iter.hasNext(); ) {
-            ThreeAddressCode code = iter.next();
+        for (ThreeAddressCode code : this) {
             code.getStringForShow("", builder);
             builder.append("\n");
         }
@@ -113,5 +113,27 @@ public class ThreeAddressCodeList {
         }
         front().setNeedLabelTrue();
         needLabel = false;
+    }
+
+    @Override
+    public Iterator<ThreeAddressCode> iterator() {
+        return new Itr(this);
+    }
+
+    public class Itr implements Iterator<ThreeAddressCode> {
+        Iterator<ThreeAddressCode> iterator;
+        public Itr(ThreeAddressCodeList codeList) {
+            this.iterator = codeList.codes.iterator();
+        }
+
+        @Override
+        public boolean hasNext() {
+            return iterator.hasNext();
+        }
+
+        @Override
+        public ThreeAddressCode next() {
+            return iterator.next();
+        }
     }
 }

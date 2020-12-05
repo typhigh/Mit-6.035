@@ -23,10 +23,6 @@ public abstract class ThreeAddressCode {
         return gotoCode;
     }
 
-    public void setGotoCode(ThreeAddressCode gotoCode) {
-        this.gotoCode = gotoCode;
-    }
-
     protected abstract String getStringFroShow(String prefix);
 
     public void getStringForShow(String prefix, StringBuilder ret) {
@@ -39,6 +35,10 @@ public abstract class ThreeAddressCode {
     }
 
     public void setNeedLabelTrue() {
+        isNeedLabel = true;
+    }
 
+    public boolean isNeedLabel() {
+        return isNeedLabel;
     }
 }

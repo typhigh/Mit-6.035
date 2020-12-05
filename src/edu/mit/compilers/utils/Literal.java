@@ -12,7 +12,7 @@ public class Literal<T> {
 
     public Literal(T value) {
         this.value = value;
-        this.literalValue = (String) value;
+        this.literalValue = value.toString();
     }
 
     public String getLiteralValue() {

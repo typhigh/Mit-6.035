@@ -5,10 +5,10 @@ import edu.mit.compilers.ir.common.IRVisitor;
 
 import java.util.ArrayList;
 
-public class PreProcessor {
+public class PreProcessors {
     private final ArrayList<IRVisitor<Void>> processors;
 
-    public PreProcessor(ArrayList<IRVisitor<Void>> processors) {
+    public PreProcessors(ArrayList<IRVisitor<Void>> processors) {
         assert processors != null;
         this.processors = processors;
     }

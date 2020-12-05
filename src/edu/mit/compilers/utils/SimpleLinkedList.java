@@ -1,11 +1,12 @@
 package edu.mit.compilers.utils;
 
+import java.util.Iterator;
+
 /*
  * single-dir linked list
  * provide toArrayList func / begin-end iterator
  */
-public class
-SimpleLinkedList<T> {
+public class SimpleLinkedList<T> implements Iterable<T> {
     // [begin, end] all the elements
     private ListNode<T> begin;
     private ListNode<T> end;
@@ -50,12 +51,7 @@ SimpleLinkedList<T> {
         return size == 0;
     }
 
-    /*
-     * iterator func, return a iterator that provides hasNext/next function
-     */
-    public Iterator iterator() {
-        return new Iterator(this);
-    }
+
 
     /*
      * append other list to this list, and other list no longer used
@@ -75,13 +71,17 @@ SimpleLinkedList<T> {
         }
         end = other.end;
         size += other.size;
-        // other.clear();
         return this;
     }
 
     public void clear() {
         begin = end = null;
         size = 0;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new Ltr(this);
     }
 
     /*
@@ -114,14 +114,14 @@ SimpleLinkedList<T> {
     }
 
     /*
-     * iterator for three address  element list
+     * iterator for three address element list
      */
-    public class Iterator {
+    public class Ltr implements Iterator<T> {
         ListNode<T> cur;
         int curId;
         int size;
 
-        public Iterator(SimpleLinkedList list) {
+        public Ltr(SimpleLinkedList list) {
             cur = list.begin;
             size = list.size;
             curId = 0;

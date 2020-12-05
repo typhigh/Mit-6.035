@@ -59,7 +59,10 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
     @Override
     public ThreeAddressCodeList visit(IRMethodDecl ir) throws CloneNotSupportedException {
         ThreeAddressCodeList ret = ir.getLowerCodes();
-        ret.init(ir.getParaList().accept(this));
+        ThreeAddressCode begin = new EmptyCode();
+        begin.setLabel(ir.getVariable().getName());
+        ret.init(begin);
+        ret.append(ir.getParaList().accept(this));
         ret.append(ir.getBlock().accept(this));
         ret.append(new MethodLeaveCode());
         ret.setNeedLabelTrue();
@@ -159,11 +162,11 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
     /*
      * left[...] = value
      * t = xxx
-     * LOOP : ifFalse t goto L1
+     * LOOP : ifFalse t goto END
      *        ...
      *        step
      *        goto LOOP
-     * L!
+     * END
      */
     @Override
     public ThreeAddressCodeList visit(IRForStmt ir) throws CloneNotSupportedException {
@@ -178,24 +181,26 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
      * t = xxx
      * ifFalse t goto FALSE
      * ...
-     * goto NEXT
+     * goto END
      * (FALSE :xxx
      *         xxx)
-     * NEXT(FALSE) : xxx
+     * END
      */
     @Override
     public ThreeAddressCodeList visit(IRIfStmt ir) throws CloneNotSupportedException {
         ThreeAddressCodeList ret = ir.getLowerCodes();
+        ThreeAddressCodeList end = new ThreeAddressCodeList(new EmptyCode());
         IRBlock block = ir.getIfBlock();
         IRBlock elseBlock = ir.getElseBlock();
         boolean needElseBlock = elseBlock != null;
         ThreeAddressCodeList ifFalseNextStmtCodeList = needElseBlock ?
-                elseBlock.getLowerCodes() : ir.getNextCodes();
+                elseBlock.getLowerCodes() : end;
         ret.init(convertConditionAndBlock(ir.getCondition(), block, false,
                 null, ifFalseNextStmtCodeList));
         if (needElseBlock) {
             ret.append(elseBlock.accept(this));
         }
+        ret.append(end);
         return ret;
     }
 
@@ -235,7 +240,7 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
      * LOOP : ifFalse t goto L1
      *        ...
      *        goto LOOP
-     * L!
+     * L1
      */
     @Override
     public ThreeAddressCodeList visit(IRWhileStmt ir) throws CloneNotSupportedException {
@@ -376,8 +381,12 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
 
     private ThreeAddressCodeList convertLoopStmt(IRLoopStmt loopStmt,
                                                  IRStatement stepStmt) throws CloneNotSupportedException {
-        return convertConditionAndBlock(loopStmt.getCondition(), loopStmt.getBlock(),
-                true, stepStmt, loopStmt.getNextCodes());
+        // nextCodes always be an empty code
+        ThreeAddressCodeList end = new ThreeAddressCodeList(new EmptyCode());
+        ThreeAddressCodeList ret = convertConditionAndBlock(loopStmt.getCondition(),
+                loopStmt.getBlock(), true, stepStmt, end);
+        ret.append(end);
+        return ret;
     }
 
     private ThreeAddressCodeList convertConditionAndBlock(IRExpression condition,
@@ -388,6 +397,13 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
             throws CloneNotSupportedException {
         // step use IRStatement for extend
         assert condition != null;
+        assert nextStmtCodeList != null;
+
+        // nextStmtCodeList can't be empty, ler it has empty code
+        if (nextStmtCodeList.isNull()) {
+            nextStmtCodeList.init(new EmptyCode());
+        }
+
         boolean needStep = stepStmt != null;
         ThreeAddressCodeList ret = new ThreeAddressCodeList();
 
