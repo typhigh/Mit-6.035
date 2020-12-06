@@ -59,9 +59,7 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
     @Override
     public ThreeAddressCodeList visit(IRMethodDecl ir) throws CloneNotSupportedException {
         ThreeAddressCodeList ret = ir.getLowerCodes();
-        ThreeAddressCode begin = new EmptyCode();
-        begin.setLabel(ir.getVariable().getName());
-        ret.init(begin);
+        ret.init(new MethodBeginCode(ir.getVariable().getName()));
         ret.append(ir.getParaList().accept(this));
         ret.append(ir.getBlock().accept(this));
         ret.append(new MethodLeaveCode());
