@@ -30,4 +30,9 @@ public class Literal<T> {
     public void setValue(T value) {
         this.value = value;
     }
+
+    @Override
+    public int hashCode() {
+        return literalValue.hashCode();
+    }
 }

@@ -3,34 +3,25 @@ package edu.mit.compilers.lowercode;
 // just left part
 public abstract class AssignCode extends ThreeAddressCode {
 
-    // left [location], location must be variable, neither be method nor literal value
-    private String left;
-    private String location;
-    private boolean isArray;
+    private LocationVariable left;
 
-    public AssignCode(String left, String location) {
-        this.left = left;
-        this.location = location;
-        this.isArray = location != null;
+    public AssignCode(Variable variable, Operand location) {
+        this.left = new LocationVariable(variable, location);
     }
 
-    public AssignCode(String left) {
-        this(left, null);
+    public AssignCode(Variable variable) {
+        this(variable, null);
     }
 
-    public String getLeft() {
+    public LocationVariable getLeft() {
         return left;
     }
 
     public boolean isArray() {
-        return isArray;
+        return left.isArray();
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public String getName() {
-        return left + (isArray ? "[" + location + "]" : "");
+    public String getLeftString() {
+        return left.getLiteralString();
     }
 }

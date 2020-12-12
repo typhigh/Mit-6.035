@@ -23,6 +23,10 @@ public class IRMemberDecl extends IR {
 		this.global = global;
 	}
 
+	public boolean isGlobal() {
+		return global;
+	}
+
 	@Override
 	public StringInfo getInfoForShow(String prefix) {
 		return super.getInfoForShow(prefix).addInfo("Global: " + global);

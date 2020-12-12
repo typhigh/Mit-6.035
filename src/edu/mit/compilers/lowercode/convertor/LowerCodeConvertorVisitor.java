@@ -115,24 +115,26 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
         ThreeAddressCodeList ret = ir.getLowerCodes();
         assert ret.isNull();
         IRLocation left = ir.getLocation();
-        String leftVariable = left.getVariable().getName();
-        String locationVariable = null;
+        IRVariable leftVariable = left.getVariable();
+        Variable variable = new Variable(leftVariable);
+
+        Operand locationOperand = null;
 
         // t1 = location
         boolean isArray = left.isArrayLocation();
         if (isArray) {
             IRExpression location = left.getLocation();
             ret.append(location.accept(this));
-            locationVariable = location.getNameInLowerCode();
+            locationOperand = new Variable(location.getNameInLowerCode(), false);
         }
 
         // t2 = value
         IRExpression value = ir.getValue();
         ret.append(value.accept(this));
-        String rightVariable = value.getNameInLowerCode();
+        Variable rightVariable = new Variable(value.getNameInLowerCode(), false);
 
         // left[t1] = t2
-        ret.append(new AssignSingleOperandCode(leftVariable, locationVariable, rightVariable, null));
+        ret.append(AssignCodeMaker.makeAssignWithLeftLocation(variable, locationOperand, rightVariable));
         return ret;
     }
 
@@ -252,7 +254,10 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
     @Override
     public ThreeAddressCodeList visit(IRLiteral ir) {
         ThreeAddressCodeList ret = ir.getLowerCodes();
-        return ret.init(new AssignLiteralCode(ir.getNameInLowerCode(), ir.getLiteral()));
+        return ret.init(AssignCodeMaker.makeAssignLiteralCode(
+                new Variable(ir.getNameInLowerCode(), false),
+                ir.getLiteral()
+        ));
     }
 
     /* for not-cond binary-op expression:
@@ -266,17 +271,26 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
         ThreeAddressCodeList ret = ir.getLowerCodes();
         String operator = ir.getOperator();
         assert OperatorUtils.isBinary(operator);
-        IRExpression left = ir.getLeft();
-        IRExpression right = ir.getRight();
+        IRExpression right1 = ir.getLeft();
+        IRExpression right2 = ir.getRight();
         if (OperatorUtils.isCond(operator)) {
             // need short-cut
             return ret.init(convertCondExpression(ir));
         }
 
-        ret.init(left.accept(this));
-        ret.append(right.accept(this));
-        ret.append(new AssignTwoOperandCode(ir.getNameInLowerCode(), left.getNameInLowerCode(),
-                right.getNameInLowerCode(), operator));
+        // t1 = xxx
+        ret.init(right1.accept(this));
+
+        // t2 = xxx
+        ret.append(right2.accept(this));
+
+        // t3 = t1 op t2
+        ret.append(AssignCodeMaker.makeAssignWithBinaryOp(
+                new Variable(ir.getNameInLowerCode(), false),
+                new Variable(right1.getNameInLowerCode(), false),
+                new Variable(right2.getNameInLowerCode(), false),
+                operator
+        ));
         return ret;
     }
 
@@ -288,11 +302,14 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
     public ThreeAddressCodeList visit(IRLenExpr ir) {
         ThreeAddressCodeList ret = ir.getLowerCodes();
         long len = ((IRFieldDecl) ir.getVariable().getDeclaredFrom()).getType().getSize();
-        ret.append(new AssignLiteralCode(ir.getNameInLowerCode(), new Literal<Long>(len)));
+        ret.append(AssignCodeMaker.makeAssignLiteralCode(
+                new Variable(ir.getNameInLowerCode(), false),
+                new Literal<Long>(len)
+        ));
         return ret;
     }
 
-    /*
+    /* just for right-value location (location in right side of expression)
      * len = xxx
      * t = a[len]
      */
@@ -304,9 +321,16 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
         if (ir.isArrayLocation()) {
             IRExpression len = ir.getLocation();
             ret.append(len.accept(this));
-            assign = new AssignSingleOperandCode(ir.getNameInLowerCode(), len.getNameInLowerCode(), variable);
+            assign = AssignCodeMaker.makeAssignWithRightLocation(
+                    new Variable(ir.getNameInLowerCode(), false),
+                    new Variable(ir.getVariable()),
+                    new Variable(len.getNameInLowerCode(), false)
+            );
         } else {
-            assign = new AssignSingleOperandCode(ir.getNameInLowerCode(), variable);
+            assign = AssignCodeMaker.makeAssign(
+                    new Variable(ir.getNameInLowerCode(), false),
+                    new Variable(ir.getVariable())
+            );
         }
         ret.append(assign);
         return ret;
@@ -349,13 +373,19 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
 
         // if Cond not
         ifCondNot.append(value1.accept(this));
-        ifCondNot.append(new AssignSingleOperandCode(ir.getNameInLowerCode(), value1.getNameInLowerCode()));
+        ifCondNot.append(AssignCodeMaker.makeAssign(
+                new Variable(ir.getNameInLowerCode(), false),
+                new Variable(value1.getNameInLowerCode(), false)
+        ));
         ifCondNot.append(new GotoCode(end));
         ret.append(ifCondNot);
 
         // if Cond
         ifCond.append(value2.accept(this));
-        ifCond.append(new AssignSingleOperandCode(ir.getNameInLowerCode(), value2.getNameInLowerCode()));
+        ifCondNot.append(AssignCodeMaker.makeAssign(
+                new Variable(ir.getNameInLowerCode(), false),
+                new Variable(value2.getNameInLowerCode(), false)
+        ));
         ret.append(ifCond);
 
         // end
@@ -371,8 +401,11 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
         ThreeAddressCodeList ret = ir.getLowerCodes();
         IRExpression expr = ir.getRight();
         ret.append(expr.accept(this));
-        ret.append(new AssignSingleOperandCode(ir.getNameInLowerCode(), null,
-                expr.getNameInLowerCode(), ir.getOperator()));
+        ret.append(AssignCodeMaker.makeAssignWithUnaryOp(
+                new Variable(ir.getNameInLowerCode(), false),
+                new Variable(expr.getNameInLowerCode(), false),
+                ir.getOperator()
+        ));
         return ret;
     }
 
@@ -462,13 +495,20 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
 
         // ifCondNot
         ifCondNot.append(right.accept(this));
-        ifCondNot.append(new AssignTwoOperandCode(expr.getNameInLowerCode(), left.getNameInLowerCode(),
-                right.getNameInLowerCode(), operator));
+        ifCondNot.append(AssignCodeMaker.makeAssignWithBinaryOp(
+                new Variable(expr.getNameInLowerCode(), false),
+                new Variable(left.getNameInLowerCode(), false),
+                new Variable(right.getNameInLowerCode(), false),
+                operator
+        ));
         ifCondNot.append(new GotoCode(end));
         ret.append(ifCondNot);
 
         // ifCond
-        ifCond.append(new AssignLiteralCode(expr.getNameInLowerCode(), new Literal<Boolean>(operator.equals("||"))));
+        ifCond.append(AssignCodeMaker.makeAssignLiteralCode(
+                new Variable(expr.getNameInLowerCode(), false),
+                new Literal<Boolean>(operator.equals("||"))
+        ));
         ret.append(ifCond);
 
         // end

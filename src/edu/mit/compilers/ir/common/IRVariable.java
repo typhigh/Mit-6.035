@@ -48,6 +48,10 @@ public class IRVariable extends IR {
 		return getName().equals(variable.getName());
 	}
 
+	public boolean isGlobal() {
+		return getDeclaredFrom().isGlobal();
+	}
+
 	@Override
 	public ArrayList<IR> getChildren() {
 		return getEmptyChildren();

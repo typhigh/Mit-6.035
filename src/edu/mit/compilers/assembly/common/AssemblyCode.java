@@ -1,5 +1,7 @@
 package edu.mit.compilers.assembly.common;
 
-public class AssemblyCode {
+public interface AssemblyCode {
 
+    // get string-format
+    public void getStringForShow(String prefix, StringBuilder ret);
 }
