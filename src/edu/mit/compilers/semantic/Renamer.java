@@ -4,7 +4,6 @@ import edu.mit.compilers.ir.common.IR;
 import edu.mit.compilers.ir.common.IRVariable;
 import edu.mit.compilers.ir.common.IRVisitor;
 import edu.mit.compilers.ir.decl.IRFieldDecl;
-import edu.mit.compilers.ir.decl.IRImportDecl;
 import edu.mit.compilers.ir.decl.IRMemberDecl;
 import edu.mit.compilers.ir.decl.IRMethodDecl;
 
@@ -73,17 +72,6 @@ public class Renamer {
             IRVariable variable = ir.getVariable();
             variable.setName("Variable" + nameId + "_" + variable.getName());
             putNewName(variable.getName());
-            return null;
-        }
-
-        /*
-         * visit import decl and rename its name
-         */
-
-        @Override
-        public Void visit(IRImportDecl ir) {
-            IRVariable variable = ir.getVariable();
-            variable.setName("Import" + "_" + variable.getName());
             return null;
         }
 

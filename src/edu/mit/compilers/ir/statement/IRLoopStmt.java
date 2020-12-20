@@ -2,7 +2,7 @@ package edu.mit.compilers.ir.statement;
 
 import edu.mit.compilers.ir.common.IRBlock;
 import edu.mit.compilers.ir.expression.IRExpression;
-import edu.mit.compilers.lowercode.ThreeAddressCodeList;
+import edu.mit.compilers.lowercode.code.ThreeAddressCodeList;
 
 public class
 IRLoopStmt extends IRStatement {

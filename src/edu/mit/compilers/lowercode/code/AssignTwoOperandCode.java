@@ -1,4 +1,7 @@
-package edu.mit.compilers.lowercode;
+package edu.mit.compilers.lowercode.code;
+
+import edu.mit.compilers.lowercode.Operand;
+import edu.mit.compilers.lowercode.Variable;
 
 public class AssignTwoOperandCode extends AssignCode {
 
@@ -11,9 +14,9 @@ public class AssignTwoOperandCode extends AssignCode {
         return prefix
                 + getLeftString()
                 + " = "
-                + right1
+                + right1.getLiteralString()
                 + " " + binaryOp + " "
-                + right2;
+                + right2.getLiteralString();
     }
 
     public AssignTwoOperandCode(Variable variable, Operand right1, Operand right2, String binaryOp) {

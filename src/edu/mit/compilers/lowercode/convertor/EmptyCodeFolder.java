@@ -1,6 +1,10 @@
 package edu.mit.compilers.lowercode.convertor;
 
 import edu.mit.compilers.lowercode.*;
+import edu.mit.compilers.lowercode.code.EmptyCode;
+import edu.mit.compilers.lowercode.code.GotoCode;
+import edu.mit.compilers.lowercode.code.ThreeAddressCode;
+import edu.mit.compilers.lowercode.code.ThreeAddressCodeList;
 
 import java.util.HashMap;
 

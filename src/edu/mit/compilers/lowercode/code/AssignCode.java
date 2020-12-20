@@ -1,4 +1,8 @@
-package edu.mit.compilers.lowercode;
+package edu.mit.compilers.lowercode.code;
+
+import edu.mit.compilers.lowercode.LocationVariable;
+import edu.mit.compilers.lowercode.Operand;
+import edu.mit.compilers.lowercode.Variable;
 
 // just left part
 public abstract class AssignCode extends ThreeAddressCode {

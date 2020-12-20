@@ -3,9 +3,9 @@ package edu.mit.compilers.utils;
 import edu.mit.compilers.cst.CST;
 import edu.mit.compilers.cst.CSTParser;
 import edu.mit.compilers.ir.common.IRProgram;
-import edu.mit.compilers.lowercode.ThreeAddressCodeList;
+import edu.mit.compilers.lowercode.code.ThreeAddressCodeList;
 import edu.mit.compilers.lowercode.convertor.LowerCodeConvertor;
-import edu.mit.compilers.lowercode.convertor.SymbolTable;
+import edu.mit.compilers.lowercode.SymbolTable;
 import edu.mit.compilers.semantic.Renamer;
 import edu.mit.compilers.semantic.checker.SemanticChecker;
 import edu.mit.compilers.semantic.checker.SemanticError;
@@ -177,11 +177,11 @@ public class MainController {
     private State doGenLowerCode(IRProgram program) throws CloneNotSupportedException {
         LowerCodeConvertor convertor = new LowerCodeConvertor();
         convertor.convertToLowCode(program);
-        ThreeAddressCodeList codes = convertor.getResult();
-        SymbolTable symbolTable = convertor.getSymbolTable();
+        ThreeAddressCodeList codes = convertor.getResult().codes;
+        SymbolTable symbolTable = convertor.getResult().symbolTable;
 
         if (debug) {
-            System.out.println(symbolTable.getNamesOfSymbol());
+            System.out.println(symbolTable.show());
             System.out.println(codes.show());
         }
         return setCodes(codes, false);

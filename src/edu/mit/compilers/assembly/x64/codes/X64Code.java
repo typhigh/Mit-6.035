@@ -1,4 +1,4 @@
-package edu.mit.compilers.assembly.x64;
+package edu.mit.compilers.assembly.x64.codes;
 
 import edu.mit.compilers.assembly.common.AssemblyCode;
 
@@ -9,3 +9,4 @@ public class X64Code implements AssemblyCode {
         // TODO:
     }
 }
+

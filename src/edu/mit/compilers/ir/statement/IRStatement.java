@@ -1,7 +1,7 @@
 package edu.mit.compilers.ir.statement;
 
 import edu.mit.compilers.ir.common.IR;
-import edu.mit.compilers.lowercode.ThreeAddressCodeList;
+import edu.mit.compilers.lowercode.code.ThreeAddressCodeList;
 
 public class IRStatement extends IR {
 

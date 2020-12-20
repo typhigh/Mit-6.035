@@ -1,8 +1,8 @@
 package edu.mit.compilers.lowercode.convertor;
 
-import edu.mit.compilers.lowercode.GotoCode;
-import edu.mit.compilers.lowercode.ThreeAddressCode;
-import edu.mit.compilers.lowercode.ThreeAddressCodeList;
+import edu.mit.compilers.lowercode.code.GotoCode;
+import edu.mit.compilers.lowercode.code.ThreeAddressCode;
+import edu.mit.compilers.lowercode.code.ThreeAddressCodeList;
 import edu.mit.compilers.lowercode.ThreeAddressCodeListProcessor;
 
 public class CodeLabelSetter implements ThreeAddressCodeListProcessor<Void> {

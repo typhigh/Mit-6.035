@@ -28,6 +28,10 @@ public class Variable extends Operand {
         return name;
     }
 
+    public boolean hasConstValue() {
+        return constValue != null;
+    }
+
     public Value getConstValue() {
         return constValue;
     }
@@ -43,6 +47,6 @@ public class Variable extends Operand {
 
     @Override
     public String getLiteralString() {
-        return name;
+        return getName();
     }
 }

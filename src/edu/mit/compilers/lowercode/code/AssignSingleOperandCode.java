@@ -1,4 +1,7 @@
-package edu.mit.compilers.lowercode;
+package edu.mit.compilers.lowercode.code;
+
+import edu.mit.compilers.lowercode.Operand;
+import edu.mit.compilers.lowercode.Variable;
 
 public class AssignSingleOperandCode extends AssignCode {
     private boolean isUnaryOp;

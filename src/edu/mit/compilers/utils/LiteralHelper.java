@@ -34,4 +34,11 @@ public class LiteralHelper {
         }
         return value;
     }
+
+    public static <T> Literal<T> makeLiteralByValue(T value) {
+        Literal<T> ret = new Literal<>(value.toString());
+        // System.out.println(ret.getLiteralValue());
+        ret.setValue(value);
+        return ret;
+    }
 }

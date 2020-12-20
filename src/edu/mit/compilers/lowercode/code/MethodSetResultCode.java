@@ -1,4 +1,4 @@
-package edu.mit.compilers.lowercode;
+package edu.mit.compilers.lowercode.code;
 
 public class MethodSetResultCode extends ThreeAddressCode {
 

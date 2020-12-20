@@ -1,12 +1,12 @@
 package edu.mit.compilers.assembly.common;
 
-import edu.mit.compilers.lowercode.ThreeAddressCodeList;
-import edu.mit.compilers.lowercode.convertor.ThreeAddressCodesInfo;
+import edu.mit.compilers.lowercode.ThreeAddressCodesInfo;
 
 public interface AssemblyConvertor {
 
-    public void convertToAssembly(ThreeAddressCodeList lowerCodes, ThreeAddressCodesInfo info);
+    // convertor three address codes into assembly codes
+    public void convertToAssembly(ThreeAddressCodesInfo info);
 
-    public AssemblyCodeList getResult();
+    public AssemblyCodesInfo getResult();
 
 }

@@ -68,6 +68,7 @@ public class SimpleLinkedList<T> implements Iterable<T> {
             begin = other.begin;
         } else {
             end.setNext(other.begin);
+            other.begin.setPrev(end);
         }
         end = other.end;
         size += other.size;
@@ -89,11 +90,8 @@ public class SimpleLinkedList<T> implements Iterable<T> {
      */
     private class ListNode<T> {
         private ListNode<T> next;
+        private ListNode<T> prev;
         private T item;
-
-        public T getItem() {
-            return item;
-        }
 
         public ListNode<T> getNext() {
             return next;
@@ -101,6 +99,18 @@ public class SimpleLinkedList<T> implements Iterable<T> {
 
         public void setNext(ListNode<T> next) {
             this.next = next;
+        }
+
+        public ListNode<T> getPrev() {
+            return prev;
+        }
+
+        public void setPrev(ListNode<T> prev) {
+            this.prev = prev;
+        }
+
+        public T getItem() {
+            return item;
         }
 
         public void setItem(T item) {

@@ -1,5 +1,6 @@
-package edu.mit.compilers.lowercode;
+package edu.mit.compilers.lowercode.code;
 
+import edu.mit.compilers.utils.Showable;
 import edu.mit.compilers.utils.SimpleLinkedList;
 
 import java.util.Iterator;
@@ -8,7 +9,7 @@ import java.util.Iterator;
  * single-dir linked list, implemented like slice
  * provide toArrayList func / begin-end iterator
  */
-public class ThreeAddressCodeList implements Iterable<ThreeAddressCode> {
+public class ThreeAddressCodeList implements Iterable<ThreeAddressCode>, Showable {
 
     // the list of codes
     private SimpleLinkedList<ThreeAddressCode> codes = new SimpleLinkedList<>();

@@ -1,10 +1,10 @@
-package edu.mit.compilers.lowercode;
+package edu.mit.compilers.lowercode.code;
 
-public class PopParamCode extends ThreeAddressCode {
+public class PushParamCode extends ThreeAddressCode {
 
     private String variable;
 
-    public PopParamCode(String variable) {
+    public PushParamCode(String variable) {
         this.variable = variable;
     }
 
@@ -14,6 +14,6 @@ public class PopParamCode extends ThreeAddressCode {
 
     @Override
     protected String getStringFroShow(String prefix) {
-        return prefix + "pop param " + variable;
+        return prefix + "push param " + variable;
     }
 }

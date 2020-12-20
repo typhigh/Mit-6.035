@@ -33,9 +33,9 @@ public class TypeHelper {
             return null;
         }
 
-        // TODO : support import
-        if (decl.getTag().equals("IRImportDecl")) {
-            return null;
+        // global method always return int
+        if (decl instanceof IRImportDecl) {
+            return IRBasicType.IntType;
         }
         return ((IRMethodDecl) decl).getType();
     }

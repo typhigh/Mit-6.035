@@ -5,9 +5,12 @@ import edu.mit.compilers.ir.decl.IRFieldDecl;
 import edu.mit.compilers.ir.decl.IRMethodDecl;
 import edu.mit.compilers.ir.expression.*;
 import edu.mit.compilers.ir.expression.literal.IRLiteral;
+import edu.mit.compilers.ir.expression.literal.IRStringLiteral;
 import edu.mit.compilers.ir.statement.*;
-import edu.mit.compilers.lowercode.*;
-import edu.mit.compilers.utils.Literal;
+import edu.mit.compilers.lowercode.Operand;
+import edu.mit.compilers.lowercode.Variable;
+import edu.mit.compilers.lowercode.code.*;
+import edu.mit.compilers.utils.LiteralHelper;
 import edu.mit.compilers.utils.OperatorUtils;
 
 import java.util.ArrayList;
@@ -30,9 +33,13 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
         throw new RuntimeException("unsupported ir type: " + ir.getTag() + " for lower code convertor");
     }
 
+    /*
+     * visit program and collect three address code list for every method
+     */
     @Override
     public ThreeAddressCodeList visit(IRProgram ir) throws CloneNotSupportedException {
         // just convert method decl
+        // TODO: parallel process
         ThreeAddressCodeList ret = ir.getLowerCodes();
         for (IRMethodDecl decl : ir.getMethodDecls()) {
             ret.append(decl.accept(this));
@@ -260,6 +267,14 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
         ));
     }
 
+    /*
+     * do nothing, the value is in constant string area
+     */
+    @Override
+    public ThreeAddressCodeList visit(IRStringLiteral ir) {
+        return ir.getLowerCodes();
+    }
+
     /* for not-cond binary-op expression:
      * t1 = xxx
      * t2 = xxx
@@ -304,7 +319,7 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
         long len = ((IRFieldDecl) ir.getVariable().getDeclaredFrom()).getType().getSize();
         ret.append(AssignCodeMaker.makeAssignLiteralCode(
                 new Variable(ir.getNameInLowerCode(), false),
-                new Literal<Long>(len)
+                LiteralHelper.makeLiteralByValue(len)
         ));
         return ret;
     }
@@ -507,7 +522,7 @@ public class LowerCodeConvertorVisitor extends IRVisitor<ThreeAddressCodeList> {
         // ifCond
         ifCond.append(AssignCodeMaker.makeAssignLiteralCode(
                 new Variable(expr.getNameInLowerCode(), false),
-                new Literal<Boolean>(operator.equals("||"))
+                LiteralHelper.makeLiteralByValue(operator.equals("||"))
         ));
         ret.append(ifCond);
 

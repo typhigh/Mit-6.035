@@ -10,11 +10,6 @@ public class Literal<T> {
         this.literalValue = literalValue;
     }
 
-    public Literal(T value) {
-        this.value = value;
-        this.literalValue = value.toString();
-    }
-
     public String getLiteralValue() {
         return literalValue;
     }

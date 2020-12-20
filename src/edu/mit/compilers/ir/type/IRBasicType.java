@@ -11,9 +11,10 @@ public class IRBasicType extends IRType {
 	private String typeName;
 
 	//Type instance
-	public static final IRBasicType IntType = new IRBasicType("int", 4);
+	public static final IRBasicType IntType = new IRBasicType("int", 8);
+
 	public static final IRBasicType CharType = new IRBasicType("char", 1);
-	public static final IRBasicType BoolType = new IRBasicType("bool", 1);
+	public static final IRBasicType BoolType = new IRBasicType("bool", 8);
 	public static final IRBasicType VoidType = new IRBasicType("void", 0);
 	public static final IRBasicType StringType = new IRBasicType("string", 0);
 	

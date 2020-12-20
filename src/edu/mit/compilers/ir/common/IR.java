@@ -1,7 +1,7 @@
 package edu.mit.compilers.ir.common;
 
 import edu.mit.compilers.ir.decl.IRMethodDecl;
-import edu.mit.compilers.lowercode.ThreeAddressCodeList;
+import edu.mit.compilers.lowercode.code.ThreeAddressCodeList;
 import edu.mit.compilers.utils.IRCloneHelper;
 import edu.mit.compilers.utils.StringInfo;
 

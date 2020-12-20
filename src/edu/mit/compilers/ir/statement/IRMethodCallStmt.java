@@ -39,6 +39,8 @@ public class IRMethodCallStmt extends IRStatement {
 
 	@Override
 	public IRMethodCallStmt clone() throws CloneNotSupportedException {
-		return (IRMethodCallStmt) super.clone();
+		IRMethodCallStmt clone = (IRMethodCallStmt) super.clone();
+		clone.methodCall = methodCall.clone();
+		return clone;
 	}
 }
