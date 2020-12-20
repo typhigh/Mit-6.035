@@ -1,46 +1,35 @@
 package edu.mit.compilers.assembly.x64.codes;
 
+import edu.mit.compilers.assembly.common.AssemblyCode;
 import edu.mit.compilers.assembly.common.AssemblyCodeList;
-import edu.mit.compilers.lowercode.FieldInfo;
-import edu.mit.compilers.lowercode.SymbolTable;
-import edu.mit.compilers.lowercode.code.ThreeAddressCodeList;
+import edu.mit.compilers.utils.SimpleLinkedList;
+
+import java.util.Iterator;
 
 public class X64CodeList implements AssemblyCodeList {
+    private SimpleLinkedList<X64Code> codes = new SimpleLinkedList<>();
+
+    public X64CodeList append(X64CodeList other) {
+        codes.append(other.codes);
+        return this;
+    }
+
+    public X64CodeList append(X64Code other) {
+        codes.add(other);
+        return this;
+    }
 
     @Override
     public String show() {
-        return null;
+        StringBuilder builder = new StringBuilder();
+        for (X64Code code : codes) {
+            code.getStringForShow("", builder);
+        }
+        return builder.toString();
     }
 
     @Override
-    public boolean hasNext() {
-        return false;
-    }
-
-    @Override
-    public X64Code next() {
+    public Iterator<AssemblyCode> iterator() {
         return null;
-    }
-
-    public void generateDataArea(SymbolTable symbolTable) {
-        // init global field
-        for (FieldInfo fieldInfo : symbolTable.getGlobalFieldsInfo()) {
-            if (fieldInfo.isDeleted()) {
-                continue;
-            }
-            long size = fieldInfo.getSize();
-
-        }
-    }
-
-    public void generateStringArea(SymbolTable symbolTable) {
-        // init (const) string field
-        for (FieldInfo fieldInfo : symbolTable.getConstStringInfo()) {
-
-        }
-    }
-
-    public void generateTextArea(ThreeAddressCodeList codes) {
-
     }
 }

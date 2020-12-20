@@ -1,11 +1,13 @@
 package edu.mit.compilers.utils;
 
+import edu.mit.compilers.assembly.common.AssemblyCodesInfo;
+import edu.mit.compilers.assembly.common.AssemblyConvertor;
+import edu.mit.compilers.assembly.x64.X64Convertor;
 import edu.mit.compilers.cst.CST;
 import edu.mit.compilers.cst.CSTParser;
 import edu.mit.compilers.ir.common.IRProgram;
-import edu.mit.compilers.lowercode.code.ThreeAddressCodeList;
+import edu.mit.compilers.lowercode.ThreeAddressCodesInfo;
 import edu.mit.compilers.lowercode.convertor.LowerCodeConvertor;
-import edu.mit.compilers.lowercode.SymbolTable;
 import edu.mit.compilers.semantic.Renamer;
 import edu.mit.compilers.semantic.checker.SemanticChecker;
 import edu.mit.compilers.semantic.checker.SemanticError;
@@ -20,12 +22,12 @@ public class MainController {
     public enum State {
         UNKNOWN(0),
         PARSED(1),
-        INTERED(2),
+        INTER(2),
         SEMANTIC_CHECKED(3),
         RENAMED(4),
         LOWERCODE_GENED(5),
-        OPTIMIZED(6);
-
+        OPTIMIZED(6),
+        ASSEMBLYCODE_GENED(7);
         private int value;
 
         private State(int value) {
@@ -53,11 +55,14 @@ public class MainController {
     // current program, maybe be equal with programNotRenamed
     private IRProgram program;
 
-    // three address code current (after codegen)
-    private ThreeAddressCodeList codes;
+    // three address codes info current (after codegen)
+    private ThreeAddressCodesInfo lowerCodesInfo;
 
-    // three address code not optimized
-    private ThreeAddressCodeList codesNotOptimized;
+    // three address codes info not optimized
+    private ThreeAddressCodesInfo lowerCodesInfoNotOptimized;
+
+    // assembly codes info current
+    private AssemblyCodesInfo assemblyCodesInfo;
 
     public MainController() {
         this(false);
@@ -88,7 +93,7 @@ public class MainController {
     public State setProgram(IRProgram program, boolean semanticChecked) {
         this.program = program;
         this.programNotRenamed = program;
-        return updateStateTo(semanticChecked ? State.SEMANTIC_CHECKED : State.INTERED);
+        return updateStateTo(semanticChecked ? State.SEMANTIC_CHECKED : State.INTER);
     }
 
     public State setProgramRenamed(IRProgram program) {
@@ -100,16 +105,29 @@ public class MainController {
         return programNotRenamed;
     }
 
-    public ThreeAddressCodeList getCodes() {
-        return codes;
+    public ThreeAddressCodesInfo getLowerCodesInfo() {
+        return lowerCodesInfo;
     }
 
-    public State setCodes(ThreeAddressCodeList codes, boolean optimized) {
-        this.codes = codes;
+    public ThreeAddressCodesInfo getLowerCodesInfoNotOptimized() {
+        return lowerCodesInfoNotOptimized;
+    }
+
+    public State setLowerCodesInfo(ThreeAddressCodesInfo codesInfo, boolean optimized) {
+        this.lowerCodesInfo = codesInfo;
         if (!optimized) {
-            codesNotOptimized = codes;
+            lowerCodesInfoNotOptimized = codesInfo;
         }
         return updateStateTo(optimized ? State.OPTIMIZED : State.LOWERCODE_GENED);
+    }
+
+    public AssemblyCodesInfo getAssemblyCodesInfo() {
+        return assemblyCodesInfo;
+    }
+
+    public State setAssemblyCodesInfo(AssemblyCodesInfo assemblyCodesInfo) {
+        this.assemblyCodesInfo = assemblyCodesInfo;
+        return updateStateTo(State.ASSEMBLYCODE_GENED);
     }
 
     private State updateStateTo(State newState) {
@@ -122,11 +140,11 @@ public class MainController {
     public State nextStep() throws CloneNotSupportedException {
         switch (state) {
             case PARSED:            return doGenInterCode(cstTree);
-            case INTERED:           return doCheckSemantic(program);
+            case INTER:             return doCheckSemantic(program);
             case SEMANTIC_CHECKED:  return doRenamed(program);
             case RENAMED:           return doGenLowerCode(program);
-            case LOWERCODE_GENED:   return doOptimize(codes);
-            case OPTIMIZED:         return doGenAssembly(codes);
+            case LOWERCODE_GENED:   return doOptimize(lowerCodesInfo);
+            case OPTIMIZED:         return doGenAssembly(lowerCodesInfo);
             default:
                 throw new RuntimeException("unexpected state " + state);
         }
@@ -177,29 +195,33 @@ public class MainController {
     private State doGenLowerCode(IRProgram program) throws CloneNotSupportedException {
         LowerCodeConvertor convertor = new LowerCodeConvertor();
         convertor.convertToLowCode(program);
-        ThreeAddressCodeList codes = convertor.getResult().codes;
-        SymbolTable symbolTable = convertor.getResult().symbolTable;
+        ThreeAddressCodesInfo lowerCodesInfo = convertor.getResult();
 
         if (debug) {
-            System.out.println(symbolTable.show());
-            System.out.println(codes.show());
+            System.out.println(lowerCodesInfo.show());
         }
-        return setCodes(codes, false);
+        return setLowerCodesInfo(lowerCodesInfo, false);
     }
 
-    private State doOptimize(ThreeAddressCodeList codes) {
+    private State doOptimize(ThreeAddressCodesInfo codesInfo) {
         if (!needOptimized) {
             // do nothing
-            return setCodes(codes, true);
+            return setLowerCodesInfo(codesInfo, true);
         }
 
         // TODO:
-        return null;
+        return updateStateTo(State.OPTIMIZED);
     }
 
-    private State doGenAssembly(ThreeAddressCodeList codes) {
+    private State doGenAssembly(ThreeAddressCodesInfo codesInfo) {
         // TODO:
-        return null;
+        AssemblyConvertor convertor = new X64Convertor();
+        convertor.convertToAssembly(codesInfo);
+        AssemblyCodesInfo assemblyCodesInfo = convertor.getResult();
+        if (debug) {
+            System.out.println(assemblyCodesInfo.show());
+        }
+        return setAssemblyCodesInfo(assemblyCodesInfo);
     }
 
     public void process(State toState) throws CloneNotSupportedException {

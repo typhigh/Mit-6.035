@@ -1,4 +1,7 @@
 package edu.mit.compilers.assembly.common;
 
-public class AssemblyCodesInfo {
+import edu.mit.compilers.utils.Showable;
+
+public abstract class AssemblyCodesInfo implements Showable {
+
 }

@@ -96,7 +96,7 @@ class Main {
 
 				// get IR
 				MainController.State state = controller.nextStep();
-				assert state == MainController.State.INTERED;
+				assert state == MainController.State.INTER;
 
 				// check semantic
 				state = controller.nextStep();
@@ -110,7 +110,12 @@ class Main {
 					state = controller.nextStep();
 					assert state == MainController.State.LOWERCODE_GENED;
 
-					// TODO :
+					state = controller.nextStep();
+					assert state == MainController.State.OPTIMIZED;
+
+					state = controller.nextStep();
+					assert state == MainController.State.ASSEMBLYCODE_GENED;
+					// TODO:
 					return;
 				}
 			}
